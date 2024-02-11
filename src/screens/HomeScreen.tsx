@@ -1,29 +1,22 @@
-// src/screens/HomeScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-import { fetchVenues, fetchClassesForVenue } from '../services/firestoreService';
-import { Venue, Class } from '../types/types';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';
+import { useAppData } from '../contexts/AppDataContext';
+import { Class } from '../types/types';
 
 const HomeScreen: React.FC = () => {
-  const [venues, setVenues] = useState<Venue[]>([]);
+  const { venues, fetchClassesForVenue } = useAppData();
   const [classes, setClasses] = useState<Class[]>([]);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadVenues = async () => {
-      const fetchedVenues = await fetchVenues();
-      console.log("Venues fetched:", fetchedVenues);
-      setVenues(fetchedVenues);
-    };
-
-    loadVenues();
-  }, []);
-
   const handleSelectVenue = async (venueId: string) => {
     setSelectedVenueId(venueId);
-    const fetchedClasses = await fetchClassesForVenue(venueId);
-    console.log("Venues fetched:", fetchedClasses);
-    setClasses(fetchedClasses);
+    try {
+      const fetchedClasses = await fetchClassesForVenue(venueId);
+      setClasses(fetchedClasses);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      setClasses([]);
+    }
   };
 
   return (
@@ -60,6 +53,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  migrationButton: {
+    marginBottom: 20, // Add some margin below the button
   },
   title: {
     fontSize: 18,

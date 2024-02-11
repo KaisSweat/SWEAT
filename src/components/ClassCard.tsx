@@ -12,26 +12,24 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
   const {
     name,
     startTime,
-    endTime,
-    duration,
     venue,
     coach,
     availableSpots,
-    description
   } = classInfo;
+
+  // Formatting the display of available spots
+  const spotsDisplay = availableSpots === 1 ? '1 spot left' : `${availableSpots} spots left`;
+  const waitlistDisplay = availableSpots === 0 ? 'Wait list' : spotsDisplay;
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
-        <Text style={styles.time}>{`${startTime} - ${endTime}`}</Text>
+        <Text style={styles.time}>{startTime}</Text>
+        <Text style={styles.spots}>{waitlistDisplay}</Text>
       </View>
       <Text style={styles.className}>{name}</Text>
       <Text style={styles.details}>
-        {`${duration} min | ${venue.name} | ${venue.area} | ${coach}`}
-      </Text>
-      <Text style={styles.description}>{description}</Text>
-      <Text style={styles.availableSpots}>
-        {`${availableSpots} spots left`}
+        {venue.name} | {venue.area} | {coach}
       </Text>
     </TouchableOpacity>
   );
@@ -59,6 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  spots: {
+    fontSize: 14,
+    color: '#666',
+  },
   className: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -67,16 +69,6 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     color: '#666',
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  availableSpots: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
   },
 });
 
