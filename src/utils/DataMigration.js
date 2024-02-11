@@ -1,4 +1,4 @@
-// src/components/DataMigration.js
+// src/utils/DataMigration.js
 import React from 'react';
 import { Button, View } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
@@ -8,21 +8,20 @@ const migrateDataToFirestore = async () => {
   console.log('Migration started');
 
   for (const venue of mockData) {
+    console.log(`Processing venue: ${venue.name}`);
     const { classes, ...venueData } = venue;
 
     try {
-      // Add the venue, Firestore auto-generates the document ID
       const docRef = await firestore().collection('venues').add(venueData);
-      console.log(`Venue added with auto-generated ID: ${docRef.id}`);
+      console.log(`Venue '${venue.name}' added with auto-generated ID: ${docRef.id}`);
 
-      // Add classes for the venue
       for (const classItem of classes) {
-        // Firestore auto-generates the ID for each class
+        console.log(`Adding class '${classItem.name}' for venue '${venue.name}'`);
         const classRef = await docRef.collection('classes').add(classItem);
-        console.log(`Class added with auto-generated ID: ${classRef.id}`);
+        console.log(`Class '${classItem.name}' added with auto-generated ID: ${classRef.id}`);
       }
     } catch (error) {
-      console.error("Error in migration:", error);
+      console.error(`Error in migration for venue '${venue.name}':`, error);
       break; // Exit the loop on the first error
     }
   }
