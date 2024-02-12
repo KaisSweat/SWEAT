@@ -7,6 +7,7 @@ import GymScreen from '../screens/GymScreen';
 import GymDetailScreen from '../screens/GymDetailScreen';
 import ClassesScreen from '../screens/ClassesScreen';
 import ClassDetailScreen from '../screens/ClassDetailScreen';
+import ClassesListForVenue from '../screens/ClassesListForVenue'; // Ensure this import is correct
 import { RootStackParamList } from '../types/types';
 
 const Tab = createBottomTabNavigator();
@@ -18,6 +19,7 @@ const GymStackScreen = () => {
     <GymStack.Navigator>
       <GymStack.Screen name="GymList" component={GymScreen} options={{ headerShown: false }} />
       <GymStack.Screen name="GymDetail" component={GymDetailScreen} />
+      <GymStack.Screen name="ClassesListForVenue" component={ClassesListForVenue} />
     </GymStack.Navigator>
   );
 };

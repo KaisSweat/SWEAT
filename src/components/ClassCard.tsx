@@ -21,6 +21,8 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
   const spotsDisplay = availableSpots === 1 ? '1 spot left' : `${availableSpots} spots left`;
   const waitlistDisplay = availableSpots === 0 ? 'Wait list' : spotsDisplay;
 
+  const venueName = venue?.name || 'Unknown Venue';
+  const venueArea = venue?.area || 'Unknown Area';
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
@@ -29,7 +31,7 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
       </View>
       <Text style={styles.className}>{name}</Text>
       <Text style={styles.details}>
-        {venue.name} | {venue.area} | {coach}
+        {venueName} | {venueArea} | {coach}
       </Text>
     </TouchableOpacity>
   );

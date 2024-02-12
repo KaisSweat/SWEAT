@@ -33,7 +33,8 @@ export type Class = {
 export type RootStackParamList = {
   GymList: undefined;
   GymDetail: { venueId: string };
-  ClassesList: undefined;
+  ClassesList: { venueId: string };
+  ClassesListForVenue: { venueId: string };
   ClassDetail: { classDetail: Class }; // Since classDetail includes venue info, no separate venue param needed
   // Add other screens and their parameters as needed
 };

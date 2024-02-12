@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,7 +14,7 @@ type Props = {
   navigation: GymDetailScreenNavigationProp;
 };
 
-const GymDetailScreen: React.FC<Props> = ({ route }) => {
+const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const [venue, setVenue] = useState<Venue | null>(null);
   const { venueId } = route.params;
 
@@ -31,6 +31,16 @@ const GymDetailScreen: React.FC<Props> = ({ route }) => {
     loadVenueDetails();
   }, [venueId]);
 
+  const handleShowClasses = () => {
+    if (venue && venue.id) { // Ensure venue and venue.id are available
+      // Navigate to the ClassesListForVenue screen and pass the actual venueId
+      navigation.navigate('ClassesListForVenue', { venueId: venue.id });
+    } else {
+      console.error("Venue ID is not available.");
+    }
+  };
+  
+
   if (!venue) {
     return <Text>Loading venue details...</Text>; // Show a loading message or spinner
   }
@@ -44,6 +54,9 @@ const GymDetailScreen: React.FC<Props> = ({ route }) => {
         <Text style={styles.rating}>Rating: {venue.rating}</Text>
         <Text style={styles.distance}>Distance: {venue.distance} meters</Text>
         <Text style={styles.description}>{venue.description}</Text>
+        <TouchableOpacity style={styles.showClassesButton} onPress={handleShowClasses}>
+          <Text style={styles.showClassesText}>Show Classes</Text>
+        </TouchableOpacity>
       </View>
       <MapView
         style={styles.map}
@@ -107,6 +120,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 250,
     marginBottom: 20,
+  },
+  showClassesButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007AFF', // Use your app's color scheme
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  showClassesText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
