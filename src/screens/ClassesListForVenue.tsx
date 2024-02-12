@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, RefreshControl } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack'; // Import StackNavigationProp
 import ClassCard from '../components/ClassCard';
-import { Class, RootStackParamList, Venue } from '../types/types';
+import { Class, RootStackParamList } from '../types/types'; // Ensure these imports are correct
 import { fetchClassesForVenue, fetchVenueById } from '../services/firestoreService';
 
 // Define the expected route parameters for this screen
@@ -12,6 +13,7 @@ const ClassesListForVenue: React.FC = () => {
   const [classes, setClasses] = useState<Class[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const route = useRoute<ClassesListForVenueRouteProp>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); // Correctly type the useNavigation hook
   const venueId = route.params.venueId;
 
   useEffect(() => {
@@ -42,12 +44,18 @@ const ClassesListForVenue: React.FC = () => {
     await loadClassesAndVenue();
   };
 
+  const handleSelectClass = (selectedClass: Class) => {
+    navigation.navigate('ClassDetail', { classDetail: selectedClass }); // This should now work without TypeScript errors
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={classes}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ClassCard classInfo={item} onPress={() => {}} />}
+        renderItem={({ item }) => (
+          <ClassCard classInfo={item} onPress={() => handleSelectClass(item)} />
+        )}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </View>

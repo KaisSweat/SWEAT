@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, Venue } from '../types/types';
 import { fetchVenueById } from '../services/firestoreService';
 
+
 type GymDetailScreenRouteProp = RouteProp<RootStackParamList, 'GymDetail'>;
 type GymDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GymDetail'>;
 

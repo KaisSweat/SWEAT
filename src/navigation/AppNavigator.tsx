@@ -20,6 +20,7 @@ const GymStackScreen = () => {
       <GymStack.Screen name="GymList" component={GymScreen} options={{ headerShown: false }} />
       <GymStack.Screen name="GymDetail" component={GymDetailScreen} />
       <GymStack.Screen name="ClassesListForVenue" component={ClassesListForVenue} />
+      <GymStack.Screen name="ClassDetail" component={ClassDetailScreen} />
     </GymStack.Navigator>
   );
 };

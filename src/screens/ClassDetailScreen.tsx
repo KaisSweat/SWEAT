@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { RouteProp } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { RootStackParamList, Venue } from '../types/types'; // Ensure this import path is correct
+import { fetchClassesForVenue, fetchVenueById } from '../services/firestoreService';
 
 type ClassDetailScreenRouteProp = RouteProp<RootStackParamList, 'ClassDetail'>;
 
