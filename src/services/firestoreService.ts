@@ -69,27 +69,4 @@ export const fetchVenueById = async (venueId: string): Promise<Venue> => {
     throw error; // Propagate the error
   }
 };
-export const fetchClassById = async (venueId: string, classId: string): Promise<Class> => {
-  try {
-    console.log(`Fetching class details for ID: ${classId} from venue: ${venueId} in Firestore...`);
-    const docRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
-    const docSnap = await docRef.get();
-    
-    if (!docSnap.exists) {
-      throw new Error(`Class with ID: ${classId} not found in venue: ${venueId}`);
-    }
-    
-    const classData = docSnap.data() as any;
-    return {
-      id: docSnap.id,
-      ...classData,
-      startTime: classData.startTime.toDate(),
-      endTime: classData.endTime.toDate(),
-      // Convert other timestamps if necessary
-    } as Class;
-  } catch (error) {
-    console.error(`Error fetching class with ID: ${classId} from venue: ${venueId}:`, error);
-    throw new Error(`Error fetching class with ID: ${classId} from venue: ${venueId}: ${error}`);
-  }
-};
 
