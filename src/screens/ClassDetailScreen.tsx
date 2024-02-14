@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList, Venue } from '../types/types'; // Ensure this import path is correct
-import { fetchClassesForVenue, fetchVenueById } from '../services/firestoreService';
+import { format, isTomorrow } from 'date-fns';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 type ClassDetailScreenRouteProp = RouteProp<RootStackParamList, 'ClassDetail'>;
 
 type Props = {
@@ -15,6 +19,10 @@ const ClassDetailScreen: React.FC<Props> = ({ route }) => {
   const { classDetail } = route.params;
   
 const venue: Venue = classDetail.venue || {};
+const startTimeFormatted = format(classDetail.startTime, 'p');
+const endTimeFormatted = format(classDetail.endTime, 'p');
+const dayIndicator = isTomorrow(classDetail.startTime) ? 'Tomorrow' : format(classDetail.startTime, 'EEEE');
+
 
 console.log('Venue Data:', venue);
   return (
@@ -22,7 +30,7 @@ console.log('Venue Data:', venue);
       <View style={styles.detailsContainer}>
       <Image source={{ uri: venue.image }} style={styles.image} resizeMode="cover" />
         <Text style={styles.className}>{classDetail.name}</Text>
-        <Text style={styles.classTime}>{`${classDetail.startTime} - ${classDetail.endTime}`}</Text>
+        <Text style={styles.classTime}>{`${dayIndicator}, ${startTimeFormatted} - ${endTimeFormatted}`}</Text>
         <Text style={styles.classInfo}>{`${venue.name } | ${venue.area }`}</Text>
         <Text style={styles.classInfo}>{`With ${classDetail.coach}`}</Text>
         <Text style={styles.classDescription}>{classDetail.description}</Text>
@@ -31,7 +39,10 @@ console.log('Venue Data:', venue);
         <TouchableOpacity style={styles.bookButton}>
           <Text style={styles.bookButtonText}>Book Now</Text>
         </TouchableOpacity>
-        
+
+        <Text style={styles.classInfo}>Book until: {format(classDetail.bookingDeadline, 'p')}</Text>
+        <Text style={styles.classInfo}>Check-in: {format(classDetail.checkInStart, 'p')} - {format(classDetail.checkInEnd, 'p')}</Text>
+        <Text style={styles.classInfo}>Cancel until: {format(classDetail.cancellationDeadline, 'p')}</Text>
         {classDetail.venue.latitude && classDetail.venue.longitude && (
           <MapView
             style={styles.map}

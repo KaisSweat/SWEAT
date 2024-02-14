@@ -13,21 +13,27 @@ const mockData = [
     classes: [
       {
         name: 'Morning Yoga',
-        startTime: '08:00 AM',
-        endTime: '09:00 AM',
-        duration: '60 min',
+        startTime: new Date('2024-02-13T08:00:00'),
+        endTime: new Date('2024-02-13T09:00:00'),
         coach: 'Alice Johnson',
         description: 'Energize your body and mind with our morning yoga session.',
         availableSpots: 10,
+        bookingDeadline: new Date('2024-02-13T07:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-13T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-13T08:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-12T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'HIIT Circuit',
-        startTime: '05:00 PM',
-        endTime: '06:00 PM',
-        duration: '60 min',
+        startTime: new Date('2024-02-14T08:00:00'),
+        endTime: new Date('2024-02-14T09:00:00'),
         coach: 'Bob Smith',
         description: 'High-intensity interval training to boost your metabolism.',
         availableSpots: 8,
+        bookingDeadline: new Date('2024-02-14T07:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-14T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-14T08:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-13T20:00:00'), // Day before at 8 PM
       },
     ],
   },
@@ -45,21 +51,27 @@ const mockData = [
     classes: [
       {
         name: 'Powerlifting 101',
-        startTime: '07:00 AM',
-        endTime: '08:00 AM',
-        duration: '60 min',
+        startTime: new Date('2024-02-15T09:00:00'),
+        endTime: new Date('2024-02-15T10:00:00'),
         coach: 'Carlton Banks',
         description: 'Learn the basics of powerlifting with our expert coach.',
         availableSpots: 6,
+        bookingDeadline: new Date('2024-02-15T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-15T08:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-15T08:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-14T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'Evening Pilates',
-        startTime: '06:00 PM',
-        endTime: '07:00 PM',
-        duration: '60 min',
+        startTime: new Date('2024-02-13T06:00:00'),
+        endTime: new Date('2024-02-13T07:00:00'),
         coach: 'Janet Hubert',
         description: 'Unwind after a long day with a session of pilates.',
         availableSpots: 12,
+        bookingDeadline: new Date('2024-02-13T05:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-13T05:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-13T06:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-12T20:00:00'), // Day before at 8 PM
       },
     ],
   },
@@ -78,21 +90,27 @@ const mockData = [
     classes: [
       {
         name: 'Guided Meditation',
-        startTime: '09:00 AM',
-        endTime: '10:00 AM',
-        duration: '60 min',
+        startTime: new Date('2024-02-16T06:00:00'),
+        endTime: new Date('2024-02-16T07:00:00'),
         coach: 'Guru Dave',
         description: 'Start your day with peace and mindfulness with our guided meditation.',
         availableSpots: 15,
+        bookingDeadline: new Date('2024-02-16T05:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-16T05:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-16T06:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-15T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'Wellness Workshop',
-        startTime: '02:00 PM',
-        endTime: '03:30 PM',
-        duration: '90 min',
+        startTime: new Date('2024-02-16T09:00:00'),
+        endTime: new Date('2024-02-16T10:00:00'),
         coach: 'Dr. Linda',
         description: 'Learn wellness techniques to improve your daily life.',
         availableSpots: 20,
+        bookingDeadline: new Date('2024-02-16T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-16T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-16T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-15T20:00:00'), // Day before at 8 PM
       },
     ],
   },
@@ -110,21 +128,27 @@ const mockData = [
     classes: [
       {
         name: 'Aqua Aerobics',
-        startTime: '11:00 AM',
-        endTime: '12:00 PM',
-        duration: '60 min',
+        startTime: new Date('2024-02-17T09:00:00'),
+        endTime: new Date('2024-02-17T10:00:00'),
         coach: 'Aqua Jane',
         description: 'Energize your body with low-impact aquatic exercises.',
         availableSpots: 12,
+        bookingDeadline: new Date('2024-02-17T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-17T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-17T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-16T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'Total Body Workout',
-        startTime: '06:00 PM',
-        endTime: '07:00 PM',
-        duration: '60 min',
+        startTime: new Date('2024-02-18T09:00:00'),
+        endTime: new Date('2024-02-18T10:00:00'),
         coach: 'Coach Mike',
         description: 'A full-body workout to tone and strengthen.',
         availableSpots: 10,
+        bookingDeadline: new Date('2024-02-18T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-18T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-18T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-17T20:00:00'), // Day before at 8 PM
       },
     ],
   },
@@ -142,21 +166,27 @@ const mockData = [
     classes: [
       {
         name: 'Beginner Climbing',
-        startTime: '10:00 AM',
-        endTime: '11:30 AM',
-        duration: '90 min',
+        startTime: new Date('2024-02-19T09:00:00'),
+        endTime: new Date('2024-02-19T10:00:00'),
         coach: 'Climber Joe',
         description: 'Learn the basics of rock climbing in a safe and fun environment.',
         availableSpots: 8,
+        bookingDeadline: new Date('2024-02-19T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-19T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-19T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-18T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'Advanced Fitness Training',
-        startTime: '07:30 PM',
-        endTime: '09:00 PM',
-        duration: '90 min',
+        startTime: new Date('2024-02-20T09:00:00'),
+        endTime: new Date('2024-02-20T10:00:00'),
         coach: 'Trainer Max',
         description: 'Push your limits with high-intensity training.',
         availableSpots: 10,
+        bookingDeadline: new Date('2024-02-20T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-20T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-20T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-18T20:00:00'), // Day before at 8 PM
       },
     ],
   },
@@ -174,21 +204,27 @@ const mockData = [
     classes: [
       {
         name: 'Vinyasa Flow',
-        startTime: '08:30 AM',
-        endTime: '09:45 AM',
-        duration: '75 min',
+        startTime: new Date('2024-02-21T09:00:00'),
+        endTime: new Date('2024-02-21T10:00:00'),
         coach: 'Yogi Anna',
         description: 'Fluid yoga sequences to enhance flexibility and strength.',
         availableSpots: 18,
+        bookingDeadline: new Date('2024-02-21T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-21T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-21T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-20T20:00:00'), // Day before at 8 PM
       },
       {
         name: 'Mat Pilates',
-        startTime: '05:30 PM',
-        endTime: '06:30 PM',
-        duration: '60 min',
+        startTime: new Date('2024-02-22T09:00:00'),
+        endTime: new Date('2024-02-22T10:00:00'),
         coach: 'Pilates Master Kim',
         description: 'Core-strengthening Pilates on the mat for all levels.',
         availableSpots: 15,
+        bookingDeadline: new Date('2024-02-22T08:00:00'), // 1 hour before start
+        checkInStart: new Date('2024-02-22T07:30:00'), // 30 minutes before start
+        checkInEnd: new Date('2024-02-22T09:15:00'), // 15 minutes after start
+        cancellationDeadline: new Date('2024-02-21T20:00:00'), // Day before at 8 PM
       },
     ],
   }

@@ -1,7 +1,20 @@
-// src/components/ClassCard.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Class } from '../types/types'; // Ensure this path is correct
+import { format } from 'date-fns';
+
+// Utility function to safely parse dates and return a formatted string or fallback
+const safeFormatDate = (dateInput: string | number | Date, formatString: string): string => {
+  try {
+    const date = new Date(dateInput);
+    if (isNaN(date.getTime())) { // Check if date is invalid
+      throw new Error('Invalid Date');
+    }
+    return format(date, formatString);
+  } catch (error) {
+    return 'Invalid Date';
+  }
+};
 
 type ClassCardProps = {
   classInfo: Class;
@@ -12,26 +25,28 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
   const {
     name,
     startTime,
+    endTime,
     venue,
     coach,
     availableSpots,
   } = classInfo;
 
-  // Formatting the display of available spots
   const spotsDisplay = availableSpots === 1 ? '1 spot left' : `${availableSpots} spots left`;
   const waitlistDisplay = availableSpots === 0 ? 'Wait list' : spotsDisplay;
 
-  const venueName = venue?.name || 'Unknown Venue';
-  const venueArea = venue?.area || 'Unknown Area';
+  // Use the safeFormatDate utility to format dates
+  const formattedStartTime = safeFormatDate(startTime, 'h:mm a');
+  const formattedEndTime = safeFormatDate(endTime, 'h:mm a');
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
-        <Text style={styles.time}>{startTime}</Text>
+        <Text style={styles.time}>{`${formattedStartTime} - ${formattedEndTime}`}</Text>
         <Text style={styles.spots}>{waitlistDisplay}</Text>
       </View>
       <Text style={styles.className}>{name}</Text>
       <Text style={styles.details}>
-        {venueName} | {venueArea} | {coach}
+        {venue?.name || 'Unknown Venue'} | {venue?.area || 'Unknown Area'} | {coach}
       </Text>
     </TouchableOpacity>
   );

@@ -1,12 +1,13 @@
 // src/contexts/AppDataContext.tsx
 import React, { createContext, useState, useContext, useEffect, ReactNode, FC } from 'react';
-import { fetchVenues, fetchClassesForVenue, fetchVenueById } from '../services/firestoreService';
+import { fetchVenues, fetchClassesForVenue, fetchVenueById,fetchClassById } from '../services/firestoreService';
 import { Venue, Class } from '../types/types';
 
 type AppDataContextType = {
   venues: Venue[];
   fetchClassesForVenue: (venueId: string) => Promise<Class[]>;
   fetchVenueById: (venueId: string) => Promise<Venue>;
+  fetchClassById: (venueId: string, classId: string) => Promise<Class>;
 };
 
 const AppDataContext = createContext<AppDataContextType | undefined>(undefined);
@@ -39,7 +40,7 @@ export const AppDataProvider: FC<AppDataProviderProps> = ({ children }) => {
   // Classes can be fetched on-demand when a specific venue is selected.
 
   return (
-    <AppDataContext.Provider value={{ venues, fetchClassesForVenue, fetchVenueById }}>
+    <AppDataContext.Provider value={{ venues, fetchClassesForVenue, fetchVenueById ,fetchClassById}}>
       {children}
     </AppDataContext.Provider>
   );

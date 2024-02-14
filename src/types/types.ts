@@ -19,14 +19,17 @@ export type Venue = {
 export type Class = {
   id: string;
   name: string; // Class name
-  startTime: string; // Start time of the class
-  endTime: string;
-  duration: string; // Duration of the class // Change this from string to Venue to hold the entire venue objec
+  startTime: Date; // Use Date object for start time of the class
+  endTime: Date; // Use Date object for end time of the class
   coach: string; // Name of the coach
   description: string; // description
   availableSpots: number;
   venueId: string;
   venue: Venue;
+  bookingDeadline: Date; // Deadline for booking the class
+  checkInStart: Date; // Check-in start time
+  checkInEnd: Date; // Check-in end time
+  cancellationDeadline: Date; // Deadline to cancel the booking
   // ... any other class related properties
 };
 // Define the RootStackParamList for React Navigation
