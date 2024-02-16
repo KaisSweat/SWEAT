@@ -2,6 +2,20 @@
 import firestore from '@react-native-firebase/firestore';
 import { Venue, Class } from '../types/types';
 
+
+
+const toDate = (value: any): Date | null => {
+  if (value?.toDate) { // Check if it's a Firestore Timestamp by checking for the toDate method
+    return value.toDate();
+  } else if (typeof value === 'string') { // Check if it's an ISO string
+    const parsedDate = new Date(value);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  } else {
+    return null; // Return null if neither, to handle unexpected formats gracefully
+  }
+};
+
+
 // Fetch all venues
 export const fetchVenues = async (): Promise<Venue[]> => {
   try {
@@ -21,35 +35,30 @@ export const fetchVenues = async (): Promise<Venue[]> => {
 
 // Fetch classes for a specific venue by its auto-generated ID
 // Fetch classes for a specific venue by its auto-generated ID
+// Fetch classes for a specific venue by its ID
 export const fetchClassesForVenue = async (venueId: string): Promise<Class[]> => {
   try {
-    const classesSnapshot = await firestore()
-      .collection('venues')
-      .doc(venueId)
-      .collection('classes')
-      .get();
-
+    const classesSnapshot = await firestore().collection('venues').doc(venueId).collection('classes').get();
     const classes = classesSnapshot.docs.map(doc => {
       const classData = doc.data();
       return {
         id: doc.id,
         ...classData,
-        // Convert Timestamps to JavaScript Date objects
-        startTime: classData.startTime.toDate(),
-        endTime: classData.endTime.toDate(),
-        bookingDeadline: classData.bookingDeadline.toDate(),
-        checkInStart: classData.checkInStart.toDate(),
-        checkInEnd: classData.checkInEnd.toDate(),
-        cancellationDeadline: classData.cancellationDeadline.toDate(),
+        startTime: toDate(classData.startTime),
+        endTime: toDate(classData.endTime),
+        bookingDeadline: toDate(classData.bookingDeadline),
+        checkInStart: toDate(classData.checkInStart),
+        checkInEnd: toDate(classData.checkInEnd),
+        cancellationDeadline: toDate(classData.cancellationDeadline),
       } as Class;
     });
-
-    return classes; // Return classes array
+    return classes;
   } catch (error) {
     console.error(`Error fetching classes for venue ${venueId}:`, error);
     throw new Error(`Error fetching classes for venue ${venueId}: ${error}`);
   }
 };
+
 
 // Fetch a single venue by its ID
 export const fetchVenueById = async (venueId: string): Promise<Venue> => {
@@ -70,3 +79,37 @@ export const fetchVenueById = async (venueId: string): Promise<Venue> => {
   }
 };
 
+export const fetchAllClasses = async (): Promise<Class[]> => {
+  try {
+    const venuesSnapshot = await firestore().collection('venues').get();
+    let allClasses: Class[] = [];
+
+    for (const venueDoc of venuesSnapshot.docs) {
+      const venueId = venueDoc.id;
+      const classesSnapshot = await firestore().collection('venues').doc(venueId).collection('classes').get();
+
+      const classes = classesSnapshot.docs.map(doc => {
+        const classData = doc.data();
+        return {
+          id: doc.id,
+          ...classData,
+          startTime: toDate(classData.startTime),
+          endTime: toDate(classData.endTime),
+          bookingDeadline: toDate(classData.bookingDeadline),
+          checkInStart: toDate(classData.checkInStart),
+          checkInEnd: toDate(classData.checkInEnd),
+          cancellationDeadline: toDate(classData.cancellationDeadline),
+          venueId: venueId,
+          venue: venueDoc.data() as Venue,
+        } as Class;
+      });
+
+      allClasses = [...allClasses, ...classes];
+    }
+
+    return allClasses;
+  } catch (error) {
+    console.error("Error fetching all classes:", error);
+    throw new Error("Error fetching all classes");
+  }
+};

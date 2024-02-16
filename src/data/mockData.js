@@ -1,79 +1,75 @@
+// src/data/mockData.js
+
+const mockData = {
+  venues: [
+    {
+      id: 'venue1',
+      name: 'Raach Gym',
+      type: ['Gym', 'Yoga'],
+      rating: 4.9,
+      distance: 340,
+      description: 'Private Gym, Strength & Cardio, Gym, Yoga',
+      address: '11 rue des palmiers',
+      area: 'Bardo',
+      latitude: 59.9139,
+      longitude: 10.7522,
+      image: 'https://www.dropbox.com/scl/fi/wqm6t2mw938janw39rq9u/salle-de-sport2.jpg?rlkey=vjsu0hsc6nubpzvbikfedpk0u&dl=1',
+    },
+    // Add more venues as needed...
+  ],
+  classes: [
+    {
+      id: 'class1',
+      venueId: 'venue1',
+      name: 'Morning Yoga',
+      startTime: '2024-02-13T08:00:00Z',
+      endTime: '2024-02-13T09:00:00Z',
+      coach: 'Alice Johnson',
+      description: 'Energize your body and mind with our morning yoga session.',
+      availableSpots: 10,
+      bookingDeadline: '2024-02-13T07:00:00Z',
+      checkInStart: '2024-02-13T07:30:00Z',
+      checkInEnd: '2024-02-13T08:15:00Z',
+      cancellationDeadline: '2024-02-12T20:00:00Z',
+    },
+    {
+      id: 'class2',
+      venueId: 'venue1',
+      name: 'HIIT Circuit',
+      startTime: '2024-02-14T010:00:00Z',
+      endTime: '2024-02-14T011:00:00Z',
+      coach: 'Bob Smith',
+      description: 'High-intensity interval training to boost your metabolism.',
+      availableSpots: 5,
+      bookingDeadline: '2024-02-14T09:00:00Z',
+      checkInStart: '2024-02-13T09:30:00Z',
+      checkInEnd: '2024-02-13T10:15:00Z',
+      cancellationDeadline: '2024-02-13T20:00:00Z',
+    },
 
 
-const mockData = [
-  {
-    id: '1',
-    name: 'Raach Gym',
-    type: ['Gym', 'Yoga'],
-    rating: 4.9,
-    distance: 340,
-    description: 'Private Gym, Strength & Cardio, Gym, Yoga',
-    address: '11 rue des palmiers',
-    area:'Bardo',
-    latitude: 59.9139,
-    longitude: 10.7522,
-    image: require('../assets/images/salle-de-sport.jpg'), // Update the path as necessary
-    classes: [
-      {
-        id: 'c1',
-        name: 'Morning Yoga',
-        startTime: '08:00 AM',
-        endTime: '09:00 AM',
-        duration: '60 min',
-        coach: 'Alice Johnson',
-        description: 'Energize your body and mind with our morning yoga session.',
-        availableSpots: 10,
-      },
-      {
-        id: 'c2',
-        name: 'HIIT Circuit',
-        startTime: '05:00 PM',
-        endTime: '06:00 PM',
-        duration: '60 min',
-        coach: 'Bob Smith',
-        description: 'High-intensity interval training to boost your metabolism.',
-        availableSpots: 8,
-      }
-    ]
-  },
-  {
-    id: '2',
-    name: 'Downtown Fitness',
-    type: ['Fitness', 'Wellness'],
-    rating: 4.7,
-    distance: 520,
-    address: 'Malerhaugveien 34B',
-    area:'Ensjø',
-    description: 'Downtown Fitness, your go-to place for wellness and strength training.',
-    latitude: 59.9140,
-    longitude: 10.7530,
-    image: require('../assets/images/salle-de-sport2.jpg'), // Update the path as necessary
-    classes: [
-      {
-        id: 'c3',
-        name: 'Powerlifting 101',
-        startTime: '07:00 AM',
-        endTime: '08:00 AM',
-        duration: '60 min',
-        coach: 'Carlton Banks',
-        description: 'Learn the basics of powerlifting with our expert coach.',
-        availableSpots: 6,
-      },
-      {
-        id: 'c4',
-        name: 'Evening Pilates',
-        startTime: '06:00 PM',
-        endTime: '07:00 PM',
-        duration: '60 min',
-        coach: 'Janet Hubert',
-        description: 'Unwind after a long day with a session of pilates.',
-        availableSpots: 12,
-      }
-    ]
-  }
-];
+    // Add more classes as needed...
+  ],
+  users: [
+    {
+      id: 'user1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      // Assuming bookings will be filled later as references to 'bookings' collection
+    },
+    // Add more users as needed...
+  ],
+  bookings: [
+    {
+      id: 'booking1',
+      classId: 'class1',
+      userId: 'user1',
+      status: 'booked',
+      bookingTime: '2024-02-12T15:00:00Z',
+      // userCheckInTime can be updated later when the user checks in
+    },
+    // Add more bookings as needed...
+  ],
+};
 
 export default mockData;
-
-
-
