@@ -113,3 +113,33 @@ export const fetchAllClasses = async (): Promise<Class[]> => {
     throw new Error("Error fetching all classes");
   }
 };
+
+// Fetch a single class by its ID and venue ID
+export const fetchClassById = async (venueId: string, classId: string): Promise<Class | null> => {
+  try {
+    const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
+    const doc = await classRef.get();
+
+    if (!doc.exists) {
+      throw new Error(`Class with ID: ${classId} not found in venue: ${venueId}`);
+    }
+
+    const classData = doc.data();
+    return {
+      id: doc.id,
+      ...classData,
+      startTime: toDate(classData?.startTime),
+      endTime: toDate(classData?.endTime),
+      bookingDeadline: toDate(classData?.bookingDeadline),
+      checkInStart: toDate(classData?.checkInStart),
+      checkInEnd: toDate(classData?.checkInEnd),
+      cancellationDeadline: toDate(classData?.cancellationDeadline),
+      // Include venueId in the class object for reference
+      venueId: venueId,
+      // If you need the entire venue object, you can fetch it separately using fetchVenueById and include it here
+    } as Class;
+  } catch (error) {
+    console.error(`Error fetching class with ID ${classId} from venue ${venueId}:`, error);
+    return null; // Return null or throw the error based on your error handling strategy
+  }
+};

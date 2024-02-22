@@ -5,6 +5,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import firebase from '@react-native-firebase/app';
 import firebaseConfig from './src/config/firebaseConfig'; // Adjust the path as necessary
 import { AppDataProvider } from './src/contexts/AppDataContext';
+import { AppUserProvider } from './src/contexts/AppUserContext';
 
 
 // Initialize Firebase only if it hasn't been initialized yet
@@ -20,9 +21,11 @@ const App: React.FC = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <AppDataProvider> 
+        <AppUserProvider>
         <NavigationContainer>
           <AppNavigator />
         </NavigationContainer>
+        </AppUserProvider>
       </AppDataProvider>
     </SafeAreaView>
 //    </AppDataProvider> // Close the AppDataProvider

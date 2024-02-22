@@ -19,8 +19,14 @@ const migrateDataToFirestore = async () => {
   for (const classItem of mockData.classes) {
     const { id, venueId, ...classData } = classItem;
     const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(id);
-    await classRef.set(classData);
-    console.log(`Class '${classItem.name}' migrated.`);
+  
+    // Include venueId in the class document
+    await classRef.set({
+      ...classData,
+      venueId: venueId, // Explicitly include venueId here
+    });
+  
+    console.log(`Class '${classItem.name}' migrated with venueId '${venueId}'.`);
   }
 
   // Migrate Users
@@ -32,12 +38,20 @@ const migrateDataToFirestore = async () => {
   }
 
   // Migrate Bookings
+
   for (const booking of mockData.bookings) {
-    const { id, userId, classId, ...bookingData } = booking;
+    const { id, userId, classId, venueId, ...bookingData } = booking;
+    const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
     const bookingRef = firestore().collection('users').doc(userId).collection('bookings').doc(id);
-    await bookingRef.set({ ...bookingData, classRef: firestore().doc(`classes/${classId}`) }); // Link to class document
-    console.log(`Booking for class '${classId}' by user '${userId}' migrated.`);
+    await bookingRef.set({
+      ...bookingData,
+      classRef: classRef, // Firestore document reference to the class
+      venueId: venueId // Directly include venueId for easy access
+    });
+    console.log(`Booking '${id}' for class '${classId}' by user '${userId}' migrated.`);
   }
+
+
 
   console.log('Migration completed.');
 };

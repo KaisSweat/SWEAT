@@ -2,49 +2,68 @@
 import firestore from '@react-native-firebase/firestore';
 import { Class, UserBooking,ClassBooking } from '../types/types';
 
-// Function to book a class for a user
-export const bookClassForUser = async (userId: string, classId: string, venueId: string): Promise<UserBooking> => {
-  // Start a Firestore transaction to ensure data consistency
-  return firestore().runTransaction(async (transaction) => {
-    const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
-    const classDoc = await transaction.get(classRef);
 
-    if (!classDoc.exists) {
-      throw new Error('Class not found!');
-    }
+const toDate = (value: any): Date | null => {
+  if (value?.toDate) { // Check if it's a Firestore Timestamp by checking for the toDate method
+    return value.toDate();
+  } else if (typeof value === 'string') { // Check if it's an ISO string
+    const parsedDate = new Date(value);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  } else {
+    return null; // Return null if neither, to handle unexpected formats gracefully
+  }
+};
 
-    const classData = classDoc.data() as Class;
-    if (classData.availableSpots <= 0) {
-      throw new Error('No spots available!');
-    }
+// Function to fetch bookings for a specific user
+export const fetchBookingsForUser = async (userId: string): Promise<UserBooking[]> => {
+  try {
+    const bookingsSnapshot = await firestore().collection('users').doc(userId).collection('bookings').get();
+    const bookingsPromises = bookingsSnapshot.docs.map(async doc => {
+      const bookingData = doc.data();
+      console.log("Booking data:", bookingData);
 
-    // Decrement the available spots
-    transaction.update(classRef, {
-      availableSpots: firestore.FieldValue.increment(-1),
+      if (!bookingData.classRef) {
+        console.error("Missing classRef in booking data:", bookingData);
+        throw new Error("Missing classRef in booking data");
+      }
+
+      // Resolve class document reference
+      const classSnapshot = await bookingData.classRef.get();
+      if (!classSnapshot.exists) {
+        console.error(`Class document not found for ref: ${bookingData.classRef.path}`);
+        throw new Error(`Class document not found for ref: ${bookingData.classRef.path}`);
+      }
+
+      const classData = classSnapshot.data();
+      console.log("Class data for booking:", classData);
+
+      const venueId = classData?.venueId;
+      if (!venueId) {
+        console.error("Missing venueId in class data:", classData);
+        throw new Error("Missing venueId in class data");
+      }
+
+      return {
+        id: doc.id,
+        classId: classSnapshot.id, // Use the document ID as the classId
+        venueId: venueId,
+        status: bookingData.status,
+        bookingTime: toDate(bookingData.bookingTime),
+        // Include additional class details as needed
+        className: classData.name,
+        classStartTime: toDate(classData.startTime),
+        classEndTime: toDate(classData.endTime),
+      } as UserBooking;
     });
 
-    // Create a new booking
-    const newBookingRef = firestore().collection('users').doc(userId).collection('bookings').doc();
-    const newBooking: UserBooking = {
-      id: newBookingRef.id,
-      classId,
-      status: 'booked',
-      bookingTime: new Date(),
-    };
-
-    transaction.set(newBookingRef, newBooking);
-
-    return newBooking;
-  });
+    const bookings = await Promise.all(bookingsPromises);
+    return bookings;
+  } catch (error) {
+    console.error("Error fetching user's bookings:", error);
+    throw new Error("Error fetching user's bookings");
+  }
 };
 
-// Function to fetch bookings for a user
-export const fetchBookingsForUser = async (userId: string): Promise<UserBooking[]> => {
-  const bookingsSnapshot = await firestore().collection('users').doc(userId).collection('bookings').get();
-  return bookingsSnapshot.docs.map(doc => doc.data() as UserBooking);
-
-
-};
 // Function to cancel a booking for a user and increment the available spots for the class
 export const cancelBookingForUser = async (userId: string, bookingId: string, venueId: string, classId: string): Promise<void> => {
   const userBookingRef = firestore().collection('users').doc(userId).collection('bookings').doc(bookingId);
@@ -79,3 +98,5 @@ export const fetchBookingsForClass = async (venueId: string, classId: string): P
 
   return bookings;
 };
+
+

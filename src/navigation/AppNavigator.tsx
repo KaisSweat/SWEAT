@@ -9,6 +9,7 @@ import ClassesScreen from '../screens/ClassesScreen';
 import ClassDetailScreen from '../screens/ClassDetailScreen';
 import ClassesListForVenue from '../screens/ClassesListForVenue'; // Ensure this import is correct
 import { RootStackParamList } from '../types/types';
+import MyClassesScreen from '../screens/MyClassesScreen';
 
 const Tab = createBottomTabNavigator();
 const GymStack = createStackNavigator<RootStackParamList>();
@@ -40,6 +41,7 @@ const AppNavigator: React.FC = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Gym" component={GymStackScreen} />
       <Tab.Screen name="Classes" component={ClassesStackScreen} />
+      <Tab.Screen name="MyClasses" component={MyClassesScreen} options={{ title: 'My Classes' }} />
       {/* Add other tabs as needed */}
     </Tab.Navigator>
   );
