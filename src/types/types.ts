@@ -34,12 +34,12 @@ export type Class = {
 };
 // Define the RootStackParamList for React Navigation
 export type RootStackParamList = {
+  Login: undefined; // Add this if LoginScreen is a direct part of your root navigator
   GymList: undefined;
   GymDetail: { venueId: string };
   ClassesList: { venueId: string };
   ClassesListForVenue: { venueId: string };
-  ClassDetail: { classDetail: Class }; // Since classDetail includes venue info, no separate venue param needed
-  // Add other screens and their parameters as needed
+  ClassDetail: { classDetail: Class };
 };
 
 // Extending User type for App User functionality
@@ -54,6 +54,7 @@ export type AppUser = {
 // Type for each booking a user makes
 export type UserBooking = {
   id: string;
+  userId:string;
   classId: string;
   venueId: string;
   status: 'booked' | 'attended' | 'cancelled'; // Including an 'attended' status if you want to track attendance

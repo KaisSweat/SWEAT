@@ -1,6 +1,6 @@
 // src/services/firestorebookingService.ts
 import firestore from '@react-native-firebase/firestore';
-import { Class, UserBooking,ClassBooking } from '../types/types';
+import { UserBooking } from '../types/types';
 
 
 const toDate = (value: any): Date | null => {
@@ -18,45 +18,20 @@ const toDate = (value: any): Date | null => {
 export const fetchBookingsForUser = async (userId: string): Promise<UserBooking[]> => {
   try {
     const bookingsSnapshot = await firestore().collection('users').doc(userId).collection('bookings').get();
-    const bookingsPromises = bookingsSnapshot.docs.map(async doc => {
+    const bookings = bookingsSnapshot.docs.map(doc => {
       const bookingData = doc.data();
       console.log("Booking data:", bookingData);
 
-      if (!bookingData.classRef) {
-        console.error("Missing classRef in booking data:", bookingData);
-        throw new Error("Missing classRef in booking data");
-      }
-
-      // Resolve class document reference
-      const classSnapshot = await bookingData.classRef.get();
-      if (!classSnapshot.exists) {
-        console.error(`Class document not found for ref: ${bookingData.classRef.path}`);
-        throw new Error(`Class document not found for ref: ${bookingData.classRef.path}`);
-      }
-
-      const classData = classSnapshot.data();
-      console.log("Class data for booking:", classData);
-
-      const venueId = classData?.venueId;
-      if (!venueId) {
-        console.error("Missing venueId in class data:", classData);
-        throw new Error("Missing venueId in class data");
-      }
-
+      // Assume class details are stored directly in the booking or fetched separately
       return {
         id: doc.id,
-        classId: classSnapshot.id, // Use the document ID as the classId
-        venueId: venueId,
+        userId: userId, // Assuming userId is needed in the booking object
+        classId: bookingData.classId,
+        venueId: bookingData.venueId,
         status: bookingData.status,
         bookingTime: toDate(bookingData.bookingTime),
-        // Include additional class details as needed
-        className: classData.name,
-        classStartTime: toDate(classData.startTime),
-        classEndTime: toDate(classData.endTime),
       } as UserBooking;
     });
-
-    const bookings = await Promise.all(bookingsPromises);
     return bookings;
   } catch (error) {
     console.error("Error fetching user's bookings:", error);
@@ -65,38 +40,94 @@ export const fetchBookingsForUser = async (userId: string): Promise<UserBooking[
 };
 
 // Function to cancel a booking for a user and increment the available spots for the class
-export const cancelBookingForUser = async (userId: string, bookingId: string, venueId: string, classId: string): Promise<void> => {
-  const userBookingRef = firestore().collection('users').doc(userId).collection('bookings').doc(bookingId);
-  const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
+export const cancelBookingForUser = async (userId: string, bookingId: string): Promise<boolean> => {
+  try {
+    const userBookingRef = firestore().collection('users').doc(userId).collection('bookings').doc(bookingId);
 
-  await firestore().runTransaction(async (transaction) => {
-    const userBookingDoc = await transaction.get(userBookingRef);
-    if (!userBookingDoc.exists) {
-      throw new Error('Booking not found');
+    await firestore().runTransaction(async (transaction) => {
+      const userBookingDoc = await transaction.get(userBookingRef);
+      if (!userBookingDoc.exists) {
+        throw new Error('Booking not found');
+      }
+
+      const bookingData = userBookingDoc.data();
+      if (!bookingData) {
+        throw new Error('No data available for booking');
+      }
+
+      const { classId, venueId } = bookingData;
+      if (!classId || !venueId) {
+        throw new Error('Booking data missing classId or venueId');
+      }
+
+      const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
+
+      // Delete the booking document
+      transaction.delete(userBookingRef);
+
+      // Increment the available spots in the class
+      transaction.update(classRef, { availableSpots: firestore.FieldValue.increment(1) });
+    });
+
+    console.log(`Booking ${bookingId} deleted successfully.`);
+    return true; // Indicate success
+  } catch (error) {
+    console.error(`Failed to delete booking ${bookingId}:`, error);
+    return false; // Indicate failure
+  }
+};
+
+
+
+
+
+//book class for user
+export const bookClassForUser = async (userId: string, classId: string, venueId: string): Promise<boolean> => {
+  const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId);
+  const userBookingsRef = firestore().collection('users').doc(userId).collection('bookings');
+
+  try {
+    const existingBookingsSnapshot = await userBookingsRef.where('classId', '==', classId).get();
+    if (!existingBookingsSnapshot.empty) {
+      // User already has a booking for this class, throw a custom error
+      throw new Error('Already booked');
     }
 
-    // Update the booking status to 'cancelled' in user's bookings
-    transaction.update(userBookingRef, { status: 'cancelled' });
+    await firestore().runTransaction(async (transaction) => {
+      const classDoc = await transaction.get(classRef);
+      if (!classDoc.exists) {
+        throw new Error(`Class with ID ${classId} does not exist.`);
+      }
 
-    // Increment the available spots in the class
-    transaction.update(classRef, {
-      availableSpots: firestore.FieldValue.increment(1),
+      const classData = classDoc.data();
+      if (!classData) {
+        throw new Error(`No data found for class with ID ${classId}.`);
+      }
+
+      const availableSpots = classData.availableSpots;
+      if (availableSpots <= 0) {
+        throw new Error('Class is full');
+      }
+
+      transaction.update(classRef, {
+        availableSpots: firestore.FieldValue.increment(-1),
+      });
+
+      const bookingRef = userBookingsRef.doc();
+      transaction.set(bookingRef, {
+        classId,
+        venueId,
+        userId,
+        status: 'booked',
+        bookingTime: firestore.FieldValue.serverTimestamp(),
+      });
     });
-  });
+
+    console.log(`Booking made for class ${classId} by user ${userId}`);
+    return true;
+  } catch (error) {
+    // Rethrow the error to be handled where the function is called
+    throw error;
+  }
 };
-// Function to fetch bookings for a specific class
-export const fetchBookingsForClass = async (venueId: string, classId: string): Promise<ClassBooking[]> => {
-  const classBookingsRef = firestore().collection('venues').doc(venueId).collection('classes').doc(classId).collection('bookings');
-  const snapshot = await classBookingsRef.get();
-
-  const bookings: ClassBooking[] = snapshot.docs.map(doc => {
-    return {
-      id: doc.id,
-      ...doc.data(),
-    } as ClassBooking; // Assuming ClassBooking is the type for bookings
-  });
-
-  return bookings;
-};
-
 

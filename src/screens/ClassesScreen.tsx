@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, SectionList,FlatList, Text, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useFocusEffect} from '@react-navigation/native';
 import ClassCard from '../components/ClassCard';
 import { Class, RootStackParamList } from '../types/types';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -21,27 +21,29 @@ const ClassesScreen: React.FC = () => {
   const navigation = useNavigation<ClassesScreenNavigationProp>();
   const { fetchAllClasses } = useAppData();
 
-  useEffect(() => {
-    const loadClasses = async () => {
-      setRefreshing(true);
-      try {
-        const fetchedClasses = await fetchAllClasses();
-        setAllClasses(fetchedClasses);
-        setFilteredClasses(fetchedClasses); // Initially show all classes
-      } catch (error) {
-        console.error("Error loading classes:", error);
-      } finally {
-        setRefreshing(false);
-      }
-    };
+  const loadClasses = async () => {
+    setRefreshing(true);
+    try {
+      const fetchedClasses = await fetchAllClasses();
+      setAllClasses(fetchedClasses);
+      setFilteredClasses(fetchedClasses);
+    } catch (error) {
+      console.error("Error loading classes:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
-    loadClasses();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      loadClasses();
+      // No cleanup action needed
+    }, [])
+  );
 
-  const onRefresh = useCallback(() => {
-    setFilteredClasses(allClasses); // Show all classes when refreshing
-    setSelectedDate(null); // Clear selected date
-  }, [allClasses]);
+  const onRefresh = async () => {
+    await loadClasses();
+  };
 
   const handleSelectClass = (selectedClass: Class) => {
     navigation.navigate('ClassDetail', { classDetail: selectedClass });

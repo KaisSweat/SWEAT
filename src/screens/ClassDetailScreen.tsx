@@ -1,12 +1,11 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList, Venue } from '../types/types';
 import { format, isTomorrow, isValid } from 'date-fns';
-import { LogBox } from 'react-native';
-
-LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+import { AppUserContext } from '../contexts/AppUserContext'; // Make sure the path is correct
+import { bookClassForUser } from '../services/firestorebookingService'; // Adjust the path as needed
 
 type ClassDetailScreenRouteProp = RouteProp<RootStackParamList, 'ClassDetail'>;
 
@@ -14,63 +13,80 @@ type Props = {
   route: ClassDetailScreenRouteProp;
 };
 
-// Helper function to safely format dates
-const safeFormat = (date: Date | number, formatStr: string): string => {
-  return isValid(date) ? format(date, formatStr) : 'N/A';
-};
-
 const ClassDetailScreen: React.FC<Props> = ({ route }) => {
   const { classDetail } = route.params;
+  const { user } = useContext(AppUserContext);
+  const [isBooking, setIsBooking] = useState(false);
 
-  const venue: Venue = classDetail.venue || {};
-  const startTimeFormatted = safeFormat(classDetail.startTime, 'p');
-  const endTimeFormatted = safeFormat(classDetail.endTime, 'p');
-  const dayIndicator = isValid(classDetail.startTime) ? (isTomorrow(classDetail.startTime) ? 'Tomorrow' : format(classDetail.startTime, 'EEEE')) : 'Date N/A';
-  const bookingDeadlineFormatted = safeFormat(classDetail.bookingDeadline, 'p');
-  const checkInStartFormatted = safeFormat(classDetail.checkInStart, 'p');
-  const checkInEndFormatted = safeFormat(classDetail.checkInEnd, 'p');
-  const cancellationDeadlineFormatted = safeFormat(classDetail.cancellationDeadline, 'p');
-
+  const handleBookClass = async () => {
+    if (!user) {
+      Alert.alert("Error", "You need to be logged in to book a class.");
+      return;
+    }
+  
+    setIsBooking(true);
+    try {
+      await bookClassForUser(user.id, classDetail.id, classDetail.venueId);
+      setIsBooking(false);
+      Alert.alert("Success", "Class booked successfully!");
+    } catch (error) {
+      setIsBooking(false);
+      // Type assertion to Error
+      const typedError = error as Error;
+      if (typedError.message === 'Already booked') {
+        Alert.alert("Already Booked", "You have already booked this class.");
+      } else if (typedError.message === 'Class is full') {
+        Alert.alert("Class Full", "This class is full. Please try another class.");
+      } else {
+        Alert.alert("Booking Failed", "Failed to book the class. Please try again later.");
+      }
+    }
+  };
+  
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: venue.image }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: classDetail.venue.image }} style={styles.image} resizeMode="cover" />
       <View style={styles.detailsContainer}>
         <Text style={styles.className}>{classDetail.name}</Text>
-        <Text style={styles.classTime}>{`${dayIndicator}, ${startTimeFormatted} - ${endTimeFormatted}`}</Text>
-        <Text style={styles.classInfo}>{`${venue.name || ''} | ${venue.area || ''}`}</Text>
+        <Text style={styles.classTime}>{`${format(classDetail.startTime, 'EEEE, MMMM do, p')} - ${format(classDetail.endTime, 'p')}`}</Text>
+        <Text style={styles.classInfo}>{`${classDetail.venue.name || ''} | ${classDetail.venue.area || ''}`}</Text>
         <Text style={styles.classInfo}>{`With ${classDetail.coach}`}</Text>
         <Text style={styles.classDescription}>{classDetail.description}</Text>
         <Text style={styles.availableSpots}>{`${classDetail.availableSpots} spots left`}</Text>
         
-        <TouchableOpacity style={styles.bookButton}>
-          <Text style={styles.bookButtonText}>Book Now</Text>
+        <TouchableOpacity style={styles.bookButton} onPress={handleBookClass} disabled={isBooking}>
+          {isBooking ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.bookButtonText}>Book Now</Text>
+          )}
         </TouchableOpacity>
 
-        <Text style={styles.classInfo}>Book until: {bookingDeadlineFormatted}</Text>
-        <Text style={styles.classInfo}>Check-in: {checkInStartFormatted} - {checkInEndFormatted}</Text>
-        <Text style={styles.classInfo}>Cancel until: {cancellationDeadlineFormatted}</Text>
+        <Text style={styles.classInfo}>Book until: {format(classDetail.bookingDeadline, 'p')}</Text>
+        <Text style={styles.classInfo}>Check-in: {format(classDetail.checkInStart, 'p')} - {format(classDetail.checkInEnd, 'p')}</Text>
+        <Text style={styles.classInfo}>Cancel until: {format(classDetail.cancellationDeadline, 'p')}</Text>
 
-        {venue.latitude && venue.longitude && (
+        {classDetail.venue.latitude && classDetail.venue.longitude && (
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: venue.latitude,
-              longitude: venue.longitude,
+              latitude: classDetail.venue.latitude,
+              longitude: classDetail.venue.longitude,
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
           >
             <Marker
               coordinate={{
-                latitude: venue.latitude,
-                longitude: venue.longitude,
+                latitude: classDetail.venue.latitude,
+                longitude: classDetail.venue.longitude,
               }}
-              title={venue.name || 'Venue Location'}
+              title={classDetail.venue.name || 'Venue Location'}
             />
           </MapView>
         )}
       </View>
-      <Text style={styles.classInfo}>{venue.address}</Text>
+      <Text style={styles.classInfo}>{classDetail.venue.address}</Text>
     </ScrollView>
   );
 };
@@ -113,6 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    marginBottom: 10,
   },
   bookButtonText: {
     color: 'white',

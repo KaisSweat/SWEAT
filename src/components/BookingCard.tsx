@@ -26,6 +26,8 @@ const BookingCard: React.FC<BookingCardProps> = ({ classDetail, onCancel }) => {
   const formattedStartTime = safeFormatDate(classDetail.startTime, 'h:mm a');
   const formattedEndTime = safeFormatDate(classDetail.endTime, 'h:mm a');
 
+  // Function to confirm cancellation
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -44,7 +46,6 @@ const BookingCard: React.FC<BookingCardProps> = ({ classDetail, onCancel }) => {
 };
 
 const styles = StyleSheet.create({
-  // Styles here should be similar to ClassCard for consistency
   card: {
     backgroundColor: '#FFF',
     borderRadius: 8,
