@@ -1,49 +1,45 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, FC } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { AppUser } from '../types/types';
 
 type AppUserContextType = {
   user: AppUser | null;
+  setUser: React.Dispatch<React.SetStateAction<AppUser | null>>;
 };
+
 const defaultContextValue: AppUserContextType = {
-  user: null, // Default to null before user data is loaded
+  user: null,
+  setUser: () => {},
 };
+
 export const AppUserContext = createContext<AppUserContextType>(defaultContextValue);
 
-export const useAppUser = (): AppUserContextType => {
-  return useContext(AppUserContext);
-};
-
-
-interface AppUserProviderProps {
-  children: ReactNode;
-}
-
-export const AppUserProvider: FC<AppUserProviderProps> = ({ children }) => {
+export const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AppUser | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      console.log('Fetching user data from Firestore...');
-      try {
-        // Fetch user data from Firestore for predefined user id 'user1'
-        const userDoc = await firestore().collection('users').doc('user1').get();
-        if (userDoc.exists) {
-          console.log('User data fetched successfully:', userDoc.data());
-          setUser({ id: userDoc.id, ...userDoc.data() } as AppUser);
+    const unsubscribe = auth().onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        const userRef = firestore().collection('users').doc(firebaseUser.uid);
+        const doc = await userRef.get();
+        if (doc.exists) {
+          const userData = doc.data() as AppUser;
+          setUser({ ...userData, id: firebaseUser.uid, email: firebaseUser.email || '' });
         } else {
-          console.error('User not found in Firestore');
+          console.log('User document does not exist in Firestore. It should be created during sign-up.');
+          // Optionally handle this case, e.g., by logging out the user or prompting to complete their profile
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+      } else {
+        setUser(null); // Set user to null if not authenticated
       }
-    };
+    });
 
-    fetchUser();
+    return () => unsubscribe(); // Clean up the subscription
   }, []);
 
   return (
-    <AppUserContext.Provider value={{ user }}>
+    <AppUserContext.Provider value={{ user, setUser }}>
       {children}
     </AppUserContext.Provider>
   );

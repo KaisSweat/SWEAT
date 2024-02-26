@@ -34,12 +34,18 @@ export type Class = {
 };
 // Define the RootStackParamList for React Navigation
 export type RootStackParamList = {
-  Login: undefined; // Add this if LoginScreen is a direct part of your root navigator
   GymList: undefined;
   GymDetail: { venueId: string };
   ClassesList: { venueId: string };
   ClassesListForVenue: { venueId: string };
   ClassDetail: { classDetail: Class };
+  Welcome: undefined;
+  SignUp: undefined;
+  Login: undefined;
+  Home:undefined;
+  PasswordReset: undefined;
+
+
 };
 
 // Extending User type for App User functionality
