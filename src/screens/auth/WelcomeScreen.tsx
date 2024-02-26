@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
@@ -19,9 +19,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Your logo or welcome message */}
-      <Text style={styles.logo}>All In</Text>
-      
+      {/* Logo image */}
+      <Image
+        source={require('../../assets/images/logo.png')} // Replace with the actual path to your logo
+        style={styles.logo}
+        resizeMode="contain" // Ensures the entire logo is visible
+      />
+
       {/* Button to navigate to login screen */}
       <TouchableOpacity style={styles.button} onPress={navigateToLogin}>
         <Text style={styles.buttonText}>Log In</Text>
@@ -43,15 +47,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   logo: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    width: 150, // Set the width of your logo
+    height: 150, // Set the height of your logo
     marginBottom: 20,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: 'green',
     padding: 15,
     borderRadius: 5,
-    marginVertical: 10,
+    marginVertical: 20,
     width: 200,
     alignItems: 'center',
   },

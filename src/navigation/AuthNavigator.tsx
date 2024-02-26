@@ -5,6 +5,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignUpScreen';
 import WelcomeScreen from '../screens/auth/WelcomeScreen';
 import PasswordRecoveryScreen from '../screens/auth/PasswordRecoveryScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const AuthNavigator: React.FC = () => (
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="SignUp" component={SignupScreen} />
     <Stack.Screen name="PasswordReset" component={PasswordRecoveryScreen} />
+    <Stack.Screen name="Home" component={HomeScreen} />
   </Stack.Navigator>
 );
 
