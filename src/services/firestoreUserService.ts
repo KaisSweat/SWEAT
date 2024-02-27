@@ -27,4 +27,20 @@ export const updateUserProfile = async (userId: string, userData: Partial<AppUse
   }
 };
 
+// Fetch user role by ID
+export const getUserRole = async (userId: string): Promise<string | null> => {
+  try {
+    const documentSnapshot = await usersCollection.doc(userId).get();
+    if (documentSnapshot.exists) {
+      // Assuming the user's role is stored under a 'role' field in their document
+      const userRole = documentSnapshot.data()?.role;
+      return userRole || null; // Return the role or null if not found
+    }
+    return null; // Return null if the user document does not exist
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    throw error;
+  }
+};
+
 // Add other user-related Firestore operations as needed

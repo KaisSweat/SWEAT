@@ -8,7 +8,7 @@ import { AppUserContext } from '../../contexts/AppUserContext';
 import AuthenticationService from '../../services/AuthenticationService';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/types';
-import { Checkbox } from 'react-native-paper';
+
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
