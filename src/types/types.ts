@@ -54,6 +54,8 @@ export type AppUser = {
   name: string;
   email: string;
   bookings: UserBooking[];
+  role:string;
+  venueId?: string | null;
   // ... other user properties such as preferences, membership info, etc.
 };
 

@@ -28,7 +28,6 @@ const LoginScreen = () => {
             const appUser = await AuthenticationService.signInWithEmailAndPassword(email, password);
             if (appUser) {
                 setUser(appUser); // Update the user context with the logged-in user
-                navigation.navigate('Home'); // Navigate to the Home screen
             } else {
                 setError('User not found.'); // Set error if user data was not fetched
             }

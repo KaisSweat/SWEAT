@@ -27,20 +27,28 @@ export const updateUserProfile = async (userId: string, userData: Partial<AppUse
   }
 };
 
-// Fetch user role by ID
-export const getUserRole = async (userId: string): Promise<string | null> => {
+export const getUserDetails = async (userId: string): Promise<{ role: string | null, venueId?: string | null, name: string | null }> => {
   try {
-    const documentSnapshot = await usersCollection.doc(userId).get();
-    if (documentSnapshot.exists) {
-      // Assuming the user's role is stored under a 'role' field in their document
-      const userRole = documentSnapshot.data()?.role;
-      return userRole || null; // Return the role or null if not found
+    const userDocSnapshot = await firestore().collection('users').doc(userId).get();
+
+    if (!userDocSnapshot.exists) {
+      console.log("User document does not exist");
+      return { role: null, name: null }; // Return null values if user document doesn't exist
     }
-    return null; // Return null if the user document does not exist
+
+    const userData = userDocSnapshot.data();
+    const userRole = userData?.role || null;
+    const userName = userData?.firstName || null; // Correctly fetching 'firstname' as the 'name'
+    
+    // Directly fetch 'venueId' from the user's data if the user is a partner
+    let venueId = null;
+    if (userRole === 'partner') {
+      venueId = userData?.venueId || null;
+    }
+
+    return { role: userRole, venueId, name: userName };
   } catch (error) {
-    console.error("Error fetching user role:", error);
-    throw error;
+    console.error("Error fetching user details:", error);
+    throw error; // Re-throwing the error for external handling
   }
 };
-
-// Add other user-related Firestore operations as needed
