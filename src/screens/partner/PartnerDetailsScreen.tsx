@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList, Venue } from '../types/types';
-import { fetchVenueById } from '../services/firestoreService';
-import {decodePlusCode} from '../utils/decodePlusCode'; // Use your decodePlusCode function
+import { RootStackParamList, Venue } from '../../types/types';
+import { fetchVenueById } from '../../services/firestoreService';
+import {decodePlusCode} from '../../utils/decodePlusCode'; // Use your decodePlusCode function
 
-type GymDetailScreenRouteProp = RouteProp<RootStackParamList, 'GymDetail'>;
-type GymDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'GymDetail'>;
+type PartnerDetailsScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'PartnerDetails'>;
+  route: RouteProp<RootStackParamList, 'PartnerDetails'>;
+};
 
-interface Props {
-  route: GymDetailScreenRouteProp;
-  navigation: GymDetailScreenNavigationProp;
-}
-
-const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
+const PartnerDetailsScreen: React.FC<PartnerDetailsScreenProps> = ({ route, navigation }) => {
   const [venue, setVenue] = useState<Venue | null>(null);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number; } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,37 +21,30 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   useEffect(() => {
     const loadVenueAndCoordinates = async () => {
       try {
-        setLoading(true);
         const fetchedVenue = await fetchVenueById(venueId);
-        if (fetchedVenue) {
+        if (fetchedVenue && fetchedVenue.PlusCode) {
           setVenue(fetchedVenue);
-          // Check if PlusCode exists, if not, use a fallback or set coordinates to null
-          if (fetchedVenue.PlusCode) {
-            const coords = await decodePlusCode(fetchedVenue.PlusCode);
-            if (coords) {
-              setCoordinates(coords);
-            } else {
-              console.error("Failed to fetch coordinates for venue Plus Code.");
-              // Optionally, set coordinates to a default or null
-              setCoordinates(null);
-            }
+          const coords = await decodePlusCode(fetchedVenue.PlusCode);
+          if (coords) {
+            setCoordinates(coords);
           } else {
-            console.log("PlusCode not available for venue, skipping coordinate decoding.");
-            // Optionally, set coordinates to a default or null
+            console.error("Failed to fetch coordinates for venue Plus Code.");
             setCoordinates(null);
           }
         } else {
-          console.error("Venue details not available.");
-          setVenue(null);
+          console.error("Venue details or Plus Code not available.");
+          setVenue(fetchedVenue); // Still set the venue even if Plus Code is missing
+          setCoordinates(null); // No coordinates to display
         }
       } catch (error) {
         console.error('Error fetching venue details or decoding Plus Code:', error);
         setVenue(null);
+        setCoordinates(null);
       } finally {
         setLoading(false);
       }
     };
-  
+
     loadVenueAndCoordinates();
   }, [venueId]);
 
@@ -66,6 +56,10 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     return <Text>Venue details not available.</Text>;
   }
 
+  const handleEditVenue = () => {
+    navigation.navigate('PartnerVenueEdit', { venueId }); // Ensure 'PartnerVenueEdit' is correctly defined in your navigation stack
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={{ uri: venue.image }} style={styles.image} resizeMode="cover" />
@@ -75,8 +69,8 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.rating}>Rating: {venue.rating}</Text>
         <Text style={styles.distance}>Distance: {venue.distance} meters</Text>
         <Text style={styles.description}>{venue.description}</Text>
-        <TouchableOpacity style={styles.showClassesButton} onPress={() => navigation.navigate('ClassesListForVenue', { venueId: venue.id })}>
-          <Text style={styles.showClassesText}>Show Classes</Text>
+        <TouchableOpacity style={styles.editButton} onPress={handleEditVenue}>
+          <Text style={styles.editButtonText}>Edit Venue Details</Text>
         </TouchableOpacity>
       </View>
       {coordinates && (
@@ -84,11 +78,11 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           style={styles.map}
           initialRegion={{
             ...coordinates,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           }}
-          scrollEnabled={false}
-          zoomEnabled={false}
+          scrollEnabled={true}
+          zoomEnabled={true}
         >
           <Marker
             coordinate={coordinates}
@@ -101,6 +95,8 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   );
 };
 
+
+// Define or adjust styles here. You can reuse styles from GymDetailScreen as needed
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -144,17 +140,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   showClassesButton: {
-    backgroundColor: '#007AFF',
+    marginTop: 20,
     padding: 10,
+    backgroundColor: '#007AFF', // Use your app's color scheme
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
   },
   showClassesText: {
-    color: 'white',
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  editButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007AFF', // Use your app's color scheme
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  editButtonText: {
+    color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
   },
 });
 
-export default GymDetailScreen;
+export default PartnerDetailsScreen;

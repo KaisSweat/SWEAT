@@ -143,3 +143,9 @@ export const fetchClassById = async (venueId: string, classId: string): Promise<
     return null; // Return null or throw the error based on your error handling strategy
   }
 };
+
+
+
+export const updateVenueDetails = async (venueId: string, venueData: Venue): Promise<void> => {
+  await firestore().collection('venues').doc(venueId).update(venueData);
+};

@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AppUserContext } from '../../contexts/AppUserContext'; // Update with the actual path
+import { AppUserContext } from '../../contexts/AppUserContext'; // Adjust the import path as needed
+import { fetchVenueById } from '../../services/firestoreService'; // Adjust the import path as needed
+import { Venue } from '../../types/types';
 
 type PartnerStackParamList = {
   PartnerDetails: { venueId: string };
-  // Add other screens and parameters here as needed
 };
 
 type PartnerDashboardNavigationProp = StackNavigationProp<
@@ -19,23 +20,37 @@ type Props = {
 
 const PartnerDashboard: React.FC<Props> = ({ navigation }) => {
   const { user } = useContext(AppUserContext);
+  // Adjust the useState hook to correctly type the state
+  const [venue, setVenue] = useState<Venue | null>(null);
+
+  useEffect(() => {
+    const loadVenueDetails = async () => {
+      if (user?.venueId) {
+        try {
+          const fetchedVenue = await fetchVenueById(user.venueId);
+          setVenue(fetchedVenue); // This should now work without error
+        } catch (error) {
+          console.error('Error fetching venue details:', error);
+        }
+      }
+    };
+
+    loadVenueDetails();
+  }, [user?.venueId]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Partner Dashboard</Text>
-      <Text>User ID: {user?.id}</Text>
       <Text>Email: {user?.email}</Text>
       <Text>Role: {user?.role}</Text>
       <Text>Venue ID: {user?.venueId}</Text>
-      <Text>Name: {user?.name}</Text>
-      {/* Ensure that user?.venueId is not empty before navigating */}
+      <Text>Venue Name: {venue?.name}</Text>
       <Button
         title="Go to Details"
         onPress={() => {
           if (user?.venueId) {
             navigation.navigate('PartnerDetails', { venueId: user.venueId });
           } else {
-            // Handle the case where venueId is not available
             console.warn('Venue ID is not available.');
           }
         }}
@@ -52,7 +67,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    marginBottom: 10, // Adjusted for spacing between text elements
+    marginBottom: 10,
   },
 });
 

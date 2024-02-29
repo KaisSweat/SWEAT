@@ -26,14 +26,7 @@ const App: React.FC = () => {
     if (!isAuthenticated) {
       return <AuthNavigator />;
     }
-    switch (userRole) {
-      case 'member':
-        return <AppNavigator />;
-      case 'partner':
-        return <PartnerNavigator />;
-      default:
-        return <View><Text>User role not determined</Text></View>; // Placeholder for undefined role
-    }
+    return userRole === 'partner' ? <PartnerNavigator /> : <AppNavigator />;
   };
 
   return (

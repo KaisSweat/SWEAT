@@ -18,23 +18,27 @@ const signupUser = async (email: string, password: string, firstName: string, la
       throw new Error('User account creation failed');
     }
 
-    // Prepare the user object for Firestore
+    // Prepare the user object for Firestore with an additional "role" field
     const newUser = {
       firstName,
       lastName,
       email: firebaseUser.email, // Use the verified email from Firebase Auth
+      role: 'member', // Assign the "member" role to every new user
     };
 
-    // Save the user's data in Firestore
+    // Save the user's data, including the role, in Firestore
     await firestore().collection('users').doc(firebaseUser.uid).set(newUser);
 
-    // Return the user's ID and email along with success status
+    console.log('User account created and saved in Firestore with member role.');
+
+    // Optionally, return success status and user object including the assigned role
     return { success: true, user: { id: firebaseUser.uid, ...newUser } };
 
   } catch (error) {
     let errorMessage = 'Signup failed. Please try again later.';
     if (error instanceof Error && 'code' in error) {
-      const firebaseError = error as FirebaseError;
+      // Handle Firebase Auth specific errors
+      const firebaseError = error as FirebaseError; // Casting error to FirebaseError for type compatibility
       switch (firebaseError.code) {
         case 'auth/email-already-in-use':
           errorMessage = 'The email address is already in use by another account.';

@@ -10,8 +10,7 @@ export type Venue = {
   description: string;
   address: string;
   area: string;
-  latitude: number;
-  longitude: number;
+  PlusCode:string;
   image: string; // Assuming local images are used and imported as numbers
   classes: Class[]; // Array of classes offered by the venue
 };
@@ -44,7 +43,9 @@ export type RootStackParamList = {
   Login: undefined;
   Home:undefined;
   PasswordReset: undefined;
-
+  PartnerDashboard: { venueId: string }; 
+  PartnerDetails: { venueId: string }; 
+  PartnerVenueEdit: { venueId: string }; 
 
 };
 
