@@ -1,11 +1,10 @@
 // firebaseConfig.js
 export default {
-  apiKey: "AIzaSyA1W3rGIGg2KfLft0jDi1jG7e-WzimrFo4",
-  authDomain: "fitnessapp-99e59.firebaseapp.com",
-  databaseURL: "https://fitnessapp-99e59.firebaseio.com",
-  projectId: "fitnessapp-99e59",
-  storageBucket: "fitnessapp-99e59.appspot.com",
-  messagingSenderId: "296587463492",
-  appId: "fitnessapp-99e59",
+  authDomain: "gymapp-251995.firebaseapp.com",
+  databaseURL: "https://gymapp-251995.firebaseio.com",
+  projectId: "gymapp-251995",
+  storageBucket: "gymapp-251995.appspot.com",
+  messagingSenderId: "3831269876",
+  appId: "gymapp-251995",
   };
   

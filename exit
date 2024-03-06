@@ -1,0 +1,545 @@
+[1mdiff --git a/android/app/google-services.json b/android/app/google-services.json[m
+[1mindex cb189a1..2f40d0c 100644[m
+[1m--- a/android/app/google-services.json[m
+[1m+++ b/android/app/google-services.json[m
+[36m@@ -1,37 +1,26 @@[m
+ {[m
+   "project_info": {[m
+[31m-    "project_number": "296587463492",[m
+[31m-    "firebase_url": "https://fitnessapp-99e59-default-rtdb.firebaseio.com",[m
+[31m-    "project_id": "fitnessapp-99e59",[m
+[31m-    "storage_bucket": "fitnessapp-99e59.appspot.com"[m
+[32m+[m[32m    "project_number": "3831269876",[m
+[32m+[m[32m    "project_id": "gymapp-251995",[m
+[32m+[m[32m    "storage_bucket": "gymapp-251995.appspot.com"[m
+   },[m
+   "client": [[m
+     {[m
+       "client_info": {[m
+[31m-        "mobilesdk_app_id": "1:296587463492:android:475fe7df68119b0d2a6511",[m
+[32m+[m[32m        "mobilesdk_app_id": "1:3831269876:android:348b110b76a3ca6d1411a1",[m
+         "android_client_info": {[m
+           "package_name": "com.gymapp"[m
+         }[m
+       },[m
+[31m-      "oauth_client": [[m
+[31m-        {[m
+[31m-          "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",[m
+[31m-          "client_type": 3[m
+[31m-        }[m
+[31m-      ],[m
+[32m+[m[32m      "oauth_client": [],[m
+       "api_key": [[m
+         {[m
+[31m-          "current_key": "AIzaSyAAI8YF-N4VGXMrOM6a14N06Q5Zldp9SjY"[m
+[32m+[m[32m          "current_key": "AIzaSyBVuuhyDO9KuWztwotbXZVC5OxZpLcGB2k"[m
+         }[m
+       ],[m
+       "services": {[m
+         "appinvite_service": {[m
+[31m-          "other_platform_oauth_client": [[m
+[31m-            {[m
+[31m-              "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",[m
+[31m-              "client_type": 3[m
+[31m-            }[m
+[31m-          ][m
+[32m+[m[32m          "other_platform_oauth_client": [][m
+         }[m
+       }[m
+     }[m
+[1mdiff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml[m
+[1mindex c63b560..9393920 100644[m
+[1m--- a/android/app/src/main/AndroidManifest.xml[m
+[1m+++ b/android/app/src/main/AndroidManifest.xml[m
+[36m@@ -27,7 +27,7 @@[m
+         <!-- Add the Google Maps API key here -->[m
+         <meta-data[m
+             android:name="com.google.android.geo.API_KEY"[m
+[31m-            android:value="AIzaSyDt2tcvmt9xLU92XEAujQ0V6FBsOLd3Lis" />[m
+[32m+[m[32m            android:value="AIzaSyBvDcibura4oNd-BSd4Dqclj7FXJr917XY" />[m
+     </application>[m
+ </manifest>[m
+ [m
+[1mdiff --git a/google-services.json b/google-services.json[m
+[1mdeleted file mode 100644[m
+[1mindex cb189a1..0000000[m
+[1m--- a/google-services.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,40 +0,0 @@[m
+[31m-{[m
+[31m-  "project_info": {[m
+[31m-    "project_number": "296587463492",[m
+[31m-    "firebase_url": "https://fitnessapp-99e59-default-rtdb.firebaseio.com",[m
+[31m-    "project_id": "fitnessapp-99e59",[m
+[31m-    "storage_bucket": "fitnessapp-99e59.appspot.com"[m
+[31m-  },[m
+[31m-  "client": [[m
+[31m-    {[m
+[31m-      "client_info": {[m
+[31m-        "mobilesdk_app_id": "1:296587463492:android:475fe7df68119b0d2a6511",[m
+[31m-        "android_client_info": {[m
+[31m-          "package_name": "com.gymapp"[m
+[31m-        }[m
+[31m-      },[m
+[31m-      "oauth_client": [[m
+[31m-        {[m
+[31m-          "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",[m
+[31m-          "client_type": 3[m
+[31m-        }[m
+[31m-      ],[m
+[31m-      "api_key": [[m
+[31m-        {[m
+[31m-          "current_key": "AIzaSyAAI8YF-N4VGXMrOM6a14N06Q5Zldp9SjY"[m
+[31m-        }[m
+[31m-      ],[m
+[31m-      "services": {[m
+[31m-        "appinvite_service": {[m
+[31m-          "other_platform_oauth_client": [[m
+[31m-            {[m
+[31m-              "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",[m
+[31m-              "client_type": 3[m
+[31m-            }[m
+[31m-          ][m
+[31m-        }[m
+[31m-      }[m
+[31m-    }[m
+[31m-  ],[m
+[31m-  "configuration_version": "1"[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mindex a6eee84..72c44e7 100644[m
+[1m--- a/package-lock.json[m
+[1m+++ b/package-lock.json[m
+[36m@@ -17,6 +17,7 @@[m
+         "@react-native-firebase/auth": "^19.0.0",[m
+         "@react-native-firebase/database": "^19.0.0",[m
+         "@react-native-firebase/firestore": "^19.0.0",[m
+[32m+[m[32m        "@react-native-firebase/storage": "^19.0.0",[m
+         "@react-navigation/bottom-tabs": "^6.5.11",[m
+         "@react-navigation/native": "^6.1.9",[m
+         "@react-navigation/stack": "^6.3.20",[m
+[36m@@ -26,6 +27,7 @@[m
+         "react-native": "^0.73.3",[m
+         "react-native-geocoding": "^0.5.0",[m
+         "react-native-gesture-handler": "^2.14.1",[m
+[32m+[m[32m        "react-native-image-picker": "^7.1.0",[m
+         "react-native-maps": "1.10.1",[m
+         "react-native-safe-area-context": "^4.9.0",[m
+         "react-native-screens": "^3.29.0",[m
+[36m@@ -4136,6 +4138,14 @@[m
+         "@react-native-firebase/app": "19.0.0"[m
+       }[m
+     },[m
+[32m+[m[32m    "node_modules/@react-native-firebase/storage": {[m
+[32m+[m[32m      "version": "19.0.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-19.0.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-JOjaNJfzeWQHNjpzElNjtk8JUvSdhRnCJtfQzJvgr78Y9L4dQqbTEvpcVOj4ZhwQ7V/NtldvxnQxAb6JM0lIMA==",[m
+[32m+[m[32m      "peerDependencies": {[m
+[32m+[m[32m        "@react-native-firebase/app": "19.0.0"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+     "node_modules/@react-native/assets-registry": {[m
+       "version": "0.73.1",[m
+       "resolved": "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.73.1.tgz",[m
+[36m@@ -12626,6 +12636,15 @@[m
+         "react-native": "*"[m
+       }[m
+     },[m
+[32m+[m[32m    "node_modules/react-native-image-picker": {[m
+[32m+[m[32m      "version": "7.1.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-7.1.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-An0hn2mwqjGAA2mbsXdHRTyoMMklGPT9stIjE2zvkegU7CdoFhowqvVHfnELJNZnfAiSQuIaeY//z0r1R0lsgw==",[m
+[32m+[m[32m      "peerDependencies": {[m
+[32m+[m[32m        "react": "*",[m
+[32m+[m[32m        "react-native": "*"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+     "node_modules/react-native-maps": {[m
+       "version": "1.10.1",[m
+       "resolved": "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.10.1.tgz",[m
+[1mdiff --git a/package.json b/package.json[m
+[1mindex 6b43d0e..46173cd 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -19,6 +19,7 @@[m
+     "@react-native-firebase/auth": "^19.0.0",[m
+     "@react-native-firebase/database": "^19.0.0",[m
+     "@react-native-firebase/firestore": "^19.0.0",[m
+[32m+[m[32m    "@react-native-firebase/storage": "^19.0.0",[m
+     "@react-navigation/bottom-tabs": "^6.5.11",[m
+     "@react-navigation/native": "^6.1.9",[m
+     "@react-navigation/stack": "^6.3.20",[m
+[36m@@ -28,6 +29,7 @@[m
+     "react-native": "^0.73.3",[m
+     "react-native-geocoding": "^0.5.0",[m
+     "react-native-gesture-handler": "^2.14.1",[m
+[32m+[m[32m    "react-native-image-picker": "^7.1.0",[m
+     "react-native-maps": "1.10.1",[m
+     "react-native-safe-area-context": "^4.9.0",[m
+     "react-native-screens": "^3.29.0",[m
+[1mdiff --git a/src/config/config.js b/src/config/config.js[m
+[1mindex ad4093b..09d6e1f 100644[m
+[1m--- a/src/config/config.js[m
+[1m+++ b/src/config/config.js[m
+[36m@@ -1,2 +1,2 @@[m
+ // config.js[m
+[31m-export const GoogleMapsAPIKey = 'AIzaSyDt2tcvmt9xLU92XEAujQ0V6FBsOLd3Lis';[m
+\ No newline at end of file[m
+[32m+[m[32mexport const GoogleMapsAPIKey = 'AIzaSyBvDcibura4oNd-BSd4Dqclj7FXJr917XY';[m
+\ No newline at end of file[m
+[1mdiff --git a/src/config/firebaseConfig.js b/src/config/firebaseConfig.js[m
+[1mindex d9f5df1..55ace04 100644[m
+[1m--- a/src/config/firebaseConfig.js[m
+[1m+++ b/src/config/firebaseConfig.js[m
+[36m@@ -1,11 +1,10 @@[m
+ // firebaseConfig.js[m
+ export default {[m
+[31m-  apiKey: "AIzaSyA1W3rGIGg2KfLft0jDi1jG7e-WzimrFo4",[m
+[31m-  authDomain: "fitnessapp-99e59.firebaseapp.com",[m
+[31m-  databaseURL: "https://fitnessapp-99e59.firebaseio.com",[m
+[31m-  projectId: "fitnessapp-99e59",[m
+[31m-  storageBucket: "fitnessapp-99e59.appspot.com",[m
+[31m-  messagingSenderId: "296587463492",[m
+[31m-  appId: "fitnessapp-99e59",[m
+[32m+[m[32m  authDomain: "gymapp-251995.firebaseapp.com",[m
+[32m+[m[32m  databaseURL: "https://gymapp-251995.firebaseio.com",[m
+[32m+[m[32m  projectId: "gymapp-251995",[m
+[32m+[m[32m  storageBucket: "gymapp-251995.appspot.com",[m
+[32m+[m[32m  messagingSenderId: "3831269876",[m
+[32m+[m[32m  appId: "gymapp-251995",[m
+   };[m
+   [m
+\ No newline at end of file[m
+[1mdiff --git a/src/data/mockData.js b/src/data/mockData.js[m
+[1mindex 45fd79a..99bccaa 100644[m
+[1m--- a/src/data/mockData.js[m
+[1m+++ b/src/data/mockData.js[m
+[36m@@ -9,10 +9,9 @@[m [mconst mockData = {[m
+       rating: 4.9,[m
+       distance: 340,[m
+       description: 'Private Gym, Strength & Cardio, Gym, Yoga',[m
+[31m-      address: '11 rue des palmiers',[m
+[32m+[m[32m      address: '31 Av. Monji Slim, 2000, Tunisia',[m
+       area: 'Ensjø',[m
+[31m-      latitude: 59.9139,[m
+[31m-      longitude: 10.7522,[m
+[32m+[m[32m      PlusCode: ' R48H+24 Tunis, Tunisia',[m
+       image: 'https://www.dropbox.com/scl/fi/wqm6t2mw938janw39rq9u/salle-de-sport2.jpg?rlkey=vjsu0hsc6nubpzvbikfedpk0u&dl=1',[m
+     },[m
+   [m
+[36m@@ -23,10 +22,9 @@[m [mconst mockData = {[m
+       rating: 4.8,[m
+       distance: 600,[m
+       description: 'A serene space for meditation and wellness workshops.',[m
+[31m-      address: '22 Peace Avenue',[m
+[32m+[m[32m      address: '22 Peace Avenue,Tunis,Tunisia',[m
+       area: 'Downtown',[m
+[31m-      latitude: 59.9250,[m
+[31m-      longitude: 10.7600,[m
+[32m+[m[32m      PlusCode: 'WQ8W+R4 Oslo',[m
+       image: 'https://www.dropbox.com/scl/fi/qy1dhmnrrk50hj7xfy3wo/salle-de-sport3.jpg?rlkey=cg018ft0bn6aeifde1s0y83f7&dl=1',[m
+ [m
+     },[m
+[36m@@ -38,10 +36,9 @@[m [mconst mockData = {[m
+     rating: 5.0,[m
+     distance: 300,[m
+     description: 'A tranquil space for yoga and Pilates enthusiasts.',[m
+[31m-    address: '5 Harmony Way',[m
+[32m+[m[32m    address: '22 Peace Avenue,Tunisia',[m
+     area: 'Serenity',[m
+[31m-    latitude: 59.9150,[m
+[31m-    longitude: 10.7450,[m
+[32m+[m[32m    PlusCode: 'V528+WG3 tunis,tunisie',[m
+     image: 'https://www.dropbox.com/scl/fi/j8pfuwaqbh7mcajcj2k1c/salle-de-sport6.jpg?rlkey=0ytsm8j5m76r5ekf3ple0uw2d&dl=1',[m
+     },[m
+ [m
+[36m@@ -52,10 +49,9 @@[m [mconst mockData = {[m
+     rating: 4.9,[m
+     distance: 450,[m
+     description: 'Climbing gym and fitness center for all skill levels.',[m
+[31m-    address: '88 Summit St.',[m
+[32m+[m[32m    address: 'Av.Slimen Ben Slimen,Tunisia',[m
+     area: 'Highland',[m
+[31m-    latitude: 59.9300,[m
+[31m-    longitude: 10.7400,[m
+[32m+[m[32m    PlusCode: ' R5Q4+5J4,tunis,Tunisie',[m
+     image: 'https://www.dropbox.com/scl/fi/2gdqujtx6dnlm77tyyz3j/salle-de-sport5.jpg?rlkey=f45yktixz9roxi8ekpbtoh6p6&dl=1',[m
+     },[m
+     // Add more venues as needed...[m
+[36m@@ -124,8 +120,11 @@[m [mconst mockData = {[m
+   users: [[m
+     {[m
+       id: 'user1',[m
+[31m-      name: 'John Doe',[m
+[32m+[m[32m      firstname: 'John',[m
+[32m+[m[32m      lastname : 'Doe',[m
+       email: 'john@example.com',[m
+[32m+[m[32m      Role:'partner',[m
+[32m+[m[32m      venueId:'venue1'[m
+       // Assuming bookings will be filled later as references to 'bookings' collection[m
+     },[m
+     // Add more users as needed...[m
+[1mdiff --git a/src/screens/HomeScreen.tsx b/src/screens/HomeScreen.tsx[m
+[1mindex 09b5c28..fbc7bc3 100644[m
+[1m--- a/src/screens/HomeScreen.tsx[m
+[1m+++ b/src/screens/HomeScreen.tsx[m
+[36m@@ -2,6 +2,8 @@[m [mimport React, { useState, useEffect } from 'react';[m
+ import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';[m
+ import { useAppData } from '../contexts/AppDataContext';[m
+ import { Class } from '../types/types';[m
+[32m+[m[32mimport auth from '@react-native-firebase/auth';[m
+[32m+[m
+ [m
+ const HomeScreen: React.FC = () => {[m
+   const { venues, fetchClassesForVenue } = useAppData();[m
+[36m@@ -19,8 +21,20 @@[m [mconst HomeScreen: React.FC = () => {[m
+     }[m
+   };[m
+ [m
+[32m+[m[32m  const handleLogout = async () => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      await auth().signOut();[m
+[32m+[m[32m      // Optionally, navigate to the login screen or perform other actions upon logout[m
+[32m+[m[32m    } catch (error) {[m
+[32m+[m[32m      console.error("Error signing out:", error);[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m
+   return ([m
+     <View style={styles.container}>[m
+[32m+[m[32m      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>[m
+[32m+[m[32m        <Text>Log Out</Text>[m
+[32m+[m[32m      </TouchableOpacity>[m
+       <Text style={styles.title}>Venues:</Text>[m
+       <FlatList[m
+         data={venues}[m
+[36m@@ -49,13 +63,17 @@[m [mconst HomeScreen: React.FC = () => {[m
+   );[m
+ };[m
+ [m
+[32m+[m[32m// Update your styles to include the logoutButton style[m
+ const styles = StyleSheet.create({[m
+   container: {[m
+     flex: 1,[m
+     padding: 20,[m
+   },[m
+[31m-  migrationButton: {[m
+[31m-    marginBottom: 20, // Add some margin below the button[m
+[32m+[m[32m  logoutButton: {[m
+[32m+[m[32m    alignSelf: 'flex-end', // Align the button to the right[m
+[32m+[m[32m    padding: 10,[m
+[32m+[m[32m    backgroundColor: '#f0f0f0',[m
+[32m+[m[32m    borderRadius: 5,[m
+   },[m
+   title: {[m
+     fontSize: 18,[m
+[1mdiff --git a/src/screens/partner/PartnerDashboard.tsx b/src/screens/partner/PartnerDashboard.tsx[m
+[1mindex 1e23744..db9c5b9 100644[m
+[1m--- a/src/screens/partner/PartnerDashboard.tsx[m
+[1m+++ b/src/screens/partner/PartnerDashboard.tsx[m
+[36m@@ -1,9 +1,10 @@[m
+ import React, { useContext, useState, useEffect } from 'react';[m
+[31m-import { View, Text, StyleSheet, Button } from 'react-native';[m
+[32m+[m[32mimport { View, Text, StyleSheet, Button, Alert } from 'react-native';[m
+ import { StackNavigationProp } from '@react-navigation/stack';[m
+ import { AppUserContext } from '../../contexts/AppUserContext'; // Adjust the import path as needed[m
+ import { fetchVenueById } from '../../services/firestoreService'; // Adjust the import path as needed[m
+ import { Venue } from '../../types/types';[m
+[32m+[m[32mimport auth from '@react-native-firebase/auth'; // Import auth module from Firebase if you're using Firebase for authentication[m
+ [m
+ type PartnerStackParamList = {[m
+   PartnerDetails: { venueId: string };[m
+[36m@@ -19,8 +20,7 @@[m [mtype Props = {[m
+ };[m
+ [m
+ const PartnerDashboard: React.FC<Props> = ({ navigation }) => {[m
+[31m-  const { user } = useContext(AppUserContext);[m
+[31m-  // Adjust the useState hook to correctly type the state[m
+[32m+[m[32m  const { user, setUser } = useContext(AppUserContext);[m
+   const [venue, setVenue] = useState<Venue | null>(null);[m
+ [m
+   useEffect(() => {[m
+[36m@@ -28,7 +28,7 @@[m [mconst PartnerDashboard: React.FC<Props> = ({ navigation }) => {[m
+       if (user?.venueId) {[m
+         try {[m
+           const fetchedVenue = await fetchVenueById(user.venueId);[m
+[31m-          setVenue(fetchedVenue); // This should now work without error[m
+[32m+[m[32m          setVenue(fetchedVenue);[m
+         } catch (error) {[m
+           console.error('Error fetching venue details:', error);[m
+         }[m
+[36m@@ -38,6 +38,17 @@[m [mconst PartnerDashboard: React.FC<Props> = ({ navigation }) => {[m
+     loadVenueDetails();[m
+   }, [user?.venueId]);[m
+ [m
+[32m+[m[32m  const handleLogout = async () => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      await auth().signOut(); // Sign out using Firebase Auth[m
+[32m+[m[32m      setUser(null); // Update your context to reflect the user has logged out[m
+[32m+[m[32m      Alert.alert("Logged Out", "You have been logged out successfully.");[m
+[32m+[m[32m    } catch (error) {[m
+[32m+[m[32m      console.error("Logout error:", error);[m
+[32m+[m[32m      Alert.alert("Logout Failed", "An error occurred while trying to log out.");[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m
+   return ([m
+     <View style={styles.container}>[m
+       <Text style={styles.text}>Partner Dashboard</Text>[m
+[36m@@ -55,6 +66,7 @@[m [mconst PartnerDashboard: React.FC<Props> = ({ navigation }) => {[m
+           }[m
+         }}[m
+       />[m
+[32m+[m[32m      <Button title="Log Out" onPress={handleLogout} />[m
+     </View>[m
+   );[m
+ };[m
+[1mdiff --git a/src/screens/partner/PartnerVenueEditScreen.tsx b/src/screens/partner/PartnerVenueEditScreen.tsx[m
+[1mindex 48a04ea..09dea51 100644[m
+[1m--- a/src/screens/partner/PartnerVenueEditScreen.tsx[m
+[1m+++ b/src/screens/partner/PartnerVenueEditScreen.tsx[m
+[36m@@ -1,9 +1,11 @@[m
+ import React, { useState, useEffect } from 'react';[m
+[31m-import { View, TextInput, StyleSheet, Button, ScrollView, Alert,Text } from 'react-native';[m
+[32m+[m[32mimport { View, TextInput, StyleSheet, Button, ScrollView, Alert, Text, ActivityIndicator, TouchableOpacity } from 'react-native';[m
+ import { RouteProp } from '@react-navigation/native';[m
+ import { StackNavigationProp } from '@react-navigation/stack';[m
+[31m-import { Venue,RootStackParamList } from '../../types/types'; // adjust import paths as needed[m
+[31m-import { fetchVenueById, updateVenueDetails } from '../../services/firestoreService'; // adjust import paths as needed[m
+[32m+[m[32mimport { Venue, RootStackParamList } from '../../types/types';[m
+[32m+[m[32mimport { fetchVenueById, updateVenueDetails } from '../../services/firestoreService';[m
+[32m+[m[32mimport ImagePicker from 'react-native-image-picker';[m
+[32m+[m
+ [m
+ type PartnerVenueEditRouteProp = RouteProp<RootStackParamList, 'PartnerVenueEdit'>;[m
+ type PartnerVenueEditNavigationProp = StackNavigationProp<RootStackParamList, 'PartnerVenueEdit'>;[m
+[36m@@ -13,19 +15,22 @@[m [mtype Props = {[m
+   navigation: PartnerVenueEditNavigationProp;[m
+ };[m
+ [m
+[31m-[m
+ const PartnerVenueEditScreen: React.FC<Props> = ({ route, navigation }) => {[m
+   const [venue, setVenue] = useState<Venue | null>(null);[m
+[32m+[m[32m  const [isLoading, setIsLoading] = useState(false);[m
+   const { venueId } = route.params;[m
+ [m
+   useEffect(() => {[m
+[32m+[m[32m    setIsLoading(true);[m
+     const loadVenueDetails = async () => {[m
+       try {[m
+         const fetchedVenue = await fetchVenueById(venueId);[m
+         setVenue(fetchedVenue);[m
+       } catch (error) {[m
+[31m-        console.error('Error fetching venue details:', error);[m
+         Alert.alert('Error', 'Could not load venue details.');[m
+[32m+[m[32m        console.error('Error fetching venue details:', error);[m
+[32m+[m[32m      } finally {[m
+[32m+[m[32m        setIsLoading(false);[m
+       }[m
+     };[m
+ [m
+[36m@@ -33,45 +38,56 @@[m [mconst PartnerVenueEditScreen: React.FC<Props> = ({ route, navigation }) => {[m
+   }, [venueId]);[m
+ [m
+   const handleUpdate = async () => {[m
+[32m+[m[32m    setIsLoading(true);[m
+     if (venue) {[m
+       try {[m
+         await updateVenueDetails(venueId, venue);[m
+[31m-        Alert.alert('Success', 'Venue details updated successfully');[m
+[32m+[m[32m        Alert.alert('Success', 'Venue details updated successfully.');[m
+         navigation.goBack();[m
+       } catch (error) {[m
+[31m-        console.error('Error updating venue details:', error);[m
+         Alert.alert('Error', 'Could not update venue details.');[m
+[32m+[m[32m        console.error('Error updating venue details:', error);[m
+[32m+[m[32m      } finally {[m
+[32m+[m[32m        setIsLoading(false);[m
+       }[m
+     }[m
+   };[m
+ [m
+[31m-  if (!venue) {[m
+[31m-    return <View><Text>Loading...</Text></View>; // Or some loading indicator[m
+[32m+[m[32m  // const handleImagePick = () => {[m
+[32m+[m[32m  //   const options = {[m
+[32m+[m[32m  //     noData: true,[m
+[32m+[m[32m  //     mediaType: 'photo',[m
+[32m+[m[32m  //   };[m
+[32m+[m
+[32m+[m[32m  //   ImagePicker.launchImageLibrary(options, async (response) => {[m
+[32m+[m[32m  //     if (response.didCancel) {[m
+[32m+[m[32m  //       console.log('User cancelled image picker');[m
+[32m+[m[32m  //     } else if (response.error) {[m
+[32m+[m[32m  //       console.log('ImagePicker Error: ', response.error);[m
+[32m+[m[32m  //     } else {[m
+[32m+[m[32m  //       const uploadUrl = await uploadImageAndGetUrl(response); // This function needs to handle the upload logic[m
+[32m+[m[32m  //       if (uploadUrl) {[m
+[32m+[m[32m  //         setVenue(venue ? { ...venue, image: uploadUrl } : null);[m
+[32m+[m[32m  //       } else {[m
+[32m+[m[32m  //         Alert.alert('Error', 'Failed to upload image.');[m
+[32m+[m[32m  //       }[m
+[32m+[m[32m  //     }[m
+[32m+[m[32m  //   });[m
+[32m+[m[32m  // };[m
+[32m+[m
+[32m+[m[32m  if (isLoading && !venue) {[m
+[32m+[m[32m    return <ActivityIndicator size="large" style={styles.loader} />;[m
+   }[m
+ [m
+   return ([m
+     <ScrollView contentContainerStyle={styles.container}>[m
+[31m-      {/* Existing TextInput for name */}[m
+[31m-      <TextInput[m
+[31m-        style={styles.input}[m
+[31m-        onChangeText={(text) => setVenue({ ...venue, description: text })}[m
+[31m-        value={venue.description}[m
+[31m-        placeholder="Description"[m
+[31m-      />[m
+[31m-      <TextInput[m
+[31m-        style={styles.input}[m
+[31m-        onChangeText={(text) => setVenue({ ...venue, address: text })}[m
+[31m-        value={venue.address}[m
+[31m-        placeholder="Address"[m
+[31m-      />[m
+[31m-      <TextInput[m
+[31m-        style={styles.input}[m
+[31m-        onChangeText={(text) => setVenue({ ...venue, area: text })}[m
+[31m-        value={venue.area}[m
+[31m-        placeholder="Area"[m
+[31m-      />[m
+[31m-      {/* For type, consider a different input method if it's an array */}[m
+[31m-      <Button title="Update Venue" onPress={handleUpdate} />[m
+[32m+[m[32m      {/* Existing inputs for name, description, etc. */}[m
+[32m+[m[32m      {/* New button for picking an image */}[m
+[32m+[m[32m      {isLoading ? ([m
+[32m+[m[32m        <ActivityIndicator color="#0000ff" />[m
+[32m+[m[32m      ) : ([m
+[32m+[m[32m        <Button title="Update Venue" onPress={handleUpdate} disabled={isLoading} />[m
+[32m+[m[32m      )}[m
+     </ScrollView>[m
+   );[m
+ };[m
+[36m@@ -86,7 +102,20 @@[m [mconst styles = StyleSheet.create({[m
+     borderWidth: 1,[m
+     padding: 10,[m
+   },[m
+[31m-  // Add styles for other elements[m
+[32m+[m[32m  button: {[m
+[32m+[m[32m    backgroundColor: '#007bff',[m
+[32m+[m[32m    padding: 10,[m
+[32m+[m[32m    borderRadius: 5,[m
+[32m+[m[32m    alignItems: 'center',[m
+[32m+[m[32m    marginBottom: 20,[m
+[32m+[m[32m  },[m
+[32m+[m[32m  buttonText: {[m
+[32m+[m[32m    color: 'white',[m
+[32m+[m[32m    fontSize: 16,[m
+[32m+[m[32m  },[m
+[32m+[m[32m  loader: {[m
+[32m+[m[32m    marginVertical: 20,[m
+[32m+[m[32m  },[m
+ });[m
+ [m
+ export default PartnerVenueEditScreen;[m

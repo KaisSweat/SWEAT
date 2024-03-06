@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "296587463492",
-    "firebase_url": "https://fitnessapp-99e59-default-rtdb.firebaseio.com",
-    "project_id": "fitnessapp-99e59",
-    "storage_bucket": "fitnessapp-99e59.appspot.com"
+    "project_number": "3831269876",
+    "project_id": "gymapp-251995",
+    "storage_bucket": "gymapp-251995.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:296587463492:android:475fe7df68119b0d2a6511",
+        "mobilesdk_app_id": "1:3831269876:android:348b110b76a3ca6d1411a1",
         "android_client_info": {
           "package_name": "com.gymapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAAI8YF-N4VGXMrOM6a14N06Q5Zldp9SjY"
+          "current_key": "AIzaSyBVuuhyDO9KuWztwotbXZVC5OxZpLcGB2k"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "296587463492-2a0a494erbpmdd2u07b2jaikq92gtp2t.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

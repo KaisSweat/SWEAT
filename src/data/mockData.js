@@ -9,10 +9,9 @@ const mockData = {
       rating: 4.9,
       distance: 340,
       description: 'Private Gym, Strength & Cardio, Gym, Yoga',
-      address: '11 rue des palmiers',
+      address: '31 Av. Monji Slim, 2000, Tunisia',
       area: 'Ensjø',
-      latitude: 59.9139,
-      longitude: 10.7522,
+      PlusCode: ' R48H+24 Tunis, Tunisia',
       image: 'https://www.dropbox.com/scl/fi/wqm6t2mw938janw39rq9u/salle-de-sport2.jpg?rlkey=vjsu0hsc6nubpzvbikfedpk0u&dl=1',
     },
   
@@ -23,10 +22,9 @@ const mockData = {
       rating: 4.8,
       distance: 600,
       description: 'A serene space for meditation and wellness workshops.',
-      address: '22 Peace Avenue',
+      address: '22 Peace Avenue,Tunis,Tunisia',
       area: 'Downtown',
-      latitude: 59.9250,
-      longitude: 10.7600,
+      PlusCode: 'WQ8W+R4 Oslo',
       image: 'https://www.dropbox.com/scl/fi/qy1dhmnrrk50hj7xfy3wo/salle-de-sport3.jpg?rlkey=cg018ft0bn6aeifde1s0y83f7&dl=1',
 
     },
@@ -38,10 +36,9 @@ const mockData = {
     rating: 5.0,
     distance: 300,
     description: 'A tranquil space for yoga and Pilates enthusiasts.',
-    address: '5 Harmony Way',
+    address: '22 Peace Avenue,Tunisia',
     area: 'Serenity',
-    latitude: 59.9150,
-    longitude: 10.7450,
+    PlusCode: 'V528+WG3 tunis,tunisie',
     image: 'https://www.dropbox.com/scl/fi/j8pfuwaqbh7mcajcj2k1c/salle-de-sport6.jpg?rlkey=0ytsm8j5m76r5ekf3ple0uw2d&dl=1',
     },
 
@@ -52,10 +49,9 @@ const mockData = {
     rating: 4.9,
     distance: 450,
     description: 'Climbing gym and fitness center for all skill levels.',
-    address: '88 Summit St.',
+    address: 'Av.Slimen Ben Slimen,Tunisia',
     area: 'Highland',
-    latitude: 59.9300,
-    longitude: 10.7400,
+    PlusCode: ' R5Q4+5J4,tunis,Tunisie',
     image: 'https://www.dropbox.com/scl/fi/2gdqujtx6dnlm77tyyz3j/salle-de-sport5.jpg?rlkey=f45yktixz9roxi8ekpbtoh6p6&dl=1',
     },
     // Add more venues as needed...
@@ -124,8 +120,11 @@ const mockData = {
   users: [
     {
       id: 'user1',
-      name: 'John Doe',
+      firstname: 'John',
+      lastname : 'Doe',
       email: 'john@example.com',
+      Role:'partner',
+      venueId:'venue1'
       // Assuming bookings will be filled later as references to 'bookings' collection
     },
     // Add more users as needed...

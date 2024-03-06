@@ -1,2 +1,2 @@
 // config.js
-export const GoogleMapsAPIKey = 'AIzaSyDt2tcvmt9xLU92XEAujQ0V6FBsOLd3Lis';
+export const GoogleMapsAPIKey = 'AIzaSyBvDcibura4oNd-BSd4Dqclj7FXJr917XY';

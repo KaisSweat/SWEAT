@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';
 import { useAppData } from '../contexts/AppDataContext';
 import { Class } from '../types/types';
+import auth from '@react-native-firebase/auth';
+
 
 const HomeScreen: React.FC = () => {
   const { venues, fetchClassesForVenue } = useAppData();
@@ -19,8 +21,20 @@ const HomeScreen: React.FC = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      // Optionally, navigate to the login screen or perform other actions upon logout
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text>Log Out</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Venues:</Text>
       <FlatList
         data={venues}
@@ -49,13 +63,17 @@ const HomeScreen: React.FC = () => {
   );
 };
 
+// Update your styles to include the logoutButton style
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
   },
-  migrationButton: {
-    marginBottom: 20, // Add some margin below the button
+  logoutButton: {
+    alignSelf: 'flex-end', // Align the button to the right
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
   },
   title: {
     fontSize: 18,
