@@ -145,7 +145,29 @@ export const fetchClassById = async (venueId: string, classId: string): Promise<
 };
 
 
+export const updateVenueDetails = async (venueId: string, venueData: Partial<Venue>): Promise<void> => {
+  console.log(`Attempting to update venue with ID: ${venueId}`, venueData);
+  try {
+    await firestore().collection('venues').doc(venueId).update(venueData);
+    console.log(`Successfully updated venue with ID: ${venueId}`);
+  } catch (error) {
+    console.error(`Failed to update venue with ID: ${venueId}`, error);
+    // Log the error details if available
+    if (error instanceof Error) {
+      console.error("Error details:", error.message);
+    }
+    throw error; // Ensure the error can be caught and handled where the function is called
+  }
+};
 
-export const updateVenueDetails = async (venueId: string, venueData: Venue): Promise<void> => {
-  await firestore().collection('venues').doc(venueId).update(venueData);
+
+export const updateVenueImage = async (venueId: string, imageUrl: string): Promise<void> => {
+  console.log(`Attempting to update image for venue with ID: ${venueId} with new image URL: ${imageUrl}`);
+  try {
+    await firestore().collection('venues').doc(venueId).update({ image: imageUrl });
+    console.log(`Successfully updated image for venue with ID: ${venueId}`);
+  } catch (error) {
+    console.error(`Failed to update image for venue with ID: ${venueId}. Error: ${error}`);
+    // Additional error handling or user feedback code here
+  }
 };
