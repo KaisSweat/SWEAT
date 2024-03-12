@@ -1,33 +1,73 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PartnerDashboard from '../screens/partner/PartnerDashboard';
 import PartnerDetailsScreen from '../screens/partner/PartnerDetailsScreen';
 import PartnerVenueEditScreen from '../screens/partner/PartnerVenueEditScreen';
-import { RootStackParamList } from '../types/types'; // Adjust this import path as necessary
+import PartnerClassAddScreen from '../screens/partner/PartnerClassAddScreen';
+import ClassesListForPartner from '../screens/partner/ClassesListForPartner';
+import { RootStackParamList } from '../types/types';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHome, faBuilding, faCalendarPlus, faTools, faList } from '@fortawesome/free-solid-svg-icons';
 
 const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootStackParamList>();
 
-function PartnerNavigator() {
+const VenueStackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="PartnerDetails"
+      component={PartnerDetailsScreen}
+      options={{ headerTitle: 'Venue Details' }}
+    />
+    <Stack.Screen
+      name="PartnerVenueEdit"
+      component={PartnerVenueEditScreen}
+      options={{ headerTitle: 'Edit Venue' }}
+    />
+  </Stack.Navigator>
+);
+
+const PartnerNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="PartnerDashboard">
-      <Stack.Screen
-        name="PartnerDashboard"
-        component={PartnerDashboard}
-        options={{ headerTitle: 'Dashboard' }}
-      />
-      <Stack.Screen
-        name="PartnerDetails"
-        component={PartnerDetailsScreen}
-        options={{ headerTitle: 'Venue Details' }}
-      />
-      <Stack.Screen
-        name="PartnerVenueEdit"
-        component={PartnerVenueEditScreen}
-        options={{ headerTitle: 'Edit Venue' }}
-      />
-      {/* Add more screens as needed */}
-    </Stack.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let icon;
+          switch (route.name) {
+            case 'PartnerDashboard':
+              icon = faHome;
+              break;
+            case 'PartnerDetails':
+              icon = faBuilding;
+              break;
+            case 'PartnerClassAdd':
+              icon = faCalendarPlus;
+              break;
+            case 'ClassesListForPartner':
+              icon = faList;
+              break;
+            case 'PartnerVenueEdit': // Added setting icon for PartnerVenueEdit
+              icon = faTools;
+              break;
+            default:
+              icon = null;
+          }
+          return icon ? <FontAwesomeIcon icon={icon} size={size} color={color} /> : null;
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      <Tab.Screen name="PartnerDashboard" component={PartnerDashboard} options={{ title: 'Dashboard' }} />
+      <Tab.Screen name="PartnerDetails" component={PartnerDetailsScreen} options={{ title: 'Venue' }} />
+      <Tab.Screen name="PartnerClassAdd" component={PartnerClassAddScreen} options={{ title: 'Add Class' }} />
+      {/* You might want to include the Venue Edit screen as a part of a stack instead of a direct tab option */}
+      <Tab.Screen name="ClassesListForPartner" component={ClassesListForPartner} options={{ title: 'Classes' }} />
+      {/* Including PartnerVenueEdit as an example, though it might be better placed within a stack for flow */}
+      <Tab.Screen name="PartnerVenueEdit" component={PartnerVenueEditScreen} options={{ title: 'Edit Venue' }} />
+    </Tab.Navigator>
   );
-}
+};
 
 export default PartnerNavigator;

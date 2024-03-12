@@ -36,26 +36,42 @@ export const fetchVenues = async (): Promise<Venue[]> => {
 // Fetch classes for a specific venue by its auto-generated ID
 // Fetch classes for a specific venue by its auto-generated ID
 // Fetch classes for a specific venue by its ID
-export const fetchClassesForVenue = async (venueId: string): Promise<Class[]> => {
+export const fetchClassesForVenue = async (venueId: string): Promise<(Class & { venueName?: string; venueArea?: string })[]> => {
   try {
-    const classesSnapshot = await firestore().collection('venues').doc(venueId).collection('classes').get();
-    const classes = classesSnapshot.docs.map(doc => {
-      const classData = doc.data();
-      return {
-        id: doc.id,
-        ...classData,
-        startTime: toDate(classData.startTime),
-        endTime: toDate(classData.endTime),
-        bookingDeadline: toDate(classData.bookingDeadline),
-        checkInStart: toDate(classData.checkInStart),
-        checkInEnd: toDate(classData.checkInEnd),
-        cancellationDeadline: toDate(classData.cancellationDeadline),
-      } as Class;
-    });
-    return classes;
+      // First, fetch the venue details
+      const venueRef = firestore().collection('venues').doc(venueId);
+      const venueSnap = await venueRef.get();
+      if (!venueSnap.exists) {
+          console.error(`Venue with ID ${venueId} not found`);
+          throw new Error(`Venue with ID ${venueId} not found`);
+      }
+      const venueData = venueSnap.data();
+
+      // Then, fetch the classes for this venue
+      const classesSnapshot = await venueRef.collection('classes').get();
+      const classes = classesSnapshot.docs.map(doc => {
+          const classData = doc.data();
+          return {
+              id: doc.id,
+              ...classData,
+              startTime: toDate(classData.startTime),
+              endTime: toDate(classData.endTime),
+              bookingDeadline: toDate(classData.bookingDeadline),
+              checkInStart: toDate(classData.checkInStart),
+              checkInEnd: toDate(classData.checkInEnd),
+              cancellationDeadline: toDate(classData.cancellationDeadline),
+              venueName: venueData?.name, // Include venue name
+              venueArea: venueData?.area, // Include venue area
+              venueImage: venueData?.image,
+              venuePlusCode: venueData?.PlusCode,
+              venueAdress: venueData?.address,
+          } as Class & { venueName?: string; venueArea?: string, venueImage:string,venuePlusCode:string,venueAdress:string  };
+      });
+
+      return classes;
   } catch (error) {
-    console.error(`Error fetching classes for venue ${venueId}:`, error);
-    throw new Error(`Error fetching classes for venue ${venueId}: ${error}`);
+      console.error(`Error fetching classes for venue ${venueId}:`, error);
+      throw new Error(`Error fetching classes for venue ${venueId}: ${error}`);
   }
 };
 
@@ -79,29 +95,35 @@ export const fetchVenueById = async (venueId: string): Promise<Venue> => {
   }
 };
 
-export const fetchAllClasses = async (): Promise<Class[]> => {
+export const fetchAllClasses = async (): Promise<(Class & { venueName?: string; venueArea?: string })[]> => {
   try {
     const venuesSnapshot = await firestore().collection('venues').get();
-    let allClasses: Class[] = [];
+    let allClasses: (Class & { venueName?: string; venueArea?: string })[] = [];
 
     for (const venueDoc of venuesSnapshot.docs) {
       const venueId = venueDoc.id;
+      const venueData = venueDoc.data();
       const classesSnapshot = await firestore().collection('venues').doc(venueId).collection('classes').get();
 
       const classes = classesSnapshot.docs.map(doc => {
         const classData = doc.data();
         return {
           id: doc.id,
-          ...classData,
+          name: classData.name,
           startTime: toDate(classData.startTime),
           endTime: toDate(classData.endTime),
+          coach: classData.coach,
+          description: classData.description,
+          availableSpots: classData.availableSpots,
+          venueId: venueId,
+          venueName: venueData.name, // Assuming venueData has a name field
+          venueArea: venueData.area, // Assuming venueData has an area field
           bookingDeadline: toDate(classData.bookingDeadline),
           checkInStart: toDate(classData.checkInStart),
           checkInEnd: toDate(classData.checkInEnd),
           cancellationDeadline: toDate(classData.cancellationDeadline),
-          venueId: venueId,
-          venue: venueDoc.data() as Venue,
-        } as Class;
+          // Ensure all other required Class properties are included
+        } as Class & { venueName?: string; venueArea?: string };
       });
 
       allClasses = [...allClasses, ...classes];
@@ -109,10 +131,12 @@ export const fetchAllClasses = async (): Promise<Class[]> => {
 
     return allClasses;
   } catch (error) {
-    console.error("Error fetching all classes:", error);
-    throw new Error("Error fetching all classes");
+    console.error("Error fetching all classes with venue info:", error);
+    throw new Error("Error fetching all classes with venue info");
   }
 };
+
+
 
 // Fetch a single class by its ID and venue ID
 export const fetchClassById = async (venueId: string, classId: string): Promise<Class | null> => {
@@ -169,5 +193,27 @@ export const updateVenueImage = async (venueId: string, imageUrl: string): Promi
   } catch (error) {
     console.error(`Failed to update image for venue with ID: ${venueId}. Error: ${error}`);
     // Additional error handling or user feedback code here
+  }
+};
+
+
+
+
+export const addClassToVenue = async (venueId: string, classData: Omit<Class, 'id'>) => {
+  try {
+      const classRef = firestore().collection('venues').doc(venueId).collection('classes').doc();
+      await classRef.set({
+          ...classData,
+          startTime: firestore.Timestamp.fromDate(new Date(classData.startTime)),
+          endTime: firestore.Timestamp.fromDate(new Date(classData.endTime)),
+          bookingDeadline: firestore.Timestamp.fromDate(new Date(classData.bookingDeadline)),
+          checkInStart: firestore.Timestamp.fromDate(new Date(classData.checkInStart)),
+          checkInEnd: firestore.Timestamp.fromDate(new Date(classData.checkInEnd)),
+          cancellationDeadline: firestore.Timestamp.fromDate(new Date(classData.cancellationDeadline)),
+      });
+      console.log("New class added successfully to venue:", venueId);
+  } catch (error) {
+      console.error(`Error adding new class to venue ${venueId}:`, error);
+      throw new Error(`Error adding new class to venue: ${error}`);
   }
 };

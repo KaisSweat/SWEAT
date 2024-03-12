@@ -1,92 +1,112 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, Venue } from '../types/types';
-import { format, isTomorrow, isValid } from 'date-fns';
-import { AppUserContext } from '../contexts/AppUserContext'; // Make sure the path is correct
-import { bookClassForUser } from '../services/firestorebookingService'; // Adjust the path as needed
+import { format } from 'date-fns';
+import { AppUserContext } from '../contexts/AppUserContext';
+import { bookClassForUser } from '../services/firestorebookingService';
+import { fetchVenueById } from '../services/firestoreService';
+import { decodePlusCode } from '../utils/decodePlusCode'; // Make sure the path to your utility function is correct
 
 type ClassDetailScreenRouteProp = RouteProp<RootStackParamList, 'ClassDetail'>;
+type ClassDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ClassDetail'>;
 
-type Props = {
+interface Props {
   route: ClassDetailScreenRouteProp;
-};
+  navigation: ClassDetailScreenNavigationProp;
+}
 
-const ClassDetailScreen: React.FC<Props> = ({ route }) => {
+const ClassDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { classDetail } = route.params;
   const { user } = useContext(AppUserContext);
   const [isBooking, setIsBooking] = useState(false);
+  const [venue, setVenue] = useState<Venue | null>(null);
+  const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      if (classDetail.venueId) {
+        try {
+          const venueData = await fetchVenueById(classDetail.venueId);
+          setVenue(venueData);
+          // Decode PlusCode to get coordinates
+          if (venueData && venueData.PlusCode) {
+            const coords = await decodePlusCode(venueData.PlusCode);
+            if (coords) {
+              setCoordinates(coords);
+            } else {
+              console.error("Failed to fetch coordinates for venue Plus Code.");
+              // Optionally, set coordinates to a default or null
+              setCoordinates(null);
+            }
+          }
+        } catch (error) {
+          Alert.alert('Error', 'Failed to fetch venue details');
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchVenueData();
+  }, [classDetail.venueId]);
 
   const handleBookClass = async () => {
     if (!user) {
-      Alert.alert("Error", "You need to be logged in to book a class.");
+      Alert.alert('Error', 'You must be logged in to book a class.');
       return;
     }
-  
+
     setIsBooking(true);
     try {
       await bookClassForUser(user.id, classDetail.id, classDetail.venueId);
-      setIsBooking(false);
-      Alert.alert("Success", "Class booked successfully!");
+      Alert.alert('Success', 'You have successfully booked the class!');
     } catch (error) {
+      Alert.alert('Error', 'Failed to book the class. Please try again later.');
+    } finally {
       setIsBooking(false);
-      // Type assertion to Error
-      const typedError = error as Error;
-      if (typedError.message === 'Already booked') {
-        Alert.alert("Already Booked", "You have already booked this class.");
-      } else if (typedError.message === 'Class is full') {
-        Alert.alert("Class Full", "This class is full. Please try another class.");
-      } else {
-        Alert.alert("Booking Failed", "Failed to book the class. Please try again later.");
-      }
     }
   };
-  
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000FF" />;
+  }
+
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: classDetail.venue.image }} style={styles.image} resizeMode="cover" />
+      <Image source={{ uri: venue?.image }} style={styles.image} resizeMode="cover" />
       <View style={styles.detailsContainer}>
         <Text style={styles.className}>{classDetail.name}</Text>
-        <Text style={styles.classTime}>{`${format(classDetail.startTime, 'EEEE, MMMM do, p')} - ${format(classDetail.endTime, 'p')}`}</Text>
-        <Text style={styles.classInfo}>{`${classDetail.venue.name || ''} | ${classDetail.venue.area || ''}`}</Text>
+        <Text style={styles.classTime}>{`${format(new Date(classDetail.startTime), 'EEEE, MMMM do, p')} - ${format(new Date(classDetail.endTime), 'p')}`}</Text>
+        <Text style={styles.classInfo}>{`${venue?.name || 'Unknown Venue'} | ${venue?.area || 'Unknown Area'}`}</Text>
         <Text style={styles.classInfo}>{`With ${classDetail.coach}`}</Text>
         <Text style={styles.classDescription}>{classDetail.description}</Text>
-        <Text style={styles.availableSpots}>{`${classDetail.availableSpots} spots left`}</Text>
-        
+        <Text style={styles.availableSpots}>{`${classDetail.availableSpots} spots available`}</Text>
         <TouchableOpacity style={styles.bookButton} onPress={handleBookClass} disabled={isBooking}>
-          {isBooking ? (
-            <ActivityIndicator color="#FFF" />
-          ) : (
-            <Text style={styles.bookButtonText}>Book Now</Text>
-          )}
+          {isBooking ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.bookButtonText}>Book Now</Text>}
         </TouchableOpacity>
 
-        <Text style={styles.classInfo}>Book until: {format(classDetail.bookingDeadline, 'p')}</Text>
-        <Text style={styles.classInfo}>Check-in: {format(classDetail.checkInStart, 'p')} - {format(classDetail.checkInEnd, 'p')}</Text>
-        <Text style={styles.classInfo}>Cancel until: {format(classDetail.cancellationDeadline, 'p')}</Text>
-
-        {classDetail.venue.latitude && classDetail.venue.longitude && (
+        {coordinates && (
           <MapView
             style={styles.map}
             initialRegion={{
-              latitude: classDetail.venue.latitude,
-              longitude: classDetail.venue.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
+              latitude: coordinates.latitude,
+              longitude: coordinates.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
             }}
           >
             <Marker
-              coordinate={{
-                latitude: classDetail.venue.latitude,
-                longitude: classDetail.venue.longitude,
-              }}
-              title={classDetail.venue.name || 'Venue Location'}
+              coordinate={{ latitude: coordinates.latitude, longitude: coordinates.longitude }}
+              title={venue?.name || 'Venue Location'}
             />
           </MapView>
         )}
       </View>
-      <Text style={styles.classInfo}>{classDetail.venue.address}</Text>
     </ScrollView>
   );
 };

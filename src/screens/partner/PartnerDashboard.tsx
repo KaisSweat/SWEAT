@@ -1,47 +1,28 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Alert } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { AppUserContext } from '../../contexts/AppUserContext'; // Adjust the import path as needed
-import { fetchVenueById } from '../../services/firestoreService'; // Adjust the import path as needed
+import { AppUserContext } from '../../contexts/AppUserContext';
+import auth from '@react-native-firebase/auth';
+import { fetchVenueById } from '../../services/firestoreService';
 import { Venue } from '../../types/types';
-import auth from '@react-native-firebase/auth'; // Import auth module from Firebase if you're using Firebase for authentication
 
-type PartnerStackParamList = {
-  PartnerDetails: { venueId: string };
-};
-
-type PartnerDashboardNavigationProp = StackNavigationProp<
-  PartnerStackParamList,
-  'PartnerDetails'
->;
-
-type Props = {
-  navigation: PartnerDashboardNavigationProp;
-};
-
-const PartnerDashboard: React.FC<Props> = ({ navigation }) => {
+const PartnerDashboard = () => {
   const { user, setUser } = useContext(AppUserContext);
-  const [venue, setVenue] = useState<Venue | null>(null);
+  const [venue, setVenue] = React.useState<Venue | null>(null);
 
   useEffect(() => {
-    const loadVenueDetails = async () => {
-      if (user?.venueId) {
-        try {
-          const fetchedVenue = await fetchVenueById(user.venueId);
-          setVenue(fetchedVenue);
-        } catch (error) {
-          console.error('Error fetching venue details:', error);
-        }
-      }
-    };
-
-    loadVenueDetails();
+    if (user?.venueId) {
+      fetchVenueById(user.venueId).then(fetchedVenue => {
+        setVenue(fetchedVenue);
+      }).catch(error => {
+        console.error('Error fetching venue details:', error);
+      });
+    }
   }, [user?.venueId]);
 
   const handleLogout = async () => {
     try {
-      await auth().signOut(); // Sign out using Firebase Auth
-      setUser(null); // Update your context to reflect the user has logged out
+      await auth().signOut();
+      setUser(null);
       Alert.alert("Logged Out", "You have been logged out successfully.");
     } catch (error) {
       console.error("Logout error:", error);
@@ -56,16 +37,6 @@ const PartnerDashboard: React.FC<Props> = ({ navigation }) => {
       <Text>Role: {user?.role}</Text>
       <Text>Venue ID: {user?.venueId}</Text>
       <Text>Venue Name: {venue?.name}</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => {
-          if (user?.venueId) {
-            navigation.navigate('PartnerDetails', { venueId: user.venueId });
-          } else {
-            console.warn('Venue ID is not available.');
-          }
-        }}
-      />
       <Button title="Log Out" onPress={handleLogout} />
     </View>
   );

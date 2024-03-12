@@ -13,6 +13,7 @@ import ClassesListForVenue from '../screens/ClassesListForVenue';
 import MyClassesScreen from '../screens/MyClassesScreen';
 import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
+import NavigationIcon from '../components/NavigationIcon';
 
 const Tab = createBottomTabNavigator();
 const GymStack = createStackNavigator<RootStackParamList>();

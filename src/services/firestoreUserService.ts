@@ -40,11 +40,8 @@ export const getUserDetails = async (userId: string): Promise<{ role: string | n
     const userRole = userData?.role || null;
     const userName = userData?.firstName || null; // Correctly fetching 'firstname' as the 'name'
     
-    // Directly fetch 'venueId' from the user's data if the user is a partner
-    let venueId = null;
-    if (userRole === 'partner') {
-      venueId = userData?.venueId || null;
-    }
+    // Directly fetch 'venueId' from the user's data if the user is a partner, otherwise null
+    const venueId = userRole === 'partner' ? (userData?.venueId || null) : null;
 
     return { role: userRole, venueId, name: userName };
   } catch (error) {

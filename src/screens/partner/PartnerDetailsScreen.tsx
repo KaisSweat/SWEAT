@@ -1,64 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, {useContext, useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList, Venue } from '../../types/types';
+import { AppUserContext } from '../../contexts/AppUserContext';
 import { fetchVenueById } from '../../services/firestoreService';
 import {decodePlusCode} from '../../utils/decodePlusCode'; // Use your decodePlusCode function
+import { Venue } from '../../types/types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../types/types.ts';
 
-type PartnerDetailsScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'PartnerDetails'>;
-  route: RouteProp<RootStackParamList, 'PartnerDetails'>;
-};
+type PartnerDetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PartnerDetails'>;
 
-const PartnerDetailsScreen: React.FC<PartnerDetailsScreenProps> = ({ route, navigation }) => {
+
+
+
+const PartnerDetailsScreen: React.FC<{ navigation: PartnerDetailsScreenNavigationProp }> = ({ navigation }) => {
+  const { user } = useContext(AppUserContext); // Accessing user context
   const [venue, setVenue] = useState<Venue | null>(null);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number; } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { venueId } = route.params;
 
   useEffect(() => {
-    const loadVenueAndCoordinates = async () => {
-      try {
-        const fetchedVenue = await fetchVenueById(venueId);
-        if (fetchedVenue && fetchedVenue.PlusCode) {
-          setVenue(fetchedVenue);
-          const coords = await decodePlusCode(fetchedVenue.PlusCode);
-          if (coords) {
-            setCoordinates(coords);
+    if (user?.venueId) {
+      const venueIdString = user.venueId!;
+      const loadVenueAndCoordinates = async () => {
+        setLoading(true);
+        try {
+          const fetchedVenue = await fetchVenueById(venueIdString);
+          if (fetchedVenue && fetchedVenue.PlusCode) {
+            setVenue(fetchedVenue);
+            const coords = await decodePlusCode(fetchedVenue.PlusCode);
+            if (coords) {
+              setCoordinates(coords);
+            } else {
+              console.error("Failed to fetch coordinates for venue Plus Code.");
+              setCoordinates(null);
+            }
           } else {
-            console.error("Failed to fetch coordinates for venue Plus Code.");
+            console.error("Venue details or Plus Code not available.");
+            setVenue(null); // In case there's no venue data
             setCoordinates(null);
           }
-        } else {
-          console.error("Venue details or Plus Code not available.");
-          setVenue(fetchedVenue); // Still set the venue even if Plus Code is missing
-          setCoordinates(null); // No coordinates to display
+        } catch (error) {
+          console.error('Error fetching venue details or decoding Plus Code:', error);
+          setVenue(null);
+          setCoordinates(null);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('Error fetching venue details or decoding Plus Code:', error);
-        setVenue(null);
-        setCoordinates(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
+  
+      loadVenueAndCoordinates();
+    }
+  }, [user?.venueId]);
 
-    loadVenueAndCoordinates();
-  }, [venueId]);
+  const handleEditVenue = () => {
+    if (user?.venueId) {
+      navigation.navigate('PartnerVenueEdit');
+    }
+  };  
+  
+  
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
   if (!venue) {
-    return <Text>Venue details not available.</Text>;
+    return <Text style={styles.fallbackText}>Venue details not available.</Text>;
   }
 
-  const handleEditVenue = () => {
-    navigation.navigate('PartnerVenueEdit', { venueId }); // Ensure 'PartnerVenueEdit' is correctly defined in your navigation stack
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -162,6 +172,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  fallbackText: {
+    fontSize: 16,
+    color: 'gray',
+    textAlign: 'center',
   },
 });
 

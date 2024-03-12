@@ -31,6 +31,7 @@ const SignupScreen = () => {
             name: `${result.user.firstName} ${result.user.lastName}`, // Combine firstName and lastName
             email: result.user.email,
             bookings: [], // Provide a default empty array for bookings
+            role :'member',
             // Include any other properties expected by AppUser type
         };
 

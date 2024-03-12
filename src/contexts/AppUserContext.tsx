@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import auth from '@react-native-firebase/auth';
-import { getUserDetails } from '../services/firestoreUserService';
-import { AppUser } from '../types/types'; // Ensure this import path matches your project structure
+import { getUserDetails } from '../services/firestoreUserService'; // Make sure this path matches your project structure
+import { AppUser } from '../types/types'; // Adjust import path as necessary
 
 type AppUserContextType = {
   user: AppUser | null;
@@ -13,37 +13,36 @@ const defaultContextValue: AppUserContextType = {
   setUser: () => {},
 };
 
-export const AppUserContext = createContext<AppUserContextType>(defaultContextValue);
+const AppUserContext = createContext<AppUserContextType>(defaultContextValue);
 
-export const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AppUser | null>(null);
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const { role, venueId, name } = await getUserDetails(firebaseUser.uid);
-          console.log(`User Details: ${JSON.stringify({ role, venueId, name })}`);
-          // Ensure all required AppUser properties are set or have default values
+          // Assume getUserDetails fetches { role, venueId, name, ...otherDetails }
+          const userDetails = await getUserDetails(firebaseUser.uid);
           setUser({
             id: firebaseUser.uid,
             email: firebaseUser.email || '',
-            role: role || 'guest', // Default to 'guest' if role is not fetched
-            venueId: venueId || '', // Provide empty string if venueId is not applicable
-            name: name || '', // Provide a default value for name
-            bookings: [], // Provide a default value for bookings
-            // Include other properties as needed with appropriate default values
+            role: userDetails.role || 'guest',
+            venueId: userDetails.venueId || null, // Ensure venueId is included for partners
+            name: userDetails.name || '',
+            bookings: [], // Initialize bookings, adjust as necessary
+            // Include other properties as fetched
           });
         } catch (error) {
           console.error("Error fetching user details:", error);
-          // Handle the error appropriately
+          setUser(null); // Consider setting user to null or handling errors differently
         }
       } else {
-        setUser(null); // Set user to null if not authenticated
+        setUser(null); // No user logged in
       }
     });
 
-    return () => unsubscribe(); // Clean up the subscription
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
   return (
@@ -52,3 +51,8 @@ export const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children })
     </AppUserContext.Provider>
   );
 };
+
+// Custom hook to use AppUser context
+export const useAppUser = () => useContext(AppUserContext);
+
+export { AppUserProvider, AppUserContext };

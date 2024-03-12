@@ -25,8 +25,9 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
   const {
     name,
     startTime,
+    venueName, // Use venueName directly
+    venueArea, // Use venueArea directly
     endTime,
-    venue,
     coach,
     availableSpots,
   } = classInfo;
@@ -46,7 +47,7 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
       </View>
       <Text style={styles.className}>{name}</Text>
       <Text style={styles.details}>
-        {venue?.name || 'Unknown Venue'} | {venue?.area || 'Unknown Area'} | {coach}
+      {venueName || 'Unknown Venue'} | {venueArea || 'Unknown Area'} | {coach}
       </Text>
     </TouchableOpacity>
   );

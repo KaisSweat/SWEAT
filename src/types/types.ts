@@ -24,11 +24,14 @@ export type Class = {
   description: string; // description
   availableSpots: number;
   venueId: string;
-  venue: Venue;
   bookingDeadline: Date; // Deadline for booking the class
   checkInStart: Date; // Check-in start time
   checkInEnd: Date; // Check-in end time
   cancellationDeadline: Date; // Deadline to cancel the booking
+  venueName?: string; // Optional venue name
+  venueArea?: string; // Optional venue area
+  venueImage?: string;
+  venue?: Venue;
   // ... any other class related properties
 };
 // Define the RootStackParamList for React Navigation
@@ -43,9 +46,11 @@ export type RootStackParamList = {
   Login: undefined;
   Home:undefined;
   PasswordReset: undefined;
-  PartnerDashboard: { venueId: string }; 
-  PartnerDetails: { venueId: string }; 
-  PartnerVenueEdit: { venueId: string }; 
+  PartnerDashboard: undefined;
+  PartnerDetails: undefined;
+  PartnerVenueEdit: undefined;
+  PartnerClassAdd: undefined;
+  ClassesListForPartner: undefined;
 
 };
 
