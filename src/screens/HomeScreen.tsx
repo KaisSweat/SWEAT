@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';
-import { useAppData } from '../contexts/AppDataContext';
-import { Class } from '../types/types';
-import auth from '@react-native-firebase/auth';
-
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Button,
+} from "react-native";
+import { useAppData } from "../contexts/AppDataContext";
+import { Class } from "../types/types";
+import auth from "@react-native-firebase/auth";
 
 const HomeScreen: React.FC = () => {
   const { venues, fetchClassesForVenue } = useAppData();
@@ -33,15 +39,18 @@ const HomeScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text>Log Out</Text>
+        <Text style={styles.btnText}>Log Out</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Venues:</Text>
       <FlatList
         data={venues}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.venueItem} onPress={() => handleSelectVenue(item.id)}>
-            <Text>{item.name}</Text>
+          <TouchableOpacity
+            style={styles.venueItem}
+            onPress={() => handleSelectVenue(item.id)}
+          >
+            <Text style={styles.itemName}>{item.name}</Text>
           </TouchableOpacity>
         )}
       />
@@ -53,7 +62,7 @@ const HomeScreen: React.FC = () => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.classItem}>
-                <Text>{item.name}</Text>
+                <Text style={styles.itemName}>{item.name}</Text>
               </View>
             )}
           />
@@ -70,28 +79,31 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logoutButton: {
-    alignSelf: 'flex-end', // Align the button to the right
+    alignSelf: "flex-end", // Align the button to the right
     padding: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#e2e2e2",
     borderRadius: 5,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 20,
+    color: "gray",
   },
   venueItem: {
     padding: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#e2e2e2",
     borderRadius: 5,
     marginTop: 10,
   },
   classItem: {
     padding: 10,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 5,
     marginTop: 10,
   },
+  itemName: { color: "gray" },
+  btnText: { color: "gray" },
 });
 
 export default HomeScreen;
