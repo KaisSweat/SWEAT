@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'black',
   },
   logo: {
-    width: 150, // Set the width of your logo
-    height: 150, // Set the height of your logo
+    width: 200, // Set the width of your logo
+    height: 200, // Set the height of your logo
     marginBottom: 20,
   },
   button: {

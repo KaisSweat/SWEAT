@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   emptyMessage: {
     padding: 20,
     textAlign: 'center',
+    alignSelf:"stretch",
   },
 });
 

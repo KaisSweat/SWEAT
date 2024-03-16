@@ -13,6 +13,7 @@ export type Venue = {
   PlusCode:string;
   image: string; // Assuming local images are used and imported as numbers
   classes: Class[]; // Array of classes offered by the venue
+  qrCodeUrl:string;
 };
 
 export type Class = {

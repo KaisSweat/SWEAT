@@ -61,6 +61,12 @@ const signupUser = async (email: string, password: string, firstName: string, la
 
 
 const signInWithEmailAndPassword = async (email: string, password: string): Promise<AppUser | null> => {
+  // Check if email or password fields are empty
+  if (!email.trim() || !password.trim()) {
+    // You can customize this message
+    throw new Error('Email and password fields cannot be empty.');
+  }
+
   try {
     const userCredential = await auth().signInWithEmailAndPassword(email, password);
     const firebaseUser = userCredential.user;

@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
+    alignSelf:"stretch",
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 20,

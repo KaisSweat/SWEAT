@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderTopWidth: 1,
     borderTopColor: '#ececec',
+    alignSelf:"stretch",
   },
   // Additional styles can be added as needed
 });

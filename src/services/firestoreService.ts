@@ -217,3 +217,19 @@ export const addClassToVenue = async (venueId: string, classData: Omit<Class, 'i
       throw new Error(`Error adding new class to venue: ${error}`);
   }
 };
+
+export const cancelClass = async (venueId: string, classId: string): Promise<void> => {
+  try {
+    await firestore()
+      .collection('venues')
+      .doc(venueId)
+      .collection('classes')
+      .doc(classId)
+      .delete();
+
+    console.log(`Class with ID: ${classId} from venue: ${venueId} has been cancelled and removed.`);
+  } catch (error) {
+    console.error("Error cancelling class: ", error);
+    throw new Error("Failed to cancel class. Please try again.");
+  }
+};

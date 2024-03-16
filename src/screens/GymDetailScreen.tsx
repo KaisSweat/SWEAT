@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 16,
     marginBottom: 8,
+    alignSelf:"stretch",
   },
   distance: {
     fontSize: 16,
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'justify',
     marginBottom: 16,
+    alignSelf:"stretch",
   },
   map: {
     width: '100%',

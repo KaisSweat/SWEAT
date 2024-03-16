@@ -47,6 +47,7 @@ const LoginScreen = () => {
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                placeholderTextColor="black" 
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
@@ -57,6 +58,7 @@ const LoginScreen = () => {
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
+                    placeholderTextColor="black" 
                     secureTextEntry={!isPasswordVisible}
                 />
                 <TouchableOpacity
@@ -104,6 +106,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+        color:'black'
     },
     errorText: {
         color: 'red',
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     },
     forgotPassword: {
         textAlign: 'right',
-        color: 'blue',
+        color: 'black',
         marginBottom: 20,
     },
     loginButton: {
@@ -143,6 +146,7 @@ const styles = StyleSheet.create({
     orContinueWith: {
         textAlign: 'center',
         marginBottom: 10,
+        color:'black'
     },
     socialLoginContainer: {
         flexDirection: 'row',

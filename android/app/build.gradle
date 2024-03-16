@@ -74,7 +74,6 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-
     namespace "com.gymapp"
     defaultConfig {
         applicationId "com.gymapp"
