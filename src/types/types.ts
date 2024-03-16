@@ -21,7 +21,7 @@ export type Class = {
   name: string; // Class name
   startTime: Date; // Use Date object for start time of the class
   endTime: Date; // Use Date object for end time of the class
-  coach: string; // Name of the coach
+  coach?: string; // Name of the coach
   description: string; // description
   availableSpots: number;
   venueId: string;

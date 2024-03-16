@@ -10,6 +10,11 @@ interface FirebaseError extends Error {
 
 
 const signupUser = async (email: string, password: string, firstName: string, lastName: string) => {
+  // Check for empty input fields first
+  if (!email.trim() || !password.trim() || !firstName.trim() || !lastName.trim()) {
+    return { success: false, message: 'Please fill in all fields.' };
+  }
+
   try {
     const userCredential = await auth().createUserWithEmailAndPassword(email, password);
     const firebaseUser = userCredential.user;
@@ -44,7 +49,7 @@ const signupUser = async (email: string, password: string, firstName: string, la
           errorMessage = 'The email address is already in use by another account.';
           break;
         case 'auth/weak-password':
-          errorMessage = 'The password is too weak.';
+          errorMessage = 'The password is too weak. It should be at least 6 characters.';
           break;
         case 'auth/invalid-email':
           errorMessage = 'The email address is invalid.';
@@ -52,10 +57,13 @@ const signupUser = async (email: string, password: string, firstName: string, la
         default:
           console.error('Signup error:', firebaseError.message);
       }
+    } else {
+      console.error('Non-Firebase signup error:', error);
     }
     return { success: false, message: errorMessage };
   }
 };
+
 
 
 
@@ -94,8 +102,7 @@ const signInWithEmailAndPassword = async (email: string, password: string): Prom
     let errorMessage = 'Something went wrong. Please try again later.';
     if ((error as FirebaseError).code) {
       const firebaseError = error as FirebaseError;
-      console.error('Authentication error:', firebaseError.code);
-
+  
       switch (firebaseError.code) {
         case 'auth/invalid-email':
           errorMessage = 'The email address format is incorrect. Please check and try again.';
@@ -105,16 +112,16 @@ const signInWithEmailAndPassword = async (email: string, password: string): Prom
           break;
         case 'auth/user-not-found':
         case 'auth/wrong-password':
-          errorMessage = 'The email or password you entered is incorrect. Please double-check your credentials and try again.';
+          // Updated error message for wrong password
+          errorMessage = 'The email or password you entered is incorrect. Please double-check your credentials.';
           break;
         case 'auth/too-many-requests':
           errorMessage = 'Too many login attempts. Please wait a moment and try again.';
           break;
         default:
-          console.error(`Unhandled authentication error: ${firebaseError.code}`);
+          errorMessage = 'Wrong Email or Password. Please try again.';
       }
     } else {
-      console.error('Non-Firebase authentication error:', error);
     }
     throw new Error(errorMessage);
   }

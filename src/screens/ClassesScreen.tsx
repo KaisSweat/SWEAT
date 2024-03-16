@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   dateOptionText: {
     textAlign: "center",
-    color: "gray",
+    color: "black",
   },
   sectionHeader: {
     fontWeight: "bold",

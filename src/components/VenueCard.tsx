@@ -18,7 +18,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, onPress }) => {
         <Text style={styles.rating}>{venue.rating}</Text>
         <Text style={styles.name}>{venue.name}</Text>
         <Text style={styles.details}>{venue.type.join(', ')}</Text>
-        <Text style={styles.distance}>{`${venue.distance} m`}</Text>
+        <Text style={styles.distance}>{`${venue.area} | ${venue.distance} m`}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   },
   textOverlay: {
     position: 'absolute',
+    alignSelf: 'center',
     bottom: 0,
     left: 0,
     right: 0,

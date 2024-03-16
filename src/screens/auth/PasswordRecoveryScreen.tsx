@@ -36,6 +36,7 @@ const PasswordRecoveryScreen = () => {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        placeholderTextColor="black" 
         autoCapitalize="none"
       />
 
@@ -58,11 +59,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'black',
   },
   instructions: {
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
+    color: 'black',
   },
   input: {
     width: '100%',

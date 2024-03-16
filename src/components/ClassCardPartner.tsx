@@ -42,11 +42,11 @@ const ClassCardPartner: React.FC<ClassCardPartnerProps> = ({ classInfo, onPress,
   return (
     <View style={styles.card}>
       <TouchableOpacity style={styles.content} onPress={onPress}>
+      <Text style={styles.className}>{name}</Text>
         <View style={styles.header}>
           <Text style={styles.time}>{`${formattedStartTime} - ${formattedEndTime}`}</Text>
           <Text style={styles.spots}>{waitlistDisplay}</Text>
         </View>
-        <Text style={styles.className}>{name}</Text>
         <Text style={styles.details}>
           {venueName || 'Unknown Venue'} | {venueArea || 'Unknown Area'} | Coach: {coach}
         </Text>
@@ -60,36 +60,40 @@ const ClassCardPartner: React.FC<ClassCardPartnerProps> = ({ classInfo, onPress,
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 8,
     marginVertical: 8,
     padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   content: {
     // Styling for the content if needed
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8, // Increased spacing between the header and class name
   },
   time: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    color: "gray",
   },
   spots: {
     fontSize: 14,
-    color: '#666',
+    color: "darkgreen",
+    fontWeight: "bold",
   },
   className: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 6, // Increased bottom margin for better visual separation
+    color: "black",
   },
   details: {
     fontSize: 14,
@@ -108,5 +112,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+
+
 
 export default ClassCardPartner;

@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
   },
-  itemName: { color: "gray" },
-  btnText: { color: "gray" },
+  itemName: { color: "black" },
+  btnText: { color: "black" },
 });
 
 export default HomeScreen;

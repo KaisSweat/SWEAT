@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
+    color:'black'
   },
   type: {
     fontSize: 18,
@@ -134,20 +135,23 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 16,
     marginBottom: 8,
+    color:'grey'
   },
   distance: {
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: 8,
+    color:'grey'
   },
   description: {
     fontSize: 16,
     textAlign: 'justify',
-    marginBottom: 16,
+    marginBottom: 8,
+    color:'grey'
   },
   map: {
     width: '100%',
     height: 250,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   showClassesButton: {
     marginTop: 20,
@@ -155,11 +159,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#007AFF', // Use your app's color scheme
     borderRadius: 5,
     alignItems: 'center',
-  },
-  showClassesText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   editButton: {
     marginTop: 20,

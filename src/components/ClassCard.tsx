@@ -46,15 +46,18 @@ const ClassCard: React.FC<ClassCardProps> = ({ classInfo, onPress }) => {
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
+      {/* Move className to the very top */}
+      <Text style={styles.className}>{name}</Text>
+      
+      {/* Then, render the header with time and spots */}
       <View style={styles.header}>
-        <Text
-          style={styles.time}
-        >{`${formattedStartTime} - ${formattedEndTime}`}</Text>
+        <Text style={styles.time}>{`${formattedStartTime} - ${formattedEndTime}`}</Text>
         <Text style={styles.spots}>{waitlistDisplay}</Text>
       </View>
-      <Text style={styles.className}>{name}</Text>
+      
+      {/* Finally, show the details at the bottom */}
       <Text style={styles.details}>
-        {venueName || "Unknown Venue"} | {venueArea || "Unknown Area"} | {coach}
+        {venueName} | {venueArea || "Unknown Area"} | {coach || "Varying instructors"}
       </Text>
     </TouchableOpacity>
   );
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 8, // Increased spacing between the header and class name
   },
   time: {
     fontSize: 16,
@@ -85,13 +88,14 @@ const styles = StyleSheet.create({
   },
   spots: {
     fontSize: 14,
-    color: "#666",
+    color: "darkgreen",
+    fontWeight: "bold",
   },
   className: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 4,
-    color: "gray",
+    marginBottom: 6, // Increased bottom margin for better visual separation
+    color: "black",
   },
   details: {
     fontSize: 14,

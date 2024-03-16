@@ -135,15 +135,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
+    color:'grey',
   },
   label: {
     marginTop: 10,
     marginBottom: 5,
     fontSize: 16,
     fontWeight: 'bold',
+    color:'grey'
   },
   uploadButton: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
     backgroundColor: '#4CAF50',
     padding: 10,

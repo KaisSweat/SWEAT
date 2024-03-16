@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { ScrollView, StyleSheet, View,TouchableOpacity,TextInput,Text,  Alert } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList,Class } from '../../types/types';
 import { AppUserContext } from '../../contexts/AppUserContext';
@@ -100,74 +100,81 @@ const PartnerClassAddScreen: React.FC<PartnerClassAddScreenProps> = ({ route }) 
 };
 
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <TextInput 
-        style={styles.input} 
-        placeholder="Class Name" 
-        value={classDetails.className} 
-        onChangeText={text => updateClassDetails('className', text)} 
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Description" 
-        value={classDetails.description} 
-        onChangeText={text => updateClassDetails('description', text)} 
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Coach Name" 
-        value={classDetails.coach} 
-        onChangeText={text => updateClassDetails('coach', text)} 
-      />
-      <TextInput 
-        style={styles.input} 
-        placeholder="Available Spots" 
-        value={classDetails.availableSpots} 
-        onChangeText={text => updateClassDetails('availableSpots', text)} 
-        keyboardType="numeric" 
-      />
-      {/* DateInputField for selecting the class date */}
+return (
+  <ScrollView contentContainerStyle={styles.container}>
+  <TextInput 
+    style={styles.input} 
+    placeholder="Class Name" 
+    value={classDetails.className} 
+    onChangeText={(text) => updateClassDetails('className', text)} 
+    placeholderTextColor="#666"
+  />
+  <TextInput 
+    style={styles.input} 
+    placeholder="Description" 
+    value={classDetails.description} 
+    onChangeText={(text) => updateClassDetails('description', text)} 
+    placeholderTextColor="#666"
+  />
+  <TextInput 
+    style={styles.input} 
+    placeholder="Coach Name" 
+    value={classDetails.coach} 
+    onChangeText={(text) => updateClassDetails('coach', text)} 
+    placeholderTextColor="#666"
+  />
+  <TextInput 
+    style={styles.input} 
+    placeholder="Available Spots" 
+    value={classDetails.availableSpots} 
+    onChangeText={(text) => updateClassDetails('availableSpots', text)} 
+    placeholderTextColor="#666" 
+    keyboardType="numeric"
+  />
+
+    <View style={styles.dateAndTimeContainer}>
       <DateInputField
         label="Select Class Date:"
         initialDate={classDetails.classDate}
-        onDateSelected={date => updateClassDetails('classDate', date)}
+        onDateSelected={(date) => updateClassDetails('classDate', date)}
       />
-      {/* TimeInputField components for time selections */}
       <TimeInputField
         label="Start Time:"
         initialTime={classDetails.startTime}
-        onTimeSelected={time => updateClassDetails('startTime', time)}
+        onTimeSelected={(time) => updateClassDetails('startTime', time)}
       />
       <TimeInputField
         label="End Time:"
         initialTime={classDetails.endTime}
-        onTimeSelected={time => updateClassDetails('endTime', time)}
+        onTimeSelected={(time) => updateClassDetails('endTime', time)}
       />
       <TimeInputField
         label="Booking Deadline:"
         initialTime={classDetails.bookingDeadline}
-        onTimeSelected={time => updateClassDetails('bookingDeadline', time)}
+        onTimeSelected={(time) => updateClassDetails('bookingDeadline', time)}
       />
       <TimeInputField
         label="Check-In Start:"
         initialTime={classDetails.checkInStart}
-        onTimeSelected={time => updateClassDetails('checkInStart', time)}
+        onTimeSelected={(time) => updateClassDetails('checkInStart', time)}
       />
       <TimeInputField
         label="Check-In End:"
         initialTime={classDetails.checkInEnd}
-        onTimeSelected={time => updateClassDetails('checkInEnd', time)}
+        onTimeSelected={(time) => updateClassDetails('checkInEnd', time)}
       />
       <TimeInputField
         label="Cancellation Deadline:"
         initialTime={classDetails.cancellationDeadline}
-        onTimeSelected={time => updateClassDetails('cancellationDeadline', time)}
+        onTimeSelected={(time) => updateClassDetails('cancellationDeadline', time)}
       />
-  
-      <Button title="Submit" onPress={handleSubmit} />
-    </ScrollView>
-  );
+    </View>
+
+    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+      <Text style={styles.submitButtonText}>Submit</Text>
+    </TouchableOpacity>
+  </ScrollView>
+);
 };
 
 const styles = StyleSheet.create({
@@ -176,11 +183,31 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
     padding: 10,
+    borderRadius: 8,
+    fontSize: 16,
+    color: '#333',
     marginBottom: 10,
-    borderRadius: 5,
+  },
+  dateAndTimeContainer: {
+    marginVertical: 10, // Provides vertical spacing around the date and time pickers
+  },
+  submitButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
 export default PartnerClassAddScreen;
+

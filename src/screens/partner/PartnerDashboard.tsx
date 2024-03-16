@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, Image ,ScrollView,TouchableOpacity} from 'react-native';
 import { AppUserContext } from '../../contexts/AppUserContext';
 import auth from '@react-native-firebase/auth';
 import { fetchVenueById } from '../../services/firestoreService';
@@ -48,31 +48,70 @@ const PartnerDashboard = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Partner Dashboard</Text>
-      <Text>Email: {user?.email}</Text>
-      <Text>Role: {user?.role}</Text>
-      <Text>Venue ID: {venue?.id}</Text>
-      <Text>Venue Name: {venue?.name}</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Partner Dashboard</Text>
+      <Text style={styles.text}>Email: {user?.email}</Text>
+      <Text style={styles.text}>Role: {user?.role}</Text>
+      <Text style={styles.text}>Venue ID: {venue?.id}</Text>
+      <Text style={styles.text}>Venue Name: {venue?.name}</Text>
       {qrCodeUrl ? (
-        <Image source={{ uri: qrCodeUrl }} style={{ width: 200, height: 200 }} />
+        <Image source={{ uri: qrCodeUrl }} style={styles.qrCode} />
       ) : (
-        <Button title="Generate QR Code" onPress={handleGenerateQRCode} />
+        <TouchableOpacity style={styles.actionButton} onPress={handleGenerateQRCode}>
+          <Text style={styles.buttonText}>Generate QR Code</Text>
+        </TouchableOpacity>
       )}
-      <Button title="Log Out" onPress={handleLogout} />
-    </View>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Log Out</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5', // Added a background color for the entire view
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center', // Centered title text
+    color:'grey'
   },
   text: {
-    fontSize: 20,
+    fontSize: 16,
     marginBottom: 10,
+    color: '#333', // Darker text color for better readability
+    textAlign: 'center', // Centered title text
+  },
+  qrCode: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginVertical: 20,
+  },
+  actionButton: {
+    alignSelf: 'stretch', // Stretch to the container's width with padding accounted
+    backgroundColor: '#007bff', // Blue background for actionable buttons
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logoutButton: {
+    alignSelf: 'center', // Center the button horizontally
+    padding: 10,
+    backgroundColor: '#e2e2e2',
+    borderRadius: 5,
+    color:'black'
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

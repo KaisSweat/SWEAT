@@ -68,6 +68,7 @@ const SignupScreen = () => {
         style={styles.input}
         placeholder="First Name"
         value={firstName}
+        placeholderTextColor="black" 
         onChangeText={setFirstName}
       />
 
@@ -75,6 +76,7 @@ const SignupScreen = () => {
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
+        placeholderTextColor="black" 
         onChangeText={setLastName}
       />
 
@@ -84,6 +86,7 @@ const SignupScreen = () => {
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        placeholderTextColor="black" 
         autoCapitalize="none"
       />
 
@@ -93,6 +96,7 @@ const SignupScreen = () => {
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
+          placeholderTextColor="black" 
           secureTextEntry={!isPasswordVisible}
         />
 

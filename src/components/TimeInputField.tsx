@@ -51,11 +51,12 @@ const TimeInputField: React.FC<TimeInputFieldProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 8,
+    marginVertical: 4,
   },
   label: {
     marginBottom: 4,
     fontWeight: 'bold',
+    color:'grey'
   },
   inputField: {
     borderWidth: 1,

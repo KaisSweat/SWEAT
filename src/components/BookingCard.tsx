@@ -66,15 +66,18 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:'black'
   },
   spots: {
     fontSize: 14,
-    color: '#666',
+    color: 'darkgreen',
+    fontWeight: 'bold',
   },
   className: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+    color:'grey'
   },
   details: {
     fontSize: 14,

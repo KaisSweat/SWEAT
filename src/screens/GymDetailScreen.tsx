@@ -15,6 +15,7 @@ import { RootStackParamList, Venue } from "../types/types";
 import { fetchVenueById } from "../services/firestoreService";
 import { decodePlusCode } from "../utils/decodePlusCode"; // Use your decodePlusCode function
 
+
 type GymDetailScreenRouteProp = RouteProp<RootStackParamList, "GymDetail">;
 type GymDetailScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -121,7 +122,7 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           <Marker coordinate={coordinates} title={venue.name} />
         </MapView>
       )}
-      <Text style={styles.description}>{venue.address}</Text>
+      <Text style={styles.venueAddress}>{venue.address}</Text>
     </ScrollView>
   );
 };
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 8,
-    color: "gray",
+    color: "black",
   },
   type: {
     fontSize: 18,
@@ -163,11 +164,14 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   description: {
-    fontSize: 16,
-    textAlign: "justify",
+    fontSize: 14,
     color: "gray",
-    marginBottom: 16,
-    alignSelf:"stretch",
+    marginBottom: 8,
+  },
+  venueAddress: {
+    fontSize: 14,
+    color: "gray",
+    marginBottom: 6,
   },
   map: {
     width: "100%",

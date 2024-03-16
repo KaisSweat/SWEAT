@@ -80,16 +80,42 @@ const ClassDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     <ScrollView style={styles.container}>
       <Image source={{ uri: venue?.image }} style={styles.image} resizeMode="cover" />
       <View style={styles.detailsContainer}>
+        {/* Class Name */}
         <Text style={styles.className}>{classDetail.name}</Text>
-        <Text style={styles.classTime}>{`${format(new Date(classDetail.startTime), 'EEEE, MMMM do, p')} - ${format(new Date(classDetail.endTime), 'p')}`}</Text>
-        <Text style={styles.classInfo}>{`${venue?.name || 'Unknown Venue'} | ${venue?.area || 'Unknown Area'}`}</Text>
-        <Text style={styles.classInfo}>{`With ${classDetail.coach}`}</Text>
-        <Text style={styles.classDescription}>{classDetail.description}</Text>
-        <Text style={styles.availableSpots}>{`${classDetail.availableSpots} spots available`}</Text>
-        <TouchableOpacity style={styles.bookButton} onPress={handleBookClass} disabled={isBooking}>
-          {isBooking ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.bookButtonText}>Book Now</Text>}
-        </TouchableOpacity>
+  
+        {/* Class Timing */}
+        <Text style={styles.classTime}>
+          {`${format(new Date(classDetail.startTime), 'EEEE, MMMM do, p')} - ${format(new Date(classDetail.endTime), 'p')}`}
+        </Text>
+  
+        {/* Venue Name and Area */}
+        <Text style={styles.classInfo}>
+          {`${venue?.name || 'Unknown Venue'} | ${venue?.area || 'Unknown Area'}`}
+        </Text>
+  
 
+  
+        {/* Class Description */}
+        <Text style={styles.classDescription}>{classDetail.description}</Text>
+  
+        {/* Available Spots */}
+        <Text style={styles.availableSpots}>
+          {`${classDetail.availableSpots} spots available`}
+        </Text>
+
+        {/* Coach Name */}
+        <Text style={styles.classInfo}>{`Coach: ${classDetail.coach}`}</Text>
+  
+        {/* Book Button */}
+        <TouchableOpacity style={styles.bookButton} onPress={handleBookClass} disabled={isBooking}>
+          {isBooking ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.bookButtonText}>Book Now</Text>
+          )}
+        </TouchableOpacity>
+  
+        {/* MapView for Venue Location */}
         {coordinates && (
           <MapView
             style={styles.map}
@@ -98,8 +124,7 @@ const ClassDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               longitude: coordinates.longitude,
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
-            }}
-          >
+            }}>
             <Marker
               coordinate={{ latitude: coordinates.latitude, longitude: coordinates.longitude }}
               title={venue?.name || 'Venue Location'}
@@ -107,6 +132,7 @@ const ClassDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           </MapView>
         )}
       </View>
+      <Text style={styles.classAdress}>{venue?.address}</Text>
     </ScrollView>
   );
 };
@@ -126,10 +152,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: 'black',
   },
   classTime: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 4,
+    color: 'grey',
   },
   classInfo: {
     fontSize: 16,
@@ -139,27 +167,35 @@ const styles = StyleSheet.create({
   classDescription: {
     fontSize: 16,
     marginBottom: 8,
+    color: 'gray', // Added for better distinction of the description
   },
   availableSpots: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 8,
+    color: 'darkgreen', // Highlighting available spots
   },
   bookButton: {
     backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 20, // Increased for spacing from the map or bottom
   },
   bookButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  classAdress: {
+    fontSize: 14,
+    color: "gray",
+    marginBottom: 1,
+    textAlign: 'center', // This centers the text horizontally
+  },
   map: {
     width: '100%',
     height: 250,
-    marginTop: 10,
+    marginTop: 20, // Adjusted for better spacing from previous content
   },
 });
 

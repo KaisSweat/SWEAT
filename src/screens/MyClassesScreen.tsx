@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ececec',
     alignSelf:"stretch",
+    color:'grey'
   },
   // Additional styles can be added as needed
 });

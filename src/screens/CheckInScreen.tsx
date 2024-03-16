@@ -60,55 +60,54 @@ const CheckInScreen: React.FC<ScannerScreenProps> = ({ navigation }) => {
 
     initialize();
   }, []);
+
+  let isFetchingLocation = false;
   // Use the code scanner hook to configure barcode scanning
 // Use the code scanner hook to configure barcode scanning
 const codeScanner = useCodeScanner({
-  codeTypes: ['qr'], // Focusing on QR codes
+  codeTypes: ['qr'],
   onCodeScanned: async (codes) => {
     if (enableOnCodeScanned && codes.length > 0) {
-      const firstCode = codes[0]; // Assuming the first code is the one we're interested in
+      setEnableOnCodeScanned(false); // Disable further scans immediately
 
+      const firstCode = codes[0];
       if (typeof firstCode.value === 'string') {
         try {
           const data: QRCodeData = JSON.parse(firstCode.value);
-          if (data.venueId && data.venueName && data.PlusCode) {
-            // Check the validity of the venue
-            const isValidVenue = await checkVenueValidity(data.venueId, data.venueName, data.PlusCode);// Update function parameters as necessary
-            if (isValidVenue) {
-              // Venue is valid; now fetch current location and calculate distance
-              const currentLocation = await getCurrentLocation();
-              const decodedLocation = await decodePlusCode(data.PlusCode);
-              if (currentLocation && decodedLocation) {
-                const distance = calculateDistanceBetweenCoordinates(currentLocation, decodedLocation);
-                Alert.alert("Success", `Valid venue: ${data.venueName}. You are ${distance} meters away.`);
-              } else {
-                Alert.alert("Error", "Failed to calculate distance. Please try again.");
-              }
+          console.log({ data });
+
+          const isValidVenue = await checkVenueValidity(data.venueId, data.venueName, data.PlusCode);
+          if (isValidVenue) {
+            const currentLocation = await getCurrentLocation();
+            const decodedLocation = await decodePlusCode(data.PlusCode);
+            
+            if (currentLocation && decodedLocation) {
+              const distance = calculateDistanceBetweenCoordinates(currentLocation, decodedLocation);
+              Alert.alert("Success", `Valid venue: ${data.venueName}. You are ${distance} meters away. Checkin Validated`);
+                // { text: "OK", onPress: () => navigation.navigate('NextScreenName') } // Replace 'NextScreenName' with your target screen name
+              // ]);
             } else {
-              Alert.alert("Error", "This venue does not exist in our records.");
+              Alert.alert("Error", "Failed to calculate distance. Please try again.");
             }
           } else {
-            console.error("QR code data does not contain necessary information");
-            Alert.alert("Error", "QR code data does not contain the expected information.");
+            Alert.alert("Error", "This venue does not exist in our records.");
           }
         } catch (error) {
-          console.error("Failed to parse QR code data:", error);
-          Alert.alert("Error", "Failed to parse QR code data.");
+          console.error("Error processing QR code or fetching location:", error);
+          Alert.alert("Error", "Failed to process QR code or fetch location.");
         }
       } else {
         console.error("No QR code value found");
         Alert.alert("Error", "No QR code value found.");
       }
 
-      // Reset scanning ability
-      setEnableOnCodeScanned(false);
-
-      // Optionally, re-enable scanning after a delay
-      setTimeout(() => setEnableOnCodeScanned(true), 3000); // Adjust delay as needed
+      // Re-enable scanning after a delay to prevent immediate repeat scans
+      setTimeout(() => {
+        setEnableOnCodeScanned(true);
+      }, 3000); // Adjust the timeout as needed
     }
   },
 });
-
   
 
 

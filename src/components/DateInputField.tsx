@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 4,
     fontWeight: 'bold',
+    color:'grey',
   },
   inputField: {
     borderWidth: 1,
