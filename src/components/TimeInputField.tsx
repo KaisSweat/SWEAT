@@ -32,7 +32,8 @@ const TimeInputField: React.FC<TimeInputFieldProps> = ({
         style={styles.inputField} 
         onPress={() => setShow(true)}
       >
-        <Text>{moment(time).format('HH:mm')}</Text>
+        {/* Apply the initialTextStyle for the initial time text */}
+        <Text style={styles.initialText}>{moment(time).format('HH:mm')}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -42,7 +43,6 @@ const TimeInputField: React.FC<TimeInputFieldProps> = ({
           is24Hour={true}
           display="default"
           onChange={onChange}
-          // For Android, ensure you set the correct props for dismissing the picker
         />
       )}
     </View>
@@ -51,18 +51,22 @@ const TimeInputField: React.FC<TimeInputFieldProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 4,
+    marginVertical: 8,
   },
   label: {
     marginBottom: 4,
     fontWeight: 'bold',
-    color:'grey'
+    color: 'grey',
   },
   inputField: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
+    justifyContent: 'center',
+  },
+  initialText: {
+    color: 'grey', // This style will make the initial time text red
   },
 });
 

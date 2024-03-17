@@ -1,93 +1,96 @@
-import React, {useContext, useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { AppUserContext } from '../../contexts/AppUserContext';
 import { fetchVenueById } from '../../services/firestoreService';
-import {decodePlusCode} from '../../utils/decodePlusCode'; // Use your decodePlusCode function
+import { decodePlusCode } from '../../utils/decodePlusCode';
 import { Venue } from '../../types/types';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types/types.ts';
-
-type PartnerDetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PartnerDetails'>;
 
 
 
-
-const PartnerDetailsScreen: React.FC<{ navigation: PartnerDetailsScreenNavigationProp }> = ({ navigation }) => {
-  const { user } = useContext(AppUserContext); // Accessing user context
+const PartnerDetailsScreen: React.FC<{ }> = ({
+}) => {
+  const { user } = useContext(AppUserContext);
   const [venue, setVenue] = useState<Venue | null>(null);
-  const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number; } | null>(null);
+  const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    if (user?.venueId) {
-      const venueIdString = user.venueId!;
-      const loadVenueAndCoordinates = async () => {
-        setLoading(true);
-        try {
-          const fetchedVenue = await fetchVenueById(venueIdString);
-          if (fetchedVenue && fetchedVenue.PlusCode) {
-            setVenue(fetchedVenue);
-            const coords = await decodePlusCode(fetchedVenue.PlusCode);
-            if (coords) {
-              setCoordinates(coords);
-            } else {
-              console.error("Failed to fetch coordinates for venue Plus Code.");
-              setCoordinates(null);
-            }
-          } else {
-            console.error("Venue details or Plus Code not available.");
-            setVenue(null); // In case there's no venue data
-            setCoordinates(null);
-          }
-        } catch (error) {
-          console.error('Error fetching venue details or decoding Plus Code:', error);
-          setVenue(null);
-          setCoordinates(null);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      loadVenueAndCoordinates();
-    }
+    loadVenueDetails();
   }, [user?.venueId]);
 
-  const handleEditVenue = () => {
+  const loadVenueDetails = async () => {
     if (user?.venueId) {
-      navigation.navigate('PartnerVenueEdit');
+      setLoading(true);
+      try {
+        const fetchedVenue = await fetchVenueById(user.venueId);
+        if (fetchedVenue && fetchedVenue.PlusCode) {
+          setVenue(fetchedVenue);
+          const coords = await decodePlusCode(fetchedVenue.PlusCode);
+          if (coords) {
+            setCoordinates(coords);
+          } else {
+            console.error('Failed to decode PlusCode into coordinates.');
+            setCoordinates(null);
+          }
+        } else {
+          console.error('Venue details or PlusCode not available.');
+          setVenue(null);
+          setCoordinates(null);
+        }
+      } catch (error) {
+        console.error('Error fetching venue details or decoding PlusCode:', error);
+        setVenue(null);
+        setCoordinates(null);
+      } finally {
+        setLoading(false);
+      }
     }
-  };  
-  
-  
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadVenueDetails();
+    setRefreshing(false);
+  };
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size='large' color='#0000ff' />;
   }
 
   if (!venue) {
     return <Text style={styles.fallbackText}>Venue details not available.</Text>;
   }
 
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: venue.image }} style={styles.image} resizeMode="cover" />
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
+      <Image source={{ uri: venue.image }} style={styles.image} resizeMode='cover' />
       <View style={styles.details}>
         <Text style={styles.name}>{venue.name}</Text>
         <Text style={styles.type}>{venue.type.join(', ')}</Text>
         <Text style={styles.rating}>Rating: {venue.rating}</Text>
         <Text style={styles.distance}>Distance: {venue.distance} meters</Text>
         <Text style={styles.description}>{venue.description}</Text>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditVenue}>
-          <Text style={styles.editButtonText}>Edit Venue Details</Text>
-        </TouchableOpacity>
       </View>
       {coordinates && (
         <MapView
           style={styles.map}
           initialRegion={{
-            ...coordinates,
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           }}
@@ -105,8 +108,6 @@ const PartnerDetailsScreen: React.FC<{ navigation: PartnerDetailsScreenNavigatio
   );
 };
 
-
-// Define or adjust styles here. You can reuse styles from GymDetailScreen as needed
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
-    color:'black'
   },
   type: {
     fontSize: 18,
@@ -134,47 +134,40 @@ const styles = StyleSheet.create({
   },
   rating: {
     fontSize: 16,
+    color: 'grey',
     marginBottom: 8,
-    color:'grey'
   },
   distance: {
     fontSize: 16,
+    color: 'grey',
     marginBottom: 8,
-    color:'grey'
   },
   description: {
     fontSize: 16,
     textAlign: 'justify',
+    color: 'grey',
     marginBottom: 8,
-    color:'grey'
   },
   map: {
     width: '100%',
     height: 250,
     marginBottom: 10,
   },
-  showClassesButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007AFF', // Use your app's color scheme
-    borderRadius: 5,
-    alignItems: 'center',
-  },
   editButton: {
     marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007AFF', // Use your app's color scheme
+    backgroundColor: '#007AFF',
     borderRadius: 5,
+    padding: 10,
     alignItems: 'center',
   },
   editButtonText: {
-    color: '#ffffff',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
   fallbackText: {
     fontSize: 16,
-    color: 'gray',
+    color: 'grey',
     textAlign: 'center',
   },
 });

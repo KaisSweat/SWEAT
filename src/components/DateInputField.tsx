@@ -32,7 +32,8 @@ const DateInputField: React.FC<DateInputFieldProps> = ({
         style={styles.inputField} 
         onPress={() => setShow(true)}
       >
-        <Text>{moment(date).format('YYYY-MM-DD')}</Text>
+        {/* Apply the initialTextStyle for the initial text */}
+        <Text style={styles.initialText}>{moment(date).format('YYYY-MM-DD')}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 4,
     fontWeight: 'bold',
-    color:'grey',
+    color: 'grey',
   },
   inputField: {
     borderWidth: 1,
@@ -62,6 +63,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
+  },
+  initialText: {
+    color: 'grey', // This style will make the initial text red
   },
 });
 

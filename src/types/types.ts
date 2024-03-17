@@ -52,6 +52,7 @@ export type RootStackParamList = {
   PartnerVenueEdit: undefined;
   PartnerClassAdd: undefined;
   ClassesListForPartner: undefined;
+  ClassDetailsForPartner: { classDetail: Class };
 
 };
 

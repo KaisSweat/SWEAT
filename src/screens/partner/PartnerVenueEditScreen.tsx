@@ -120,7 +120,7 @@ const PartnerVenueEditScreen: React.FC<PartnerVenueEditScreenProps> = ({ navigat
       <Button title="Update Venue" onPress={handleUpdate} disabled={isLoading} />
       <Text style={styles.label}>Venue Image:</Text>
       <TouchableOpacity style={styles.uploadButton} onPress={handleSelectImage}>
-        <Text style={styles.uploadButtonText}>Select Image</Text>
+        <Text style={styles.uploadButtonText}>Upload Image</Text>
       </TouchableOpacity>
     </ScrollView>
   );
