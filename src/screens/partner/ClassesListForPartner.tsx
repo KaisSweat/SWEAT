@@ -6,7 +6,7 @@ import ClassCardPartner from '../../components/ClassCardPartner';
 import { Class, RootStackParamList } from '../../types/types';
 import { fetchClassesForVenue, cancelClass } from '../../services/firestoreService';
 import { AppUserContext } from '../../contexts/AppUserContext';
-import { format, isSameDay, startOfDay } from 'date-fns'; // Assuming date-fns is used for date formatting
+import { format, startOfDay } from 'date-fns'; // Assuming date-fns is used for date formatting
 
 // Adjust your Props type if needed
 type ClassesListForPartnerProps = StackNavigationProp<RootStackParamList>;
@@ -40,11 +40,8 @@ const ClassesListForPartner: React.FC = () => {
   };
 
   const handleSelectClass = (selectedClass: Class) => {
-    // Ensure you navigate to the correct screen with the expected parameters
-    // The screen name 'ClassDetail' should match your navigation setup
     navigation.navigate('ClassDetailsForPartner', { classDetail: selectedClass });
   };
-  
   
 
   const handleCancelClass = async (classId: string) => {

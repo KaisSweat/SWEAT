@@ -39,7 +39,7 @@ export type Class = {
 export type RootStackParamList = {
   GymList: undefined;
   GymDetail: { venueId: string };
-  ClassesList: { venueId: string };
+  ClassesList: undefined;
   ClassesListForVenue: { venueId: string };
   ClassDetail: { classDetail: Class };
   Welcome: undefined;

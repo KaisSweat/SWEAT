@@ -8,15 +8,15 @@ import { format } from 'date-fns';
 import { fetchVenueById } from './../../services/firestoreService';
 import { decodePlusCode } from '../../utils/decodePlusCode'; // Make sure the path to your utility function is correct
 
-type ClassDetailsForPartnerRouteProp = RouteProp<RootStackParamList, 'ClassDetailsForPartner'>;
+type ClassDetailsForPartnerscreenRouteProp = RouteProp<RootStackParamList, 'ClassDetailsForPartner'>;
 type ClassDetailsForPartnerNavigationProp = StackNavigationProp<RootStackParamList, 'ClassDetailsForPartner'>;
-
 interface Props {
-  route: ClassDetailsForPartnerRouteProp;
+  route: ClassDetailsForPartnerscreenRouteProp;
   navigation: ClassDetailsForPartnerNavigationProp;
 }
 
-const ClassDetailsForPartner: React.FC<Props> = ({ route }) => {
+
+const ClassDetailsForPartner: React.FC<Props> = ({ route, navigation }) => {
   const { classDetail } = route.params;
   const [venue, setVenue] = useState<Venue | null>(null);
   const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
