@@ -4,7 +4,7 @@ import { AppUserContext } from '../../contexts/AppUserContext';
 import auth from '@react-native-firebase/auth';
 import { fetchVenueById } from '../../services/firestoreService';
 import { Venue } from '../../types/types';
-import { uploadQRCode } from '../../services/QrcodeGenService';
+import { uploadQRCodeVenue } from '../../services/QrcodeGenService';
 
 const PartnerDashboard = () => {
   const { user, setUser } = useContext(AppUserContext);
@@ -27,10 +27,10 @@ const PartnerDashboard = () => {
     fetchAndCheckVenue();
   }, [user?.venueId]);
 
-  const handleGenerateQRCode = async () => {
+  const handleGenerateQRCodeVenue = async () => {
     if (venue) {
       const qrData = JSON.stringify({ venueId: venue.id, venueName: venue.name, PlusCode: venue.PlusCode });
-      const newQrCodeUrl = await uploadQRCode(venue.id, qrData);
+      const newQrCodeUrl = await uploadQRCodeVenue(venue.id, qrData);
       setQrCodeUrl(newQrCodeUrl);
       // Assuming the venue state is updated with the new QR code URL in uploadQRCode function
     }
@@ -57,7 +57,7 @@ const PartnerDashboard = () => {
       {qrCodeUrl ? (
         <Image source={{ uri: qrCodeUrl }} style={styles.qrCode} />
       ) : (
-        <TouchableOpacity style={styles.actionButton} onPress={handleGenerateQRCode}>
+        <TouchableOpacity style={styles.actionButton} onPress={handleGenerateQRCodeVenue}>
           <Text style={styles.buttonText}>Generate QR Code</Text>
         </TouchableOpacity>
       )}

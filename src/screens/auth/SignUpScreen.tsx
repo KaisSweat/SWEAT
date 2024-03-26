@@ -35,6 +35,11 @@ const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+    const handleCreateVenue = () => {
+    // Logic to navigate to the Create Venue screen or display a form
+    console.log('Navigating to Create Venue screen...');
+    // Replace with your navigation or form display logic
+  };
   const handleSignup = async () => {
     const result = await AuthenticationService.signupUser(
       email,
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   signupButton: {
-    backgroundColor: "#4CAF50", // A more vibrant green
+    backgroundColor: "#00c4ff", // A more vibrant green
     paddingVertical: 15,
     borderRadius: 8, // More pronounced rounding of corners
     alignItems: "center",

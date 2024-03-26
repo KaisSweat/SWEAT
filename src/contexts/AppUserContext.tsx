@@ -1,44 +1,51 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import auth from '@react-native-firebase/auth';
-import { getUserDetails } from '../services/firestoreUserService'; // Make sure this path matches your project structure
-import { AppUser } from '../types/types'; // Adjust import path as necessary
+import { getUserDetails } from '../services/firestoreUserService'; // Adjust the path as needed
+import { AppUser } from '../types/types'; // Ensure this includes your Balance type
 
 type AppUserContextType = {
   user: AppUser | null;
   setUser: React.Dispatch<React.SetStateAction<AppUser | null>>;
+  isLoading: boolean; // Added loading state
 };
 
 const defaultContextValue: AppUserContextType = {
   user: null,
   setUser: () => {},
+  isLoading: false, // Default loading state is false
 };
 
 const AppUserContext = createContext<AppUserContextType>(defaultContextValue);
 
 const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AppUser | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Initialize isLoading as true
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (firebaseUser) => {
+      setIsLoading(true); // Set loading to true when auth state changes
       if (firebaseUser) {
         try {
-          // Assume getUserDetails fetches { role, venueId, name, ...otherDetails }
           const userDetails = await getUserDetails(firebaseUser.uid);
           setUser({
             id: firebaseUser.uid,
             email: firebaseUser.email || '',
             role: userDetails.role || 'guest',
-            venueId: userDetails.venueId || null, // Ensure venueId is included for partners
-            name: userDetails.name || '',
-            bookings: [], // Initialize bookings, adjust as necessary
-            // Include other properties as fetched
+            venueId: userDetails.venueId || null,
+            firstName: userDetails.firstName || '',
+            lastName: userDetails.lastName || '',
+            bookings: [], // Initialize or fetch bookings, adjust as necessary
+            balance: userDetails.balance || {}, // Assuming balance is part of the userDetails fetched
           });
         } catch (error) {
           console.error("Error fetching user details:", error);
-          setUser(null); // Consider setting user to null or handling errors differently
+          setUser(null); // Set user to null on error
+        } finally {
+          setIsLoading(false); // Set loading to false after attempting to fetch user details
         }
       } else {
-        setUser(null); // No user logged in
+        setUser(null); // Set user to null if no firebase user
+        setIsLoading(false); // Also set loading to false if not authenticated
       }
     });
 
@@ -46,7 +53,7 @@ const AppUserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <AppUserContext.Provider value={{ user, setUser }}>
+    <AppUserContext.Provider value={{ user, setUser, isLoading }}>
       {children}
     </AppUserContext.Provider>
   );

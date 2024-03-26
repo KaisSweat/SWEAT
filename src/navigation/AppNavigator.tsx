@@ -3,7 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faBuilding, faListAlt, faHeart, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBuilding, faListAlt, faHeart, faQrcode, faWallet } from '@fortawesome/free-solid-svg-icons';
 import HomeScreen from '../screens/HomeScreen';
 import GymScreen from '../screens/GymScreen';
 import GymDetailScreen from '../screens/GymDetailScreen';
@@ -13,7 +13,8 @@ import ClassesListForVenue from '../screens/ClassesListForVenue';
 import MyClassesScreen from '../screens/MyClassesScreen';
 import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
-import NavigationIcon from '../components/NavigationIcon';
+import WalletScreen from '../screens/WalletScreen';
+
 
 const Tab = createBottomTabNavigator();
 const GymStack = createStackNavigator<RootStackParamList>();
@@ -42,7 +43,8 @@ const AppNavigator: React.FC = () => (
       tabBarIcon: ({ color, size }) => {
         let icon;
         switch (route.name) {
-          case 'Home': icon = faHome; break;
+          case 'Home': icon = faWallet; break;
+          case 'Wallet':icon= faWallet; break;
           case 'Gym': icon = faBuilding; break;
           case 'Classes': icon = faListAlt; break;
           case 'MyClasses': icon = faHeart; break;
@@ -54,6 +56,7 @@ const AppNavigator: React.FC = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
+    <Tab.Screen name="Wallet" component={WalletScreen} />
     <Tab.Screen name="Gym" component={GymStackScreen} />
     <Tab.Screen name="Classes" component={ClassesStackScreen} />
     <Tab.Screen name="CheckIn" component={CheckInScreen} options={{ title: 'Check-In' }} />

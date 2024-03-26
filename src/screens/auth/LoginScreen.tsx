@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     loginButton: {
-        backgroundColor: 'limegreen',
+        backgroundColor: '#00c4ff',
         padding: 15,
         borderRadius: 5,
         alignItems: 'center',
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    
     orContinueWith: {
         textAlign: 'center',
         marginBottom: 10,

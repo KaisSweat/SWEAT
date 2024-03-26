@@ -27,25 +27,31 @@ export const updateUserProfile = async (userId: string, userData: Partial<AppUse
   }
 };
 
-export const getUserDetails = async (userId: string): Promise<{ role: string | null, venueId?: string | null, name: string | null }> => {
+export const getUserDetails = async (userId: string): Promise<AppUser> => {
   try {
-    const userDocSnapshot = await firestore().collection('users').doc(userId).get();
-
-    if (!userDocSnapshot.exists) {
-      console.log("User document does not exist");
-      return { role: null, name: null }; // Return null values if user document doesn't exist
+    const userDoc = await firestore().collection('users').doc(userId).get();
+    if (!userDoc.exists) {
+      throw new Error("User not found");
     }
-
-    const userData = userDocSnapshot.data();
-    const userRole = userData?.role || null;
-    const userName = userData?.firstName || null; // Correctly fetching 'firstname' as the 'name'
-    
-    // Directly fetch 'venueId' from the user's data if the user is a partner, otherwise null
-    const venueId = userRole === 'partner' ? (userData?.venueId || null) : null;
-
-    return { role: userRole, venueId, name: userName };
+    const userData = userDoc.data();
+    if (!userData) {
+      throw new Error("Failed to fetch user data");
+    }
+    // Ensure that the object returned here includes all properties expected by the AppUser interface
+    const userDetails: AppUser = {
+      id: userId, // Ensure you include the userId in the userDetails
+      email: userData.enamemail || '',
+      role: userData.role || 'guest',
+      venueId: userData.venueId || null,
+      firstName: userData.firstname || '',
+      lastName: userData.firstname || '',
+      bookings: userData.bookings || [], // Adjust based on your data structure
+      balance: userData.balance || {}, // Include a default empty object if no balance is found
+      // Include other properties as per the AppUser interface
+    };
+    return userDetails;
   } catch (error) {
     console.error("Error fetching user details:", error);
-    throw error; // Re-throwing the error for external handling
+    throw error;
   }
 };

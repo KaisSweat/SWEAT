@@ -33,6 +33,7 @@ export type Class = {
   venueArea?: string; // Optional venue area
   venueImage?: string;
   venue?: Venue;
+  costInCredits: number; 
   // ... any other class related properties
 };
 // Define the RootStackParamList for React Navigation
@@ -55,17 +56,26 @@ export type RootStackParamList = {
   ClassDetailsForPartner: { classDetail: Class };
 
 };
+// Define a type for the supported currencies
+export type Currency = 'NOK'|'EURO'  | 'TND' | 'SWEETUN';
 
-// Extending User type for App User functionality
-export type AppUser = {
-  id: string;
-  name: string;
-  email: string;
-  bookings: UserBooking[];
-  role:string;
-  venueId?: string | null;
-  // ... other user properties such as preferences, membership info, etc.
+// Define an interface for the Balance object, using the Currency type for its keys
+export type Balance = {
+  [key in Currency]?: number;
 };
+
+// Update the AppUser interface to include the Balance type
+export interface AppUser {
+  id: string;
+  firstName: string;
+  lastName:string;
+  email: string;
+  bookings: UserBooking[]; // Assuming UserBooking is defined elsewhere
+  role: string;
+  venueId?: string | null;
+  balance: Balance; // Use the Balance interface here
+  // Add other properties as needed
+}
 
 // Type for each booking a user makes
 export type UserBooking = {
