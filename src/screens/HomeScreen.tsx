@@ -62,6 +62,12 @@ const HomeScreen = () => {
           <Text style={styles.buttonText}>Generate QR Code</Text>
         </TouchableOpacity>
       )}
+            {/* Displaying the Image */}
+            <Image
+          source={require('../assets/images/Currency_logo.png')} // Adjust the path as needed
+          style={styles.profileImage} // Define the styling as needed
+      />
+
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log Out</Text>
       </TouchableOpacity>
@@ -126,6 +132,14 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 20,
+  },
+  profileImage: {
+    width: 200, // Specify the width
+    height: 200, // Specify the height
+    alignSelf: 'center', // Center the image
+    marginTop: 20, // Margin at the top
+    marginBottom: 40, // Margin at the bottom
+    resizeMode: 'contain', // Ensure the full picture is shown, adjusted within the given dimensions
   },
 });
 

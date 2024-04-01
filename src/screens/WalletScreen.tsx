@@ -1,94 +1,178 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  RefreshControl,
+} from 'react-native';
 import { AppUserContext } from '../contexts/AppUserContext';
-import { Currency } from '../types/types'; // Ensure this path is correct*
+import WalletService from '../services/WalletServices'; // Make sure this path is correct
+import { Picker } from '@react-native-picker/picker'; // Ensure you've installed this package
+import { Currency } from '../types/types'; // Adjust based on your project's structure
 
 const WalletScreen = () => {
-    const { user } = useContext(AppUserContext);
+  const { user } = useContext(AppUserContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const [balance, setBalance] = useState({});
+  const [amountToAdd, setAmountToAdd] = useState('');
+  const [amountToWithdraw, setAmountToWithdraw] = useState('');
+  const [amountToSend, setAmountToSend] = useState('');
+  const [selectedCurrency, setSelectedCurrency] = useState('USD'); // Default currency
+  const [recipients, setRecipients] = useState([]); // Placeholder for recipients list
+  const [selectedRecipient, setSelectedRecipient] = useState('');
 
-    const currencyOrder: Currency[] = ['TND', 'EURO', 'NOK', 'SWEETUN'];
+  const onRefresh = useCallback(async () => {
+    // Refresh logic here
+  }, []);
 
+  useEffect(() => {
+    onRefresh();
+    // Here, you would fetch your recipients list
+    // This is a placeholder implementation
+    setRecipients([
+      { id: '1', name: 'Amine' },
+      { id: '2', name: 'Azza' },
+    ]);
+  }, [onRefresh]);
 
+  // Handlers for adding, withdrawing, and sending money
+  const handleAddMoney = async () => {
+    // Add money logic
+  };
 
-    return (
-        <ScrollView style={styles.container}>
-          <View style={styles.balanceContainer}>
-            <Text style={styles.balanceTitle}>Your Balance:</Text>
-            {user?.balance ? (
-              currencyOrder.map(currency => user.balance[currency] !== undefined && (
-                <Text key={currency} style={styles.balanceText}>
-                  {`${currency.toUpperCase()}: ${user.balance[currency]}`}
-                </Text>
-              ))
-            ) : (
-              <Text style={styles.balanceText}>Loading balance...</Text>
-            )}
-          </View>
-        </ScrollView>
-      );
-    };
+  const handleWithdrawMoney = async () => {
+    // Withdraw money logic
+  };
 
+  const handleSendMoney = async () => {
+    // Implement sending money logic
+    Alert.alert('Success', 'Money sent successfully.');
+  };
 
-    const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          padding: 20,
-          backgroundColor: '#f5f5f5',
-        },
-        title: {
-          fontSize: 24,
-          fontWeight: 'bold',
-          marginBottom: 20,
-          textAlign: 'center',
-          color: 'grey',
-        },
-        text: {
-          fontSize: 16,
-          marginBottom: 10,
-          color: '#333',
-          textAlign: 'center',
-        },
-        balanceContainer: {
-          alignItems: 'center',
-          marginTop: 10,
-        },
-        balanceTitle: {
-          fontSize: 18,
-          fontWeight: '500',
-        },
-        balanceText: {
-          fontSize: 16,
-          marginTop: 5,
-          color: '#333',
-        },
-        logoutButton: {
-          alignSelf: 'center',
-          marginTop: 20,
-          padding: 10,
-          backgroundColor: '#e2e2e2',
-          borderRadius: 5,
-        },
-        buttonText: {
-          color: 'black',
-          fontSize: 16,
-          fontWeight: 'bold',
-        },
-        qrCode: {
-          width: 200,
-          height: 200,
-          alignSelf: 'center',
-          marginVertical: 20,
-        },
-        actionButton: {
-          // Styles for the QR code generation button
-          alignSelf: 'center',
-          backgroundColor: '#007bff',
-          padding: 10,
-          borderRadius: 5,
-          marginBottom: 20,
-        },
-      });
-      
-      
-      export default WalletScreen;
-      
+  return (
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <View style={styles.balanceContainer}>
+        <Text style={styles.balanceTitle}>Your Balance:</Text>
+        {/* Display balance here */}
+      </View>
+
+      <Picker
+        selectedValue={selectedCurrency}
+        style={styles.picker}
+        onValueChange={(itemValue) => setSelectedCurrency(itemValue)}
+      >
+        {/* Currency options */}
+      </Picker>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Amount to Add"
+        keyboardType="numeric"
+        value={amountToAdd}
+        onChangeText={setAmountToAdd}
+      />
+      <TouchableOpacity style={styles.actionButton} onPress={handleAddMoney}>
+        <Text style={styles.buttonText}>Add Money</Text>
+      </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Amount to Withdraw"
+        keyboardType="numeric"
+        value={amountToWithdraw}
+        onChangeText={setAmountToWithdraw}
+      />
+      <TouchableOpacity style={styles.withdrawButton} onPress={handleWithdrawMoney}>
+        <Text style={styles.buttonText}>Withdraw Money</Text>
+      </TouchableOpacity>
+
+      {/* New UI for sending money */}
+      <Picker
+        selectedValue={selectedRecipient}
+        style={styles.picker}
+        onValueChange={(itemValue) => setSelectedRecipient(itemValue)}
+      >
+        {recipients.map((recipient) => (
+          <Picker.Item key={recipient.id} label={recipient.name} value={recipient.id} />
+        ))}
+      </Picker>
+      <TextInput
+        style={styles.input}
+        placeholder="Amount to Send"
+        keyboardType="numeric"
+        value={amountToSend}
+        onChangeText={setAmountToSend}
+      />
+      <TouchableOpacity style={styles.sendButton} onPress={handleSendMoney}>
+        <Text style={styles.buttonText}>Send Money</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
+
+// Expanded styles, including new styles for the send button
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  balanceContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  balanceTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 20,
+    marginTop: 10,
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+    marginBottom: 20,
+  },
+  actionButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  withdrawButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  sendButton: {
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default WalletScreen;

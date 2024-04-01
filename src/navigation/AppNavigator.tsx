@@ -45,8 +45,8 @@ const AppNavigator: React.FC = () => (
         switch (route.name) {
           case 'Home': icon = faWallet; break;
           case 'Wallet':icon= faWallet; break;
-          case 'Gym': icon = faBuilding; break;
-          case 'Classes': icon = faListAlt; break;
+          case 'Venue': icon = faBuilding; break;
+          case 'Booking': icon = faListAlt; break;
           case 'MyClasses': icon = faHeart; break;
           case 'CheckIn': icon = faQrcode; break;
           default: icon = null; break;
@@ -57,8 +57,8 @@ const AppNavigator: React.FC = () => (
   >
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Wallet" component={WalletScreen} />
-    <Tab.Screen name="Gym" component={GymStackScreen} />
-    <Tab.Screen name="Classes" component={ClassesStackScreen} />
+    <Tab.Screen name="Venue" component={GymStackScreen} />
+    <Tab.Screen name="Booking" component={ClassesStackScreen} />
     <Tab.Screen name="CheckIn" component={CheckInScreen} options={{ title: 'Check-In' }} />
     <Tab.Screen name="MyClasses" component={MyClassesScreen} options={{ title: 'My Classes' }} />
   </Tab.Navigator>

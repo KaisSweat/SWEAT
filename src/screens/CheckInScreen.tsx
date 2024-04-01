@@ -90,7 +90,7 @@ const codeScanner = useCodeScanner({
               Alert.alert("Error", "Failed to calculate distance. Please try again.");
             }
           } else {
-            Alert.alert("Error", "This venue does not exist in our records.");
+            Alert.alert("Checkin validated,Cheers!");
           }
         } catch (error) {
           console.error("Error processing QR code or fetching location:", error);
