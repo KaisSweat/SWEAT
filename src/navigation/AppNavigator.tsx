@@ -14,11 +14,13 @@ import MyClassesScreen from '../screens/MyClassesScreen';
 import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
 import WalletScreen from '../screens/WalletScreen';
+import PaymentSelectionScreen from '../screens/payement/PaymentSelectionScreen';
 
 
 const Tab = createBottomTabNavigator();
 const GymStack = createStackNavigator<RootStackParamList>();
 const ClassesStack = createStackNavigator<RootStackParamList>();
+const WalletStack = createStackNavigator<RootStackParamList>(); // Create a stack for wallet-related screens
 
 const GymStackScreen = () => (
   <GymStack.Navigator>
@@ -35,6 +37,13 @@ const ClassesStackScreen = () => (
     <ClassesStack.Screen name="ClassDetail" component={ClassDetailScreen} />
   </ClassesStack.Navigator>
 );
+const WalletStackScreen = () => (
+  <WalletStack.Navigator>
+    <WalletStack.Screen name="Wallet" component={WalletScreen} options={{ headerShown: true, title: 'Wallet' }} />
+    <WalletStack.Screen name="PaymentSelection" component={PaymentSelectionScreen} options={{ headerShown: true, title: 'Select Payment' }} />
+  </WalletStack.Navigator>
+);
+
 
 const AppNavigator: React.FC = () => (
   <Tab.Navigator
@@ -56,7 +65,7 @@ const AppNavigator: React.FC = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Wallet" component={WalletScreen} />
+    <Tab.Screen name="Wallet" component={WalletStackScreen} />
     <Tab.Screen name="Venue" component={GymStackScreen} />
     <Tab.Screen name="Booking" component={ClassesStackScreen} />
     <Tab.Screen name="CheckIn" component={CheckInScreen} options={{ title: 'Check-In' }} />

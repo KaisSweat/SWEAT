@@ -55,3 +55,22 @@ export const getUserDetails = async (userId: string): Promise<AppUser> => {
     throw error;
   }
 };
+
+export const fetchUsersByRole = async (role: string): Promise<AppUser[]> => {
+  try {
+    const querySnapshot = await usersCollection.where('role', '==', role).get();
+    const users: AppUser[] = [];
+    querySnapshot.forEach((documentSnapshot) => {
+      if (documentSnapshot.exists) {
+        const userData = documentSnapshot.data() as AppUser;
+        // Optionally, include the document ID (which is usually the user ID) if not included in the document data
+        userData.id = documentSnapshot.id;
+        users.push(userData);
+      }
+    });
+    return users;
+  } catch (error) {
+    console.error(`Error fetching users with role ${role}:`, error);
+    throw error; // Rethrow the error for handling in the UI
+  }
+};

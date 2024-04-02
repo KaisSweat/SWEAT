@@ -47,6 +47,11 @@ export type RootStackParamList = {
   SignUp: undefined;
   Login: undefined;
   Home:undefined;
+  Wallet:undefined;
+  PaymentSelection: {
+    amount: string;
+    currency: string;
+  };
   PasswordReset: undefined;
   PartnerDashboard: undefined;
   PartnerDetails: undefined;
@@ -56,6 +61,9 @@ export type RootStackParamList = {
   ClassDetailsForPartner: { classDetail: Class };
 
 };
+// Create an array of currency options
+export const currencyOptions: Currency[] = ['NOK', 'EURO', 'TND'];
+
 // Define a type for the supported currencies
 export type Currency = 'NOK'|'EURO'  | 'TND' | 'SWEETUN';
 
@@ -71,7 +79,7 @@ export interface AppUser {
   lastName:string;
   email: string;
   bookings: UserBooking[]; // Assuming UserBooking is defined elsewhere
-  role: string;
+  role: 'Owner' | 'Partner' | 'User';
   venueId?: string | null;
   balance: Balance; // Use the Balance interface here
   // Add other properties as needed
