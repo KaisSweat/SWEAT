@@ -2,7 +2,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, useColorScheme, ActivityIndicator, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './src/navigation/AppNavigator';
+import OwnerNavigator from './src/navigation/OwnerNavigator';
 import PartnerNavigator from './src/navigation/PartnerNavigator';
 import AuthNavigator from './src/navigation/AuthNavigator';
 import { AppDataProvider } from './src/contexts/AppDataContext';
@@ -26,7 +26,7 @@ const App: React.FC = () => {
     if (!isAuthenticated) {
       return <AuthNavigator />;
     }
-    return userRole === 'partner' ? <PartnerNavigator /> : <AppNavigator />;
+    return userRole === 'User' ? <PartnerNavigator /> : <OwnerNavigator />;
   };
 
   return (

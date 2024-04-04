@@ -3,7 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faBuilding, faListAlt, faHeart, faQrcode, faWallet } from '@fortawesome/free-solid-svg-icons';
+import {  faBuilding, faListAlt, faHeart, faQrcode, faWallet } from '@fortawesome/free-solid-svg-icons';
 import HomeScreen from '../screens/HomeScreen';
 import GymScreen from '../screens/GymScreen';
 import GymDetailScreen from '../screens/GymDetailScreen';
@@ -45,7 +45,7 @@ const WalletStackScreen = () => (
 );
 
 
-const AppNavigator: React.FC = () => (
+const OwnerNavigator: React.FC = () => (
   <Tab.Navigator
     initialRouteName="Home"
     screenOptions={({ route }) => ({
@@ -73,4 +73,4 @@ const AppNavigator: React.FC = () => (
   </Tab.Navigator>
 );
 
-export default AppNavigator;
+export default OwnerNavigator;

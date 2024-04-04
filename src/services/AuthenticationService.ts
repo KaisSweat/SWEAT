@@ -23,20 +23,29 @@ const signupUser = async (email: string, password: string, firstName: string, la
       throw new Error('User account creation failed');
     }
 
-    // Prepare the user object for Firestore with an additional "role" field
+    // Initialize the balance for the new user. Adjust the values as needed.
+    const initialBalance = {
+      NOK: 0, // Example starting balance
+      EURO: 0,
+      TND: 0,
+      SWEETUN: 0,
+    };
+
+    // Prepare the user object for Firestore with an additional "role" and "balance" fields
     const newUser = {
       firstName,
       lastName,
       email: firebaseUser.email, // Use the verified email from Firebase Auth
-      role: 'member', // Assign the "member" role to every new user
+      role: 'Owner', // Assign the "Owner" role to every new user
+      balance: initialBalance, // Include the initial balance
     };
 
-    // Save the user's data, including the role, in Firestore
+    // Save the user's data, including the role and balance, in Firestore
     await firestore().collection('users').doc(firebaseUser.uid).set(newUser);
 
-    console.log('User account created and saved in Firestore with member role.');
+    console.log('User account created and saved in Firestore with member role and initial balance.');
 
-    // Optionally, return success status and user object including the assigned role
+    // Optionally, return success status and user object including the assigned role and balance
     return { success: true, user: { id: firebaseUser.uid, ...newUser } };
 
   } catch (error) {
@@ -63,6 +72,7 @@ const signupUser = async (email: string, password: string, firstName: string, la
     return { success: false, message: errorMessage };
   }
 };
+
 
 
 
