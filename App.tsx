@@ -8,6 +8,7 @@ import AuthNavigator from './src/navigation/AuthNavigator';
 import { AppDataProvider } from './src/contexts/AppDataContext';
 import { AppUserProvider } from './src/contexts/AppUserContext';
 import useAuth from './src/hooks/useAuth';
+import MemberNavigator from './src/navigation/MemberNavigator';
 
 const App: React.FC = () => {
   const { isLoading, isAuthenticated, userRole, error } = useAuth();
@@ -26,7 +27,8 @@ const App: React.FC = () => {
     if (!isAuthenticated) {
       return <AuthNavigator />;
     }
-    return userRole === 'User' ? <PartnerNavigator /> : <OwnerNavigator />;
+    return userRole === 'partner' ? <PartnerNavigator /> : (userRole === 'Member' ? <MemberNavigator /> : <OwnerNavigator />);
+    
   };
 
   return (
