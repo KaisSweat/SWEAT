@@ -47,7 +47,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Login: undefined;
   Home:undefined;
-  Wallet:undefined;
+  WalletScreen:undefined;
   PaymentSelection: {
     amount: string;
     currency: string;

@@ -19,7 +19,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 type WalletScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'Wallet'>;
+  navigation: StackNavigationProp<RootStackParamList, 'WalletScreen'>;
 };
 
 const WalletScreen: React.FC<WalletScreenProps> = ({ navigation }) => {
