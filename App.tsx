@@ -27,7 +27,7 @@ const App: React.FC = () => {
     if (!isAuthenticated) {
       return <AuthNavigator />;
     }
-    return userRole === 'partner' ? <PartnerNavigator /> : (userRole === 'Member' ? <MemberNavigator /> : <OwnerNavigator />);
+    return userRole === 'Partner' ? <PartnerNavigator /> : (userRole === 'Member' ? <MemberNavigator /> : <OwnerNavigator />);
     
   };
 
