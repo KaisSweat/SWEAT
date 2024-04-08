@@ -30,6 +30,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ navigation }) => {
   const [amountToSend, setAmountToSend] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>('EURO');
   const [recipients, setRecipients] = useState<AppUser[]>([]);
+  const [recipientsOwner, setRecipientOwner] = useState<AppUser[]>([]);
   const [selectedRecipient, setSelectedRecipient] = useState('');
 
   useEffect(() => {
@@ -37,14 +38,17 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ navigation }) => {
       console.log('Starting to fetch partners...'); // Log the start of the fetch operation
       try {
         const partners = await fetchUsersByRole('Partner');
+        const owners = await fetchUsersByRole('Owner');
+
         console.log('Fetched Partners:', partners); // Log the fetched partners
         setRecipients(partners);
+        setRecipientOwner(owners);
       } catch (error) {
         Alert.alert("Error", "Failed to fetch partners.");
         console.error("Failed to fetch partners:", error); // Log any errors encountered
       }
     };
-  
+
     loadPartners();
   }, []);
 
@@ -55,25 +59,58 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ navigation }) => {
 
   // Handlers for transaction functionalities
   const handleAddMoney = async () => {
-    console.log('Navigating to Payment Selection...');
-    // Assuming validation and logic for amountToAdd and selectedCurrency are handled
-    navigation.navigate('PaymentSelection', {
-      amount: amountToAdd,
-      currency: selectedCurrency,
-      // Optionally pass available APIs based on the currency or handle it in the PaymentSelectionScreen
-    });
+    console.log('Adding money...');
+    try {
+      await WalletService.addCredit(user?.id || '', selectedCurrency, Number(amountToAdd));
+      // Assuming validation and logic for amountToAdd and selectedCurrency are handled
+      Alert.alert('Success', 'Credit Added successfully.');
+
+    } catch (error) {
+      console.error('Failed to add credit:', error);
+      Alert.alert('Error', 'Failed to add credit. Please try again.');
+    }
   };
 
   const handleWithdrawMoney = async () => {
-    console.log('Withdrawing money...');
+    try {
+      await WalletService.subtractCredit(user?.id || '', selectedCurrency, Number(amountToWithdraw));
+      // Assuming validation and logic for amountToAdd and selectedCurrency are handled
+      console.log('Withdrawing money...');
+
+      Alert.alert('Success', 'Credit substracted successfully.');
+
+    } catch (error) {
+      console.error('Failed to substract credit:', error);
+      Alert.alert('Error', 'Failed to substract credit. Please try again.');
+    }
+    
+
+
     // Implement withdraw money functionality here
   };
 
   const handleSendMoney = async () => {
-    console.log('Sending money...');
-    // Implement send money functionality here
-    Alert.alert('Success', 'Money sent successfully.');
+    try {
+      await WalletService.sendCredit(user?.id || '', selectedRecipient, selectedCurrency, Number(amountToSend));
+      // Assuming validation and logic for amountToAdd and selectedCurrency are handled
+      console.log('sending money...');
+
+      Alert.alert('Success', 'Credit sent successfully.');
+
+    } catch (error) {
+      console.error('Failed to send credit:', error);
+      Alert.alert('Error', 'Failed to send credit. Please try again.');
+    }
+
+ 
   };
+  {recipients.sort((a, b) => a.firstName.localeCompare(b.firstName)).map((recipient) => (
+    <Picker.Item 
+      key={recipient.id} 
+      label={`${recipient.firstName} ${recipient.lastName}`} 
+      value={recipient.id} 
+    />
+))}
 
   return (
     <ScrollView
@@ -128,12 +165,21 @@ const WalletScreen: React.FC<WalletScreenProps> = ({ navigation }) => {
   style={styles.picker}
   onValueChange={(itemValue) => setSelectedRecipient(itemValue)}
 >
+
   {recipients.map((recipient) => (
     // Concatenate firstName and lastName for the label
     <Picker.Item 
       key={recipient.id} 
       label={`${recipient.firstName} ${recipient.lastName}`} 
       value={recipient.id} 
+    />
+  ))}
+    {recipientsOwner.map((owner) => (
+    // Concatenate firstName and lastName for the label
+    <Picker.Item 
+      key={owner.id} 
+      label={`${owner.firstName} ${owner.lastName}`} 
+      value={owner.id} 
     />
   ))}
 </Picker>
