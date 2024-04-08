@@ -15,6 +15,8 @@ import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
 import WalletScreen from '../screens/WalletScreen';
 import PaymentSelectionScreen from '../screens/payement/PaymentSelectionScreen';
+import ItemsListForVenue from '../screens/ItemsListForVenue';
+import ItemDetailScreen from '../screens/ItemDetailScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -27,7 +29,10 @@ const GymStackScreen = () => (
     <GymStack.Screen name="GymList" component={GymScreen} options={{ headerShown: true, title: 'Gyms' }} />
     <GymStack.Screen name="GymDetail" component={GymDetailScreen} />
     <GymStack.Screen name="ClassesListForVenue" component={ClassesListForVenue} />
+    <GymStack.Screen name="ItemsListForVenue" component={ItemsListForVenue} />
     <GymStack.Screen name="ClassDetail" component={ClassDetailScreen} />
+    
+
   </GymStack.Navigator>
 );
 
@@ -39,7 +44,7 @@ const ClassesStackScreen = () => (
 );
 const WalletStackScreen = () => (
   <WalletStack.Navigator>
-    <WalletStack.Screen name="Wallet" component={WalletScreen} options={{ headerShown: true, title: 'Wallet' }} />
+    <WalletStack.Screen name="WalletScreen" component={WalletScreen} options={{ headerShown: true, title: 'Wallet' }} />
     <WalletStack.Screen name="PaymentSelection" component={PaymentSelectionScreen} options={{ headerShown: true, title: 'Select Payment' }} />
   </WalletStack.Navigator>
 );

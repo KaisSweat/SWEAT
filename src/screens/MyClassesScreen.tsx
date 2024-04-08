@@ -6,7 +6,7 @@ import { Class, Venue } from '../types/types';
 import { fetchBookingsForUser, cancelBookingForUser } from '../services/firestorebookingService';
 import { format, startOfDay } from 'date-fns';
 import { useFocusEffect } from '@react-navigation/native';
-import { fetchVenueById,fetchClassById } from '../services/firestoreService';
+import { fetchVenueById,fetchClassById } from '../services/VenueService';
 // Define the structure of each section in the SectionList
 interface Section {
   title: string;

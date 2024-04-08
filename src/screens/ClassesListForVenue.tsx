@@ -4,7 +4,7 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'; // Import StackNavigationProp
 import ClassCard from '../components/ClassCard';
 import { Class, RootStackParamList } from '../types/types'; // Ensure these imports are correct
-import { fetchClassesForVenue, fetchVenueById } from '../services/firestoreService';
+import { fetchClassesForVenue, fetchVenueById } from '../services/VenueService';
 import { format } from 'date-fns'; 
 
 // Define the expected route parameters for this screen

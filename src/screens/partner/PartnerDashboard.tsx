@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, Alert, Image ,ScrollView,TouchableOpacity} from 'react-native';
 import { AppUserContext } from '../../contexts/AppUserContext';
 import auth from '@react-native-firebase/auth';
-import { fetchVenueById } from '../../services/firestoreService';
+import { fetchVenueById } from '../../services/VenueService';
 import { Venue } from '../../types/types';
 import { uploadQRCodeVenue } from '../../services/QrcodeGenService';
 

@@ -12,7 +12,7 @@ import MapView, { Marker } from "react-native-maps";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, Venue } from "../types/types";
-import { fetchVenueById } from "../services/firestoreService";
+import { fetchVenueById } from "../services/VenueService";
 import { decodePlusCode } from "../utils/decodePlusCode"; // Use your decodePlusCode function
 
 
@@ -107,6 +107,14 @@ const GymDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         >
           <Text style={styles.showClassesText}>Show Classes</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.showMenuButton}
+          onPress={() =>
+            navigation.navigate("ItemsListForVenue", { venueId: venue.id })
+          }
+        >
+          <Text style={styles.showMenuText}>Show Menu</Text>
+        </TouchableOpacity>
       </View>
       {coordinates && (
         <MapView
@@ -185,7 +193,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
+  showMenuButton: {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
   showClassesText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  showMenuText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",

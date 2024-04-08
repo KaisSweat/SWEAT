@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import ClassCardPartner from '../../components/ClassCardPartner';
 import { Class, RootStackParamList } from '../../types/types';
-import { fetchClassesForVenue, cancelClass } from '../../services/firestoreService';
+import { fetchClassesForVenue, cancelClass } from '../../services/VenueService';
 import { AppUserContext } from '../../contexts/AppUserContext';
 import { format, startOfDay } from 'date-fns'; // Assuming date-fns is used for date formatting
 

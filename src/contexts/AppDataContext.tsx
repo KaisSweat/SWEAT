@@ -1,6 +1,6 @@
 // src/contexts/AppDataContext.tsx
 import React, { createContext, useState, useContext, useEffect, ReactNode, FC } from 'react';
-import { fetchVenues, fetchClassesForVenue, fetchVenueById,fetchAllClasses} from '../services/firestoreService';
+import { fetchVenues, fetchClassesForVenue, fetchVenueById,fetchAllClasses} from '../services/VenueService';
 import { Venue, Class } from '../types/types';
 
 type AppDataContextType = {

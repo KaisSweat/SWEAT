@@ -1,6 +1,6 @@
 // src/services/firestoreService.ts
 import firestore from '@react-native-firebase/firestore';
-import { Venue, Class } from '../types/types';
+import { Venue, Class ,ItemData,Item} from '../types/types';
 
 
 
@@ -231,5 +231,93 @@ export const cancelClass = async (venueId: string, classId: string): Promise<voi
   } catch (error) {
     console.error("Error cancelling class: ", error);
     throw new Error("Failed to cancel class. Please try again.");
+  }
+};
+
+
+
+
+
+
+
+
+
+
+export const fetchItemsForVenue = async (venueId: string): Promise<Item[]> => {
+  try {
+    const itemsRef = firestore().collection('venues').doc(venueId).collection('items');
+    const snapshot = await itemsRef.get();
+    const items: Item[] = snapshot.docs.map(doc => {
+      const itemData = doc.data();
+      // Here, you might need to handle any data transformations or defaults
+      // For example, if certain fields are optional in Firestore but required in your type,
+      // you may need to provide default values
+      return {
+        id: doc.id,
+        name: itemData.name,
+        venueId, // Assuming every item should inherit this venueId
+        description: itemData.description || '',
+        priceInSweetun: itemData.priceInSweetun,
+        stockQuantity: itemData.stockQuantity,
+        image: itemData.image,
+        categories: itemData.categories || [],
+      };
+    });
+    console.log("Items fetched successfully for venue:", venueId, items);
+    return items;
+  } catch (error) {
+    console.error(`Error fetching items for venue ${venueId}:`, error);
+    throw new Error(`Error fetching items for venue: ${error}`);
+  }
+};
+export const addItemToVenue = async (venueId: string, itemData: ItemData) => {
+  try {
+    const itemRef = firestore().collection('venues').doc(venueId).collection('items').doc();
+    await itemRef.set(itemData);
+    console.log("New item added successfully to venue:", venueId);
+  } catch (error) {
+    console.error(`Error adding new item to venue ${venueId}:`, error);
+    throw new Error(`Error adding new item to venue: ${error}`);
+  }
+};
+export const updateItemDetails = async (venueId: string, itemId: string, itemData: ItemData) => {
+  try {
+    await firestore().collection('venues').doc(venueId).collection('items').doc(itemId).update(itemData);
+    console.log(`Item with ID: ${itemId} in venue: ${venueId} has been successfully updated.`);
+  } catch (error) {
+    console.error(`Failed to update item with ID: ${itemId} in venue: ${venueId}. Error: ${error}`);
+    throw error;
+  }
+};
+export const removeItemFromVenue = async (venueId: string, itemId: string) => {
+  try {
+    await firestore().collection('venues').doc(venueId).collection('items').doc(itemId).delete();
+    console.log(`Item with ID: ${itemId} from venue: ${venueId} has been removed.`);
+  } catch (error) {
+    console.error("Error removing item: ", error);
+    throw new Error("Failed to remove item. Please try again.");
+  }
+};
+export const fetchItemById = async (venueId: string, itemId: string): Promise<Item | null> => {
+  try {
+    const itemRef = firestore().collection('venues').doc(venueId).collection('items').doc(itemId);
+    const doc = await itemRef.get();
+    if (!doc.exists) {
+      console.error(`Item with ID: ${itemId} not found in venue: ${venueId}`);
+      return null;
+    }
+    const itemData = doc.data();
+    if (!itemData) {
+      console.error(`Item data is undefined for ID: ${itemId} in venue: ${venueId}`);
+      return null;
+    }
+    // Assuming all necessary Item fields are present and correctly named in the document.
+    return {
+      id: doc.id,
+      ...itemData,
+    } as Item; // Cast to Item type to enforce type checking
+  } catch (error) {
+    console.error(`Error fetching item with ID ${itemId} from venue ${venueId}:`, error);
+    return null;
   }
 };

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, View,TouchableOpacity,TextInput,Text,  Alert } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList,Class } from '../../types/types';
+import { RootStackParamList} from '../../types/types';
 import { AppUserContext } from '../../contexts/AppUserContext';
 import DateInputField from '../../components/DateInputField'; // Adjust the import path as needed
 import TimeInputField from '../../components/TimeInputField'; // Make sure this is correctly imported
-import {addClassToVenue} from '../../services/firestoreService'
+import {addClassToVenue} from '../../services/VenueService'
 
 
 

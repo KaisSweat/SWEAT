@@ -10,6 +10,8 @@ import ClassDetailsForPartner from '../screens/partner/ClassDetailsForPartner';
 import { RootStackParamList } from '../types/types';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faBuilding, faCalendarPlus, faTools, faList } from '@fortawesome/free-solid-svg-icons';
+import PartnerItemAddScreen from '../screens/partner/PartnerItemAddScreen';
+
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const PartnerClassesStack = createStackNavigator();
@@ -30,6 +32,8 @@ const PartnerNavigator = () => {
               icon = faBuilding; break;
             case 'PartnerClassAdd':
               icon = faCalendarPlus; break;
+            case 'PartnerItemAdd':
+              icon = faCalendarPlus; break;
             case 'ClassesListForPartner':
               icon = faList; break;
             case 'PartnerVenueEdit':
@@ -47,6 +51,7 @@ const PartnerNavigator = () => {
       <Tab.Screen name="PartnerDashboard" component={PartnerDashboard} options={{ title: 'Dashboard' }} />
       <Tab.Screen name="PartnerDetails" component={PartnerDetailsScreen} options={{ title: 'Venue' }} />
       <Tab.Screen name="PartnerClassAdd" component={PartnerClassAddScreen} options={{ title: 'Add Class' }} />
+      <Tab.Screen name="PartnerItemAdd" component={PartnerItemAddScreen} options={{ title: 'Add Item' }} />
       <Tab.Screen name="ClassesListForPartner" component={ClassesListForPartner} options={{ title: 'Classes' }} />
       <Tab.Screen name="PartnerVenueEdit" component={PartnerVenueEditScreen} options={{ title: 'Edit Venue' }} />
     </Tab.Navigator>

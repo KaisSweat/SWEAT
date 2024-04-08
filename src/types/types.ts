@@ -33,15 +33,58 @@ export type Class = {
   venueArea?: string; // Optional venue area
   venueImage?: string;
   venue?: Venue;
-  costInCredits: number; 
   // ... any other class related properties
 };
+
+// Type for the data needed to create a new item
+export type ItemData = Omit<Item, 'id'>;
+
+export type Item = {
+  id: string;
+  name: string;
+  venueId: string;
+  description?: string;
+  priceInSweetun: number; // Assuming all prices are now in SWEETUN credits
+  stockQuantity: number;
+  image: string; // URL to the item's image.
+  categories?: string[]; // Optional categories for the item.
+};
+
+export type CreditPurchase = {
+  id: string;
+  userId: string;
+  amount: number; // Amount of SWEETUN credits purchased.
+  purchaseTime: Date;
+  paymentMethod: string; // This could reference an external payment method if needed.
+  status: 'pending' | 'completed' | 'failed';
+};
+export type CartItem = {
+  itemId: string;
+  quantity: number;
+};
+
+// You might also want to include a Cart type that references these CartItems.
+export type Cart = {
+  userId: string;
+  items: CartItem[];
+};
+export type Order = {
+  id: string;
+  userId: string;
+  items: CartItem[];
+  totalCostInSweetun: number; // Total cost of the order in SWEETUN credits.
+  orderTime: Date;
+  status: 'pending' | 'completed' | 'cancelled';
+};
+
+
 // Define the RootStackParamList for React Navigation
 export type RootStackParamList = {
   GymList: undefined;
   GymDetail: { venueId: string };
   ClassesList: undefined;
   ClassesListForVenue: { venueId: string };
+  ItemsListForVenue: { venueId: string };
   ClassDetail: { classDetail: Class };
   Welcome: undefined;
   SignUp: undefined;
@@ -56,9 +99,13 @@ export type RootStackParamList = {
   PartnerDashboard: undefined;
   PartnerDetails: undefined;
   PartnerVenueEdit: undefined;
+  PartnerItemAdd: undefined;
   PartnerClassAdd: undefined;
   ClassesListForPartner: undefined;
   ClassDetailsForPartner: { classDetail: Class };
+  ItemDetail: {
+    itemDetail: Item;
+  };
 
 };
 // Create an array of currency options

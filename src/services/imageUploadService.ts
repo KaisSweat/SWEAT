@@ -1,6 +1,6 @@
 import storage from '@react-native-firebase/storage';
 import { Asset } from 'react-native-image-picker';
-import { updateVenueImage } from './firestoreService';
+import { updateVenueImage } from './VenueService';
 
 export const uploadImage = async (image: Asset): Promise<string> => {
   if (!image.uri) {

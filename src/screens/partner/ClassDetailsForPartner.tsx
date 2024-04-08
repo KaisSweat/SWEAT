@@ -5,7 +5,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, Venue } from '../../types/types';
 import { format } from 'date-fns';
-import { fetchVenueById } from './../../services/firestoreService';
+import { fetchVenueById } from '../../services/VenueService';
 import { decodePlusCode } from '../../utils/decodePlusCode'; // Make sure the path to your utility function is correct
 
 type ClassDetailsForPartnerscreenRouteProp = RouteProp<RootStackParamList, 'ClassDetailsForPartner'>;

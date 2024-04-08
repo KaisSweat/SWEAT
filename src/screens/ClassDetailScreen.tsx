@@ -7,7 +7,7 @@ import { RootStackParamList, Venue } from '../types/types';
 import { format } from 'date-fns';
 import { AppUserContext } from '../contexts/AppUserContext';
 import { bookClassForUser } from '../services/firestorebookingService';
-import { fetchVenueById } from '../services/firestoreService';
+import { fetchVenueById } from '../services/VenueService';
 import { decodePlusCode } from '../utils/decodePlusCode'; // Make sure the path to your utility function is correct
 
 type ClassDetailScreenRouteProp = RouteProp<RootStackParamList, 'ClassDetail'>;

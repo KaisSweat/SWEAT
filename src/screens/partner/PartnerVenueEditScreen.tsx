@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Button, ScrollView, Alert, Text, TouchableOpacity } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Venue, RootStackParamList } from '../../types/types';
-import { fetchVenueById, updateVenueDetails } from '../../services/firestoreService';
+import { fetchVenueById, updateVenueDetails } from '../../services/VenueService';
 import { handleImageUploadAndUpdate } from '../../services/imageUploadService';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AppUserContext } from '../../contexts/AppUserContext';

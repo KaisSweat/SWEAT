@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { AppUserContext } from '../../contexts/AppUserContext';
-import { fetchVenueById } from '../../services/firestoreService';
+import { fetchVenueById } from '../../services/VenueService';
 import { decodePlusCode } from '../../utils/decodePlusCode';
 import { Venue } from '../../types/types';
 
