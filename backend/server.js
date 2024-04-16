@@ -32,9 +32,26 @@ app.post('/initiate-payment', async (req, res) => {
   res.send(data);
 });
 
+const fetch = require('node-fetch');
+
 async function getVippsToken() {
-  // Fetch token logic here using your Vipps credentials
-  return 'your_access_token'; // This should be fetched dynamically
+  const response = await fetch('https://api.vipps.no/access-token-endpoint', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: process.env.VIPPS_CLIENT_ID,
+      client_secret: process.env.VIPPS_CLIENT_SECRET
+    })
+  });
+
+  const data = await response.json();
+  if (!data.access_token) {
+    throw new Error('Failed to fetch access token');
+  }
+  return data.access_token;
 }
 
 app.listen(3000, () => console.log('Server running on port 3000'));
