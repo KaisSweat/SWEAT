@@ -71,28 +71,3 @@ const styles = StyleSheet.create({
 
 export default MemberWalletScreen;
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 10,
-    width: '100%',
-  },
-  purchaseButton: {
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-});
-
-export default SweetunPurchaseScreen;
