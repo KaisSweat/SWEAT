@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const SweetunPurchaseScreen: React.FC = () => {
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+const MemberWalletScreen: React.FC = () => {
   const [sweetcoinAmount, setSweetcoinAmount] = useState('');
-  const sweetcoinToTnd = 1; // 1 Sweetcoin = 1 TND
-  const sweetcoinToNok = 10; // 1 Sweetcoin = 10 NOK
 
-  const handlePurchase = () => {
-    // Implémentez ici la logique d'achat
-    console.log('Purchase initiated');
+  const handlePurchase = async () => {
+    try {
+      const nokAmount = Number(sweetcoinAmount) * 10; // 1 Sweetcoin = 10 NOK
+      const response = await fetch('http://your-backend-url/initiate-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount: nokAmount })
+      });
+      const data = await response.json();
+      if (data.success) {
+        Alert.alert("Payment Successful", "Coins added to your wallet.");
+      } else {
+        Alert.alert("Payment Failed", data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Payment Error", "Failed to initiate payment.");
+    }
   };
-
-  const tndAmount = Number(sweetcoinAmount) * sweetcoinToTnd;
-  const nokAmount = Number(sweetcoinAmount) * sweetcoinToNok;
 
   return (
     <View style={styles.container}>
@@ -24,14 +39,38 @@ const SweetunPurchaseScreen: React.FC = () => {
         value={sweetcoinAmount}
         onChangeText={setSweetcoinAmount}
       />
-      <Text>TND Amount: {tndAmount}</Text>
-      <Text>NOK Amount: {nokAmount}</Text>
       <TouchableOpacity style={styles.purchaseButton} onPress={handlePurchase}>
-        <Text>Purchase</Text>
+        <Text>Purchase with Vipps</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 10,
+    width: '100%',
+  },
+  purchaseButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+});
+
+export default MemberWalletScreen;
+
 
 const styles = StyleSheet.create({
   container: {
