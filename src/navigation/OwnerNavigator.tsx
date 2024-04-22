@@ -15,6 +15,9 @@ import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
 import WalletScreen from '../screens/WalletScreen';
 import PaymentSelectionScreen from '../screens/payement/PaymentSelectionScreen';
+import PaymentMethodSelectionScreen from '../screens/payement/PaymentMethodSelectionScreen';
+import MemberWalletScreen from '../screens/MemberWalletScreen';
+import VippsGuideScreen from '../screens/payement/VippsGuideScreen';
 import ItemsListForVenue from '../screens/ItemsListForVenue';
 import ItemDetailScreen from '../screens/ItemDetailScreen';
 
@@ -44,8 +47,9 @@ const ClassesStackScreen = () => (
 );
 const WalletStackScreen = () => (
   <WalletStack.Navigator>
-    <WalletStack.Screen name="WalletScreen" component={WalletScreen} options={{ headerShown: true, title: 'Wallet' }} />
-    <WalletStack.Screen name="PaymentSelection" component={PaymentSelectionScreen} options={{ headerShown: true, title: 'Select Payment' }} />
+    <WalletStack.Screen name="MemberWallet" component={MemberWalletScreen} options={{ headerShown: true, title: 'My Wallet' }} />
+    <WalletStack.Screen name="PaymentMethodSelection" component={PaymentMethodSelectionScreen} options={{ headerShown: true, title: 'Select Payment Method' }} />
+    <WalletStack.Screen name="VippsGuide" component={VippsGuideScreen} options={{ headerShown: true, title: 'Vipps Guide payment' }} />
   </WalletStack.Navigator>
 );
 

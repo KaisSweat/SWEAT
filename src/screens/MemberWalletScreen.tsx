@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const SweetunPurchaseScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [sweetcoinAmount, setSweetcoinAmount] = useState('');
   const sweetcoinToTnd = 1; // 1 Sweetcoin = 1 TND
   const sweetcoinToNok = 10; // 1 Sweetcoin = 10 NOK
@@ -9,6 +11,11 @@ const SweetunPurchaseScreen: React.FC = () => {
 
   const handlePurchase = () => {
     console.log('Purchase initiated');
+    try {
+      navigation.navigate('PaymentMethodSelection');
+    } catch (error) {
+      console.error("Failed to navigate:", error);
+    }
   };
 
   const tndAmount = Number(sweetcoinAmount) * sweetcoinToTnd;
@@ -27,7 +34,7 @@ const SweetunPurchaseScreen: React.FC = () => {
       />
       <Text>TND Amount: {tndAmount}</Text>
       <Text>NOK Amount: {nokAmount}</Text>
-      <Text>Euro Amount: {euroAmount}</Text> {/* Display Euro conversion */}
+      <Text>Euro Amount: {euroAmount}</Text>
       <TouchableOpacity style={styles.purchaseButton} onPress={handlePurchase}>
         <Text>Purchase</Text>
       </TouchableOpacity>

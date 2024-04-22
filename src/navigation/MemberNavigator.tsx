@@ -15,6 +15,7 @@ import CheckInScreen from '../screens/CheckInScreen';
 import { RootStackParamList } from '../types/types';
 import WalletScreen from '../screens/WalletScreen';
 import PaymentSelectionScreen from '../screens/payement/PaymentSelectionScreen';
+import PaymentMethodSelectionScreen from '../screens/payement/PaymentMethodSelectionScreen';
 import MemberWalletScreen from '../screens/MemberWalletScreen';
 import ItemsListForVenue from '../screens/ItemsListForVenue';
 import ItemDetailScreen from '../screens/ItemDetailScreen';
@@ -42,8 +43,8 @@ const ClassesStackScreen = () => (
 );
 const WalletStackScreen = () => (
   <WalletStack.Navigator>
-    <WalletStack.Screen name="WalletScreen" component={WalletScreen} options={{ headerShown: true, title: 'Wallet' }} />
-    <WalletStack.Screen name="PaymentSelection" component={PaymentSelectionScreen} options={{ headerShown: true, title: 'Select Payment' }} />
+     <WalletStack.Screen name="MemberWallet" component={MemberWalletScreen} options={{ headerShown: true, title: 'My Wallet' }} />
+    <WalletStack.Screen name="PaymentMethodSelection" component={PaymentMethodSelectionScreen} options={{ headerShown: true, title: 'Select Payment Method' }} />
   </WalletStack.Navigator>
 );
 
@@ -68,7 +69,7 @@ const OwnerNavigator: React.FC = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Wallet" component={MemberWalletScreen} />
+    <Tab.Screen name="Wallet" component={WalletStackScreen} />
     <Tab.Screen name="Venue" component={GymStackScreen} />
     <Tab.Screen name="Booking" component={ClassesStackScreen} />
     <Tab.Screen name="CheckIn" component={CheckInScreen} options={{ title: 'Check-In' }} />
