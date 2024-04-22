@@ -5,15 +5,15 @@ const SweetunPurchaseScreen: React.FC = () => {
   const [sweetcoinAmount, setSweetcoinAmount] = useState('');
   const sweetcoinToTnd = 1; // 1 Sweetcoin = 1 TND
   const sweetcoinToNok = 10; // 1 Sweetcoin = 10 NOK
+  const sweetcoinToEuro = 0.33; // 1 Sweetcoin = 0.33 Euro
 
   const handlePurchase = () => {
-    // Implémentez ici la logique d'achat
     console.log('Purchase initiated');
   };
 
   const tndAmount = Number(sweetcoinAmount) * sweetcoinToTnd;
   const nokAmount = Number(sweetcoinAmount) * sweetcoinToNok;
-
+  const euroAmount = Number(sweetcoinAmount) * sweetcoinToEuro; // Calculate Euro amount
   return (
     <View style={styles.container}>
       <Text>Enter Sweetcoin Amount:</Text>
