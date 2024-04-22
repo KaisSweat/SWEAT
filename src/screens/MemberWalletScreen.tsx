@@ -14,6 +14,7 @@ const SweetunPurchaseScreen: React.FC = () => {
   const tndAmount = Number(sweetcoinAmount) * sweetcoinToTnd;
   const nokAmount = Number(sweetcoinAmount) * sweetcoinToNok;
   const euroAmount = Number(sweetcoinAmount) * sweetcoinToEuro; // Calculate Euro amount
+
   return (
     <View style={styles.container}>
       <Text>Enter Sweetcoin Amount:</Text>
@@ -26,6 +27,7 @@ const SweetunPurchaseScreen: React.FC = () => {
       />
       <Text>TND Amount: {tndAmount}</Text>
       <Text>NOK Amount: {nokAmount}</Text>
+      <Text>Euro Amount: {euroAmount}</Text> {/* Display Euro conversion */}
       <TouchableOpacity style={styles.purchaseButton} onPress={handlePurchase}>
         <Text>Purchase</Text>
       </TouchableOpacity>
