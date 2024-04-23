@@ -1,13 +1,18 @@
 
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
-const PaymentMethodSelectionScreen :React.FC = () => {
-const navigation = useNavigation();
-const handleVippsSelection = () => {
-    navigation.navigate('VippsGuide'); 
+const PaymentMethodSelectionScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  // Ensure you have a fallback or a check to prevent accessing undefined
+  const nokAmount = route.params ? route.params.nokAmount : '0';
+
+  const handleVippsSelection = () => {
+    console.log('Received params pay:', nokAmount);
+    navigation.navigate('VippsGuide', { nokAmount }); 
   };
 
   return (

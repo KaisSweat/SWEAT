@@ -12,7 +12,8 @@ const SweetunPurchaseScreen: React.FC = () => {
   const handlePurchase = () => {
     console.log('Purchase initiated');
     try {
-      navigation.navigate('PaymentMethodSelection');
+      // Passing the calculated NOK amount as a parameter to the PaymentMethodSelection screen
+      navigation.navigate('PaymentMethodSelection', { nokAmount });
     } catch (error) {
       console.error("Failed to navigate:", error);
     }

@@ -1,31 +1,85 @@
+// src/screens/payement/VippsGuideScreen.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import * as ImagePicker from 'react-native-image-picker';
+import { uploadImage } from '../../services/imageUploadService'; // Import the uploadImage function
 
 const VippsGuideScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const route = useRoute();
+  const nokAmount = route.params ? route.params.nokAmount : '0'; // Retrieve the passed nokAmount parameter
+  console.log('goparams:', nokAmount);
 
-  const handleUploadScreenshot = () => {
-    // Function to handle screenshot upload and navigate to validation
-    console.log('Upload and validate screenshot');
+  const handlePaymentValidation = async (imageUri: string) => {
+    try {
+      const uploadedImageUrl = await uploadImage({ uri: imageUri, type: 'image/jpeg', name: 'payment_screenshot.jpg' }); // Assuming JPEG type
+      // Perform OCR and validate payment based on uploadedImageUrl and nokAmount
+      // Here, you should implement the validation logic or call an existing service
+      console.log('Image uploaded, URL:', uploadedImageUrl);
+      // Proceed with additional validation and navigate based on success or failure
+    } catch (error) {
+      console.error('Image upload or validation failed:', error);
+      // Show an error message to the user
+    }
+  };
+
+  const selectImage = () => {
+    const options = { /* ... options ... */ };
+    ImagePicker.launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const imageUri = response.assets[0].uri;
+        handlePaymentValidation(imageUri);
+      }
+    });
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <Text style={{ fontSize: 16, marginBottom: 20 }}>
-        Follow these steps to complete your payment via VIPPS:
+    <View style={styles.container}>
+      <Text style={styles.title}>VIPPS Payment Guide</Text>
+      <Text style={styles.instructions}>
+        - Scan the QR code or open the VIPPS app{'\n'}
+        - Pay the amount of {nokAmount}NOK to +47 91 00 90 94{'\n'}
+        - Include the note "Birthday Gift"{'\n'}
+        - Take a screenshot of the successful payment{'\n'}
+        - Upload the screenshot here for validation
       </Text>
-      <Text style={{ fontSize: 14 }}>
-        1. Scan the QR code at the location or open the VIPPS app.
-        2. Pay the specified NOK amount to the number provided.
-        3. Take a screenshot of the successful payment.
-      </Text>
-      <Image source={require('../../assets/sweat1.jpg')} style={{ marginVertical: 20, width: 200, height: 200 }} />
-      <TouchableOpacity onPress={handleUploadScreenshot} style={{ backgroundColor: 'blue', padding: 10 }}>
-        <Text style={{ color: 'white' }}>Upload Payment Screenshot</Text>
+      <TouchableOpacity onPress={selectImage} style={styles.button}>
+        <Text style={styles.buttonText}>Load your payment</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20
+  },
+  instructions: {
+    fontSize: 16,
+    textAlign: 'left',
+    marginBottom: 20
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 15,
+    borderRadius: 5
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18
+  }
+});
 
 export default VippsGuideScreen;
